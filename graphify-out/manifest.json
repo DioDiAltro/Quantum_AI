@@ -15,9 +15,9 @@
     "semantic_hash": "4aa89c35c7980e7834ee01c82aba4458"
   },
   "main.py": {
-    "mtime": 1783536610.954916,
-    "ast_hash": "6d2e8cdfd5e2f8d6df95fccb5fea0355",
-    "semantic_hash": "6d2e8cdfd5e2f8d6df95fccb5fea0355"
+    "mtime": 1784919565.6108172,
+    "ast_hash": "c2c8a1b7702d746e794ddcca3aed5763",
+    "semantic_hash": "c2c8a1b7702d746e794ddcca3aed5763"
   },
   "pyproject.toml": {
     "mtime": 1783535121.3185666,
@@ -33,5 +33,20 @@
     "mtime": 1784897359.27027,
     "ast_hash": "19e297d0944692e98823df2b1aa5d326",
     "semantic_hash": "19e297d0944692e98823df2b1aa5d326"
+  },
+  "MAIN_README.md": {
+    "mtime": 1784919594.632551,
+    "ast_hash": "0cffc6881999b3cf0d90ea4b06d00e46",
+    "semantic_hash": "0cffc6881999b3cf0d90ea4b06d00e46"
+  },
+  "README.md": {
+    "mtime": 1784919605.5115483,
+    "ast_hash": "61553ea788aa596218783b65da259dc3",
+    "semantic_hash": "61553ea788aa596218783b65da259dc3"
+  },
+  "TRANSLATOR_README.md": {
+    "mtime": 1784897383.6682532,
+    "ast_hash": "93cd4d9c7949cf707e92a0496b497210",
+    "semantic_hash": "93cd4d9c7949cf707e92a0496b497210"
   }
 }

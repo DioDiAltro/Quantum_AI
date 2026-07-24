@@ -54,7 +54,7 @@ Database: PostgreSQL
 
 - [x] Calcolo dinamico di Numero Atomico, Numero di Massa e Carica Netta (Ioni).
 
-### 🚧 Fase 2: Chimica Molecolare e Traduzione Dati (IN CORSO)
+### ✅ Fase 2: Chimica Molecolare e Traduzione Dati (COMPLETATA)
 
 - [x] Sviluppo della classe Molecule:
 
@@ -73,6 +73,12 @@ Database: PostgreSQL
 - [x] Conversione in tensori per ML/QML (PyTorch Geometric, Quantum Encoding)
 
 - [x] Documentazione completa del modulo traduttore
+
+- [x] Implementazione del main.py con CLI multi-modalità
+
+- [x] Integrazione opzionale con database PostgreSQL
+
+- [x] Test completi di tutte le funzionalità
 
 ### 🔮 Fase 3: L'Oracolo della Stabilità (AI/QML) (PIANIFICATA)
 
@@ -127,3 +133,37 @@ result = translator.translate_molecule(H2, "quantum")
 ```
 
 Per la documentazione completa, vedi [TRANSLATOR_README.md](TRANSLATOR_README.md)
+
+## 🚀 Utilizzo del Sistema
+
+Il sistema può essere avviato tramite `main.py` con diverse modalità:
+
+### Modalità Demo
+```bash
+python main.py --mode demo
+```
+Esegue una demo completa con tutte le funzionalità del sistema.
+
+### Modalità Quick
+```bash
+python main.py --mode quick --molecule h2 --format quantum
+```
+Mostra solo le informazioni essenziali per una molecola specifica.
+
+### Modalità Interattiva
+```bash
+python main.py --mode interactive
+```
+Avvia un menu interattivo per esplorare il sistema.
+
+### Integrazione Database
+```bash
+python main.py --mode quick --db
+```
+Abilita l'integrazione con PostgreSQL per salvare le molecole nel database.
+
+### Opzioni CLI
+- `--mode`: Modalità di esecuzione (`demo`, `interactive`, `quick`)
+- `--molecule`: Molecola specifica (`h2`, `h2o`, `ch4`, `all`)
+- `--format`: Formato di traduzione (`tensors`, `pyg`, `quantum`)
+- `--db`: Abilita integrazione database PostgreSQL

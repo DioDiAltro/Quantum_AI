@@ -1,7 +1,53 @@
 {
   "directed": false,
   "multigraph": false,
-  "graph": {},
+  "graph": {
+    "hyperedges": [
+      {
+        "id": "qml_system_architecture",
+        "label": "QML System Three-Layer Architecture",
+        "nodes": [
+          "readme_qml_chemical_discovery_engine",
+          "readme_physical_engine",
+          "readme_translator",
+          "readme_ai_qml"
+        ],
+        "relation": "form",
+        "confidence": "EXTRACTED",
+        "confidence_score": 1.0,
+        "source_file": "README.md"
+      },
+      {
+        "id": "translator_components",
+        "label": "Translator Module Components",
+        "nodes": [
+          "translator_readme_translator_module",
+          "translator_readme_featureextractor",
+          "translator_readme_graphbuilder",
+          "translator_readme_tensorconverter",
+          "translator_readme_quantumencoder"
+        ],
+        "relation": "participate_in",
+        "confidence": "EXTRACTED",
+        "confidence_score": 1.0,
+        "source_file": "TRANSLATOR_README.md"
+      },
+      {
+        "id": "main_execution_modes",
+        "label": "main.py Execution Modes",
+        "nodes": [
+          "main_readme_main_py",
+          "main_readme_demo_mode",
+          "main_readme_quick_mode",
+          "main_readme_interactive_mode"
+        ],
+        "relation": "participate_in",
+        "confidence": "EXTRACTED",
+        "confidence_score": 1.0,
+        "source_file": "MAIN_README.md"
+      }
+    ]
+  },
   "nodes": [
     {
       "label": "__init__.py",
@@ -9,9 +55,8 @@
       "source_file": "lib/__init__.py",
       "source_location": "L1",
       "_origin": "ast",
-      "community": 7,
+      "community": 11,
       "norm_label": "__init__.py",
-      "community_name": "__init__.py",
       "id": "lib_init"
     },
     {
@@ -22,7 +67,6 @@
       "_origin": "ast",
       "community": 5,
       "norm_label": "create_db.py",
-      "community_name": "create_db.py",
       "id": "lib_create_db"
     },
     {
@@ -33,7 +77,6 @@
       "_origin": "ast",
       "community": 5,
       "norm_label": "subatomiccomposition",
-      "community_name": "Base",
       "id": "lib_create_db_subatomiccomposition"
     },
     {
@@ -44,7 +87,6 @@
       "_origin": "ast",
       "community": 5,
       "norm_label": "base",
-      "community_name": "Base",
       "id": "base"
     },
     {
@@ -55,7 +97,6 @@
       "_origin": "ast",
       "community": 5,
       "norm_label": "subatomicparticle",
-      "community_name": "Base",
       "id": "lib_create_db_subatomicparticle"
     },
     {
@@ -66,7 +107,6 @@
       "_origin": "ast",
       "community": 5,
       "norm_label": "interaction",
-      "community_name": "create_db.py",
       "id": "lib_create_db_interaction"
     },
     {
@@ -77,7 +117,6 @@
       "_origin": "ast",
       "community": 5,
       "norm_label": "atomcomposition",
-      "community_name": "create_db.py",
       "id": "lib_create_db_atomcomposition"
     },
     {
@@ -88,7 +127,6 @@
       "_origin": "ast",
       "community": 5,
       "norm_label": "atom",
-      "community_name": "Base",
       "id": "lib_create_db_atom"
     },
     {
@@ -99,7 +137,6 @@
       "_origin": "ast",
       "community": 5,
       "norm_label": "moleculeatomposition",
-      "community_name": "Base",
       "id": "lib_create_db_moleculeatomposition"
     },
     {
@@ -110,7 +147,6 @@
       "_origin": "ast",
       "community": 5,
       "norm_label": "moleculebond",
-      "community_name": "create_db.py",
       "id": "lib_create_db_moleculebond"
     },
     {
@@ -121,7 +157,6 @@
       "_origin": "ast",
       "community": 5,
       "norm_label": "molecule",
-      "community_name": "create_db.py",
       "id": "lib_create_db_molecule"
     },
     {
@@ -132,7 +167,6 @@
       "_origin": "ast",
       "community": 5,
       "norm_label": "vqesimulationresult",
-      "community_name": "Base",
       "id": "lib_create_db_vqesimulationresult"
     },
     {
@@ -141,9 +175,8 @@
       "source_file": "lib/create_db.py",
       "source_location": "L137",
       "_origin": "ast",
-      "community": 5,
+      "community": 0,
       "norm_label": "create_database()",
-      "community_name": "create_db.py",
       "id": "lib_create_db_create_database"
     },
     {
@@ -152,9 +185,8 @@
       "source_file": "lib/matter.py",
       "source_location": "L1",
       "_origin": "ast",
-      "community": 0,
+      "community": 3,
       "norm_label": "matter.py",
-      "community_name": "Subatomic",
       "id": "lib_matter"
     },
     {
@@ -163,9 +195,8 @@
       "source_file": "lib/matter.py",
       "source_location": "L1",
       "_origin": "ast",
-      "community": 0,
+      "community": 3,
       "norm_label": "subatomic",
-      "community_name": "Subatomic",
       "id": "lib_matter_subatomic"
     },
     {
@@ -174,9 +205,8 @@
       "source_file": "lib/matter.py",
       "source_location": "L2",
       "_origin": "ast",
-      "community": 0,
+      "community": 3,
       "norm_label": ".__init__()",
-      "community_name": "Subatomic",
       "id": "lib_matter_subatomic_init"
     },
     {
@@ -185,9 +215,8 @@
       "source_file": "lib/matter.py",
       "source_location": "L19",
       "_origin": "ast",
-      "community": 0,
+      "community": 3,
       "norm_label": ".show()",
-      "community_name": "Subatomic",
       "id": "lib_matter_subatomic_show"
     },
     {
@@ -196,9 +225,8 @@
       "source_file": "lib/matter.py",
       "source_location": "L32",
       "_origin": "ast",
-      "community": 0,
+      "community": 3,
       "norm_label": "interaction",
-      "community_name": "Subatomic",
       "id": "lib_matter_interaction"
     },
     {
@@ -207,9 +235,8 @@
       "source_file": "lib/matter.py",
       "source_location": "L33",
       "_origin": "ast",
-      "community": 0,
+      "community": 3,
       "norm_label": ".__init__()",
-      "community_name": "Subatomic",
       "id": "lib_matter_interaction_init"
     },
     {
@@ -218,9 +245,8 @@
       "source_file": "lib/matter.py",
       "source_location": "L39",
       "_origin": "ast",
-      "community": 0,
+      "community": 3,
       "norm_label": "atom",
-      "community_name": "Atom",
       "id": "lib_matter_atom"
     },
     {
@@ -229,9 +255,8 @@
       "source_file": "lib/matter.py",
       "source_location": "L40",
       "_origin": "ast",
-      "community": 0,
+      "community": 3,
       "norm_label": ".__init__()",
-      "community_name": "Atom",
       "id": "lib_matter_atom_init"
     },
     {
@@ -240,9 +265,8 @@
       "source_file": "lib/matter.py",
       "source_location": "L61",
       "_origin": "ast",
-      "community": 0,
+      "community": 3,
       "norm_label": ".is_ion()",
-      "community_name": "Atom",
       "id": "lib_matter_atom_is_ion"
     },
     {
@@ -251,9 +275,8 @@
       "source_file": "lib/matter.py",
       "source_location": "L65",
       "_origin": "ast",
-      "community": 0,
+      "community": 3,
       "norm_label": ".ion_type()",
-      "community_name": "Atom",
       "id": "lib_matter_atom_ion_type"
     },
     {
@@ -262,9 +285,8 @@
       "source_file": "lib/matter.py",
       "source_location": "L73",
       "_origin": "ast",
-      "community": 0,
+      "community": 3,
       "norm_label": ".get_configuration()",
-      "community_name": "Atom",
       "id": "lib_matter_atom_get_configuration"
     },
     {
@@ -273,9 +295,8 @@
       "source_file": "lib/matter.py",
       "source_location": "L94",
       "_origin": "ast",
-      "community": 0,
+      "community": 3,
       "norm_label": ".show_configuration()",
-      "community_name": "Atom",
       "id": "lib_matter_atom_show_configuration"
     },
     {
@@ -284,9 +305,8 @@
       "source_file": "lib/matter.py",
       "source_location": "L105",
       "_origin": "ast",
-      "community": 0,
+      "community": 3,
       "norm_label": "molecule",
-      "community_name": "Molecule",
       "id": "lib_matter_molecule"
     },
     {
@@ -295,9 +315,8 @@
       "source_file": "lib/matter.py",
       "source_location": "L106",
       "_origin": "ast",
-      "community": 0,
+      "community": 3,
       "norm_label": ".__init__()",
-      "community_name": "Molecule",
       "id": "lib_matter_molecule_init"
     },
     {
@@ -306,9 +325,8 @@
       "source_file": "lib/matter.py",
       "source_location": "L112",
       "_origin": "ast",
-      "community": 0,
+      "community": 3,
       "norm_label": ".add_atom()",
-      "community_name": "Molecule",
       "id": "lib_matter_molecule_add_atom"
     },
     {
@@ -317,9 +335,8 @@
       "source_file": "lib/matter.py",
       "source_location": "L116",
       "_origin": "ast",
-      "community": 0,
+      "community": 3,
       "norm_label": ".add_bond()",
-      "community_name": "Molecule",
       "id": "lib_matter_molecule_add_bond"
     },
     {
@@ -328,9 +345,8 @@
       "source_file": "lib/matter.py",
       "source_location": "L126",
       "_origin": "ast",
-      "community": 0,
+      "community": 3,
       "norm_label": ".molecular_mass()",
-      "community_name": "Molecule",
       "id": "lib_matter_molecule_molecular_mass"
     },
     {
@@ -339,9 +355,8 @@
       "source_file": "lib/matter.py",
       "source_location": "L130",
       "_origin": "ast",
-      "community": 0,
+      "community": 3,
       "norm_label": ".net_charge()",
-      "community_name": "Molecule",
       "id": "lib_matter_molecule_net_charge"
     },
     {
@@ -350,10 +365,509 @@
       "source_file": "lib/matter.py",
       "source_location": "L113",
       "_origin": "ast",
-      "community": 0,
+      "community": 3,
       "norm_label": "aggiunge un atomo specificando la sua posizione 3d nello spazio.",
-      "community_name": "Molecule",
       "id": "lib_matter_rationale_113"
+    },
+    {
+      "label": "translator.py",
+      "file_type": "code",
+      "source_file": "lib/translator.py",
+      "source_location": "L1",
+      "_origin": "ast",
+      "community": 4,
+      "norm_label": "translator.py",
+      "id": "lib_translator"
+    },
+    {
+      "label": "AtomFeatures",
+      "file_type": "code",
+      "source_file": "lib/translator.py",
+      "source_location": "L12",
+      "_origin": "ast",
+      "community": 2,
+      "norm_label": "atomfeatures",
+      "id": "lib_translator_atomfeatures"
+    },
+    {
+      "label": ".to_vector()",
+      "file_type": "code",
+      "source_file": "lib/translator.py",
+      "source_location": "L21",
+      "_origin": "ast",
+      "community": 2,
+      "norm_label": ".to_vector()",
+      "id": "lib_translator_atomfeatures_to_vector"
+    },
+    {
+      "label": "ndarray",
+      "file_type": "code",
+      "source_file": "",
+      "source_location": "",
+      "_origin": "ast",
+      "community": 2,
+      "norm_label": "ndarray",
+      "id": "ndarray"
+    },
+    {
+      "label": "FeatureExtractor",
+      "file_type": "code",
+      "source_file": "lib/translator.py",
+      "source_location": "L35",
+      "_origin": "ast",
+      "community": 2,
+      "norm_label": "featureextractor",
+      "id": "lib_translator_featureextractor"
+    },
+    {
+      "label": ".__init__()",
+      "file_type": "code",
+      "source_file": "lib/translator.py",
+      "source_location": "L46",
+      "_origin": "ast",
+      "community": 2,
+      "norm_label": ".__init__()",
+      "id": "lib_translator_featureextractor_init"
+    },
+    {
+      "label": ".extract_from_atom()",
+      "file_type": "code",
+      "source_file": "lib/translator.py",
+      "source_location": "L49",
+      "_origin": "ast",
+      "community": 2,
+      "norm_label": ".extract_from_atom()",
+      "id": "lib_translator_featureextractor_extract_from_atom"
+    },
+    {
+      "label": "._encode_configuration()",
+      "file_type": "code",
+      "source_file": "lib/translator.py",
+      "source_location": "L67",
+      "_origin": "ast",
+      "community": 2,
+      "norm_label": "._encode_configuration()",
+      "id": "lib_translator_featureextractor_encode_configuration"
+    },
+    {
+      "label": "._calculate_valence_electrons()",
+      "file_type": "code",
+      "source_file": "lib/translator.py",
+      "source_location": "L78",
+      "_origin": "ast",
+      "community": 2,
+      "norm_label": "._calculate_valence_electrons()",
+      "id": "lib_translator_featureextractor_calculate_valence_electrons"
+    },
+    {
+      "label": "MolecularGraph",
+      "file_type": "code",
+      "source_file": "lib/translator.py",
+      "source_location": "L101",
+      "_origin": "ast",
+      "community": 1,
+      "norm_label": "moleculargraph",
+      "id": "lib_translator_moleculargraph"
+    },
+    {
+      "label": ".to_pyg_format()",
+      "file_type": "code",
+      "source_file": "lib/translator.py",
+      "source_location": "L109",
+      "_origin": "ast",
+      "community": 1,
+      "norm_label": ".to_pyg_format()",
+      "id": "lib_translator_moleculargraph_to_pyg_format"
+    },
+    {
+      "label": ".to_adjacency_matrix()",
+      "file_type": "code",
+      "source_file": "lib/translator.py",
+      "source_location": "L118",
+      "_origin": "ast",
+      "community": 1,
+      "norm_label": ".to_adjacency_matrix()",
+      "id": "lib_translator_moleculargraph_to_adjacency_matrix"
+    },
+    {
+      "label": "GraphBuilder",
+      "file_type": "code",
+      "source_file": "lib/translator.py",
+      "source_location": "L130",
+      "_origin": "ast",
+      "community": 2,
+      "norm_label": "graphbuilder",
+      "id": "lib_translator_graphbuilder"
+    },
+    {
+      "label": ".__init__()",
+      "file_type": "code",
+      "source_file": "lib/translator.py",
+      "source_location": "L133",
+      "_origin": "ast",
+      "community": 2,
+      "norm_label": ".__init__()",
+      "id": "lib_translator_graphbuilder_init"
+    },
+    {
+      "label": ".build_from_molecule()",
+      "file_type": "code",
+      "source_file": "lib/translator.py",
+      "source_location": "L136",
+      "_origin": "ast",
+      "community": 2,
+      "norm_label": ".build_from_molecule()",
+      "id": "lib_translator_graphbuilder_build_from_molecule"
+    },
+    {
+      "label": "._calculate_distance()",
+      "file_type": "code",
+      "source_file": "lib/translator.py",
+      "source_location": "L188",
+      "_origin": "ast",
+      "community": 2,
+      "norm_label": "._calculate_distance()",
+      "id": "lib_translator_graphbuilder_calculate_distance"
+    },
+    {
+      "label": "TensorConverter",
+      "file_type": "code",
+      "source_file": "lib/translator.py",
+      "source_location": "L193",
+      "_origin": "ast",
+      "community": 1,
+      "norm_label": "tensorconverter",
+      "id": "lib_translator_tensorconverter"
+    },
+    {
+      "label": ".normalize_features()",
+      "file_type": "code",
+      "source_file": "lib/translator.py",
+      "source_location": "L197",
+      "_origin": "ast",
+      "community": 1,
+      "norm_label": ".normalize_features()",
+      "id": "lib_translator_tensorconverter_normalize_features"
+    },
+    {
+      "label": ".graph_to_tensors()",
+      "file_type": "code",
+      "source_file": "lib/translator.py",
+      "source_location": "L214",
+      "_origin": "ast",
+      "community": 1,
+      "norm_label": ".graph_to_tensors()",
+      "id": "lib_translator_tensorconverter_graph_to_tensors"
+    },
+    {
+      "label": "QuantumEncoder",
+      "file_type": "code",
+      "source_file": "lib/translator.py",
+      "source_location": "L230",
+      "_origin": "ast",
+      "community": 1,
+      "norm_label": "quantumencoder",
+      "id": "lib_translator_quantumencoder"
+    },
+    {
+      "label": ".encode_hamiltonian()",
+      "file_type": "code",
+      "source_file": "lib/translator.py",
+      "source_location": "L234",
+      "_origin": "ast",
+      "community": 1,
+      "norm_label": ".encode_hamiltonian()",
+      "id": "lib_translator_quantumencoder_encode_hamiltonian"
+    },
+    {
+      "label": ".map_to_qubits()",
+      "file_type": "code",
+      "source_file": "lib/translator.py",
+      "source_location": "L272",
+      "_origin": "ast",
+      "community": 1,
+      "norm_label": ".map_to_qubits()",
+      "id": "lib_translator_quantumencoder_map_to_qubits"
+    },
+    {
+      "label": "Translator",
+      "file_type": "code",
+      "source_file": "lib/translator.py",
+      "source_location": "L292",
+      "_origin": "ast",
+      "community": 4,
+      "norm_label": "translator",
+      "id": "lib_translator_translator"
+    },
+    {
+      "label": ".__init__()",
+      "file_type": "code",
+      "source_file": "lib/translator.py",
+      "source_location": "L295",
+      "_origin": "ast",
+      "community": 1,
+      "norm_label": ".__init__()",
+      "id": "lib_translator_translator_init"
+    },
+    {
+      "label": ".translate_molecule()",
+      "file_type": "code",
+      "source_file": "lib/translator.py",
+      "source_location": "L301",
+      "_origin": "ast",
+      "community": 1,
+      "norm_label": ".translate_molecule()",
+      "id": "lib_translator_translator_translate_molecule"
+    },
+    {
+      "label": ".batch_translate()",
+      "file_type": "code",
+      "source_file": "lib/translator.py",
+      "source_location": "L321",
+      "_origin": "ast",
+      "community": 1,
+      "norm_label": ".batch_translate()",
+      "id": "lib_translator_translator_batch_translate"
+    },
+    {
+      "label": "debug_translation()",
+      "file_type": "code",
+      "source_file": "lib/translator.py",
+      "source_location": "L327",
+      "_origin": "ast",
+      "community": 4,
+      "norm_label": "debug_translation()",
+      "id": "lib_translator_debug_translation"
+    },
+    {
+      "label": "Modulo Traduttore: Converte oggetti chimici in rappresentazioni ML/QML",
+      "file_type": "rationale",
+      "source_file": "lib/translator.py",
+      "source_location": "L1",
+      "_origin": "ast",
+      "community": 4,
+      "norm_label": "modulo traduttore: converte oggetti chimici in rappresentazioni ml/qml",
+      "id": "lib_translator_rationale_1"
+    },
+    {
+      "label": "Vettore di caratteristiche per un atomo",
+      "file_type": "rationale",
+      "source_file": "lib/translator.py",
+      "source_location": "L13",
+      "_origin": "ast",
+      "community": 2,
+      "norm_label": "vettore di caratteristiche per un atomo",
+      "id": "lib_translator_rationale_13"
+    },
+    {
+      "label": "Converte in array numpy per ML",
+      "file_type": "rationale",
+      "source_file": "lib/translator.py",
+      "source_location": "L22",
+      "_origin": "ast",
+      "community": 2,
+      "norm_label": "converte in array numpy per ml",
+      "id": "lib_translator_rationale_22"
+    },
+    {
+      "label": "Estrae feature vectors dagli oggetti Atom",
+      "file_type": "rationale",
+      "source_file": "lib/translator.py",
+      "source_location": "L36",
+      "_origin": "ast",
+      "community": 2,
+      "norm_label": "estrae feature vectors dagli oggetti atom",
+      "id": "lib_translator_rationale_36"
+    },
+    {
+      "label": "Estrae feature vector da un oggetto Atom",
+      "file_type": "rationale",
+      "source_file": "lib/translator.py",
+      "source_location": "L50",
+      "_origin": "ast",
+      "community": 2,
+      "norm_label": "estrae feature vector da un oggetto atom",
+      "id": "lib_translator_rationale_50"
+    },
+    {
+      "label": "Codifica la configurazione elettronica come vettore",
+      "file_type": "rationale",
+      "source_file": "lib/translator.py",
+      "source_location": "L68",
+      "_origin": "ast",
+      "community": 2,
+      "norm_label": "codifica la configurazione elettronica come vettore",
+      "id": "lib_translator_rationale_68"
+    },
+    {
+      "label": "Calcola elettroni di valenza (semplificato)",
+      "file_type": "rationale",
+      "source_file": "lib/translator.py",
+      "source_location": "L79",
+      "_origin": "ast",
+      "community": 2,
+      "norm_label": "calcola elettroni di valenza (semplificato)",
+      "id": "lib_translator_rationale_79"
+    },
+    {
+      "label": "Rappresentazione grafo di una molecola",
+      "file_type": "rationale",
+      "source_file": "lib/translator.py",
+      "source_location": "L102",
+      "_origin": "ast",
+      "community": 1,
+      "norm_label": "rappresentazione grafo di una molecola",
+      "id": "lib_translator_rationale_102"
+    },
+    {
+      "label": "Converte in formato PyTorch Geometric",
+      "file_type": "rationale",
+      "source_file": "lib/translator.py",
+      "source_location": "L110",
+      "_origin": "ast",
+      "community": 1,
+      "norm_label": "converte in formato pytorch geometric",
+      "id": "lib_translator_rationale_110"
+    },
+    {
+      "label": "Genera matrice di adiacenza",
+      "file_type": "rationale",
+      "source_file": "lib/translator.py",
+      "source_location": "L119",
+      "_origin": "ast",
+      "community": 1,
+      "norm_label": "genera matrice di adiacenza",
+      "id": "lib_translator_rationale_119"
+    },
+    {
+      "label": "Costruisce grafi molecolari da oggetti Molecule",
+      "file_type": "rationale",
+      "source_file": "lib/translator.py",
+      "source_location": "L131",
+      "_origin": "ast",
+      "community": 2,
+      "norm_label": "costruisce grafi molecolari da oggetti molecule",
+      "id": "lib_translator_rationale_131"
+    },
+    {
+      "label": "Costruisce grafo da oggetto Molecule",
+      "file_type": "rationale",
+      "source_file": "lib/translator.py",
+      "source_location": "L137",
+      "_origin": "ast",
+      "community": 2,
+      "norm_label": "costruisce grafo da oggetto molecule",
+      "id": "lib_translator_rationale_137"
+    },
+    {
+      "label": "Calcola distanza euclidea tra due atomi",
+      "file_type": "rationale",
+      "source_file": "lib/translator.py",
+      "source_location": "L189",
+      "_origin": "ast",
+      "community": 2,
+      "norm_label": "calcola distanza euclidea tra due atomi",
+      "id": "lib_translator_rationale_189"
+    },
+    {
+      "label": "Converte grafi in tensori per ML",
+      "file_type": "rationale",
+      "source_file": "lib/translator.py",
+      "source_location": "L194",
+      "_origin": "ast",
+      "community": 1,
+      "norm_label": "converte grafi in tensori per ml",
+      "id": "lib_translator_rationale_194"
+    },
+    {
+      "label": "Normalizza feature vectors",
+      "file_type": "rationale",
+      "source_file": "lib/translator.py",
+      "source_location": "L198",
+      "_origin": "ast",
+      "community": 1,
+      "norm_label": "normalizza feature vectors",
+      "id": "lib_translator_rationale_198"
+    },
+    {
+      "label": "Converte grafo in dizionario di tensori",
+      "file_type": "rationale",
+      "source_file": "lib/translator.py",
+      "source_location": "L215",
+      "_origin": "ast",
+      "community": 1,
+      "norm_label": "converte grafo in dizionario di tensori",
+      "id": "lib_translator_rationale_215"
+    },
+    {
+      "label": "Prepara dati per Quantum Machine Learning",
+      "file_type": "rationale",
+      "source_file": "lib/translator.py",
+      "source_location": "L231",
+      "_origin": "ast",
+      "community": 1,
+      "norm_label": "prepara dati per quantum machine learning",
+      "id": "lib_translator_rationale_231"
+    },
+    {
+      "label": "Codifica Hamiltoniano molecolare semplificato",
+      "file_type": "rationale",
+      "source_file": "lib/translator.py",
+      "source_location": "L235",
+      "_origin": "ast",
+      "community": 1,
+      "norm_label": "codifica hamiltoniano molecolare semplificato",
+      "id": "lib_translator_rationale_235"
+    },
+    {
+      "label": "Mappa atomi a qubit per circuiti quantistici",
+      "file_type": "rationale",
+      "source_file": "lib/translator.py",
+      "source_location": "L273",
+      "_origin": "ast",
+      "community": 1,
+      "norm_label": "mappa atomi a qubit per circuiti quantistici",
+      "id": "lib_translator_rationale_273"
+    },
+    {
+      "label": "Classe principale che orchesta tutte le conversioni",
+      "file_type": "rationale",
+      "source_file": "lib/translator.py",
+      "source_location": "L293",
+      "_origin": "ast",
+      "community": 4,
+      "norm_label": "classe principale che orchesta tutte le conversioni",
+      "id": "lib_translator_rationale_293"
+    },
+    {
+      "label": "Converte molecola nel formato richiesto",
+      "file_type": "rationale",
+      "source_file": "lib/translator.py",
+      "source_location": "L302",
+      "_origin": "ast",
+      "community": 1,
+      "norm_label": "converte molecola nel formato richiesto",
+      "id": "lib_translator_rationale_302"
+    },
+    {
+      "label": "Converte batch di molecole",
+      "file_type": "rationale",
+      "source_file": "lib/translator.py",
+      "source_location": "L322",
+      "_origin": "ast",
+      "community": 1,
+      "norm_label": "converte batch di molecole",
+      "id": "lib_translator_rationale_322"
+    },
+    {
+      "label": "Funzione di debug per visualizzare la traduzione",
+      "file_type": "rationale",
+      "source_file": "lib/translator.py",
+      "source_location": "L328",
+      "_origin": "ast",
+      "community": 4,
+      "norm_label": "funzione di debug per visualizzare la traduzione",
+      "id": "lib_translator_rationale_328"
     },
     {
       "label": "main.py",
@@ -361,21 +875,219 @@
       "source_file": "main.py",
       "source_location": "L1",
       "_origin": "ast",
-      "community": 6,
+      "community": 0,
       "norm_label": "main.py",
-      "community_name": "main.py",
       "id": "main"
+    },
+    {
+      "label": "create_example_molecules()",
+      "file_type": "code",
+      "source_file": "main.py",
+      "source_location": "L16",
+      "_origin": "ast",
+      "community": 0,
+      "norm_label": "create_example_molecules()",
+      "id": "main_create_example_molecules"
+    },
+    {
+      "label": "demonstrate_basic_properties()",
+      "file_type": "code",
+      "source_file": "main.py",
+      "source_location": "L59",
+      "_origin": "ast",
+      "community": 0,
+      "norm_label": "demonstrate_basic_properties()",
+      "id": "main_demonstrate_basic_properties"
+    },
+    {
+      "label": "demonstrate_translation()",
+      "file_type": "code",
+      "source_file": "main.py",
+      "source_location": "L78",
+      "_origin": "ast",
+      "community": 0,
+      "norm_label": "demonstrate_translation()",
+      "id": "main_demonstrate_translation"
+    },
+    {
+      "label": "demonstrate_detailed_analysis()",
+      "file_type": "code",
+      "source_file": "main.py",
+      "source_location": "L115",
+      "_origin": "ast",
+      "community": 0,
+      "norm_label": "demonstrate_detailed_analysis()",
+      "id": "main_demonstrate_detailed_analysis"
+    },
+    {
+      "label": "run_batch_processing()",
+      "file_type": "code",
+      "source_file": "main.py",
+      "source_location": "L125",
+      "_origin": "ast",
+      "community": 0,
+      "norm_label": "run_batch_processing()",
+      "id": "main_run_batch_processing"
+    },
+    {
+      "label": "interactive_menu()",
+      "file_type": "code",
+      "source_file": "main.py",
+      "source_location": "L145",
+      "_origin": "ast",
+      "community": 0,
+      "norm_label": "interactive_menu()",
+      "id": "main_interactive_menu"
+    },
+    {
+      "label": "run_demo()",
+      "file_type": "code",
+      "source_file": "main.py",
+      "source_location": "L188",
+      "_origin": "ast",
+      "community": 0,
+      "norm_label": "run_demo()",
+      "id": "main_run_demo"
+    },
+    {
+      "label": "try_database_integration()",
+      "file_type": "code",
+      "source_file": "main.py",
+      "source_location": "L216",
+      "_origin": "ast",
+      "community": 0,
+      "norm_label": "try_database_integration()",
+      "id": "main_try_database_integration"
+    },
+    {
+      "label": "save_molecules_to_db()",
+      "file_type": "code",
+      "source_file": "main.py",
+      "source_location": "L240",
+      "_origin": "ast",
+      "community": 0,
+      "norm_label": "save_molecules_to_db()",
+      "id": "main_save_molecules_to_db"
     },
     {
       "label": "main()",
       "file_type": "code",
       "source_file": "main.py",
-      "source_location": "L3",
+      "source_location": "L269",
       "_origin": "ast",
-      "community": 6,
+      "community": 0,
       "norm_label": "main()",
-      "community_name": "main.py",
       "id": "main_main"
+    },
+    {
+      "label": "Main entry point per QML Chemical Discovery Engine Integra il motore fisico, il",
+      "file_type": "rationale",
+      "source_file": "main.py",
+      "source_location": "L1",
+      "_origin": "ast",
+      "community": 0,
+      "norm_label": "main entry point per qml chemical discovery engine integra il motore fisico, il",
+      "id": "main_rationale_1"
+    },
+    {
+      "label": "Crea molecole di esempio per dimostrazione",
+      "file_type": "rationale",
+      "source_file": "main.py",
+      "source_location": "L17",
+      "_origin": "ast",
+      "community": 0,
+      "norm_label": "crea molecole di esempio per dimostrazione",
+      "id": "main_rationale_17"
+    },
+    {
+      "label": "Mostra le propriet\u00e0 basiche delle molecole",
+      "file_type": "rationale",
+      "source_file": "main.py",
+      "source_location": "L60",
+      "_origin": "ast",
+      "community": 0,
+      "norm_label": "mostra le proprieta basiche delle molecole",
+      "id": "main_rationale_60"
+    },
+    {
+      "label": "Dimostra la traduzione nel formato specificato",
+      "file_type": "rationale",
+      "source_file": "main.py",
+      "source_location": "L79",
+      "_origin": "ast",
+      "community": 0,
+      "norm_label": "dimostra la traduzione nel formato specificato",
+      "id": "main_rationale_79"
+    },
+    {
+      "label": "Analisi dettagliata di una singola molecola",
+      "file_type": "rationale",
+      "source_file": "main.py",
+      "source_location": "L116",
+      "_origin": "ast",
+      "community": 0,
+      "norm_label": "analisi dettagliata di una singola molecola",
+      "id": "main_rationale_116"
+    },
+    {
+      "label": "Dimostra il batch processing",
+      "file_type": "rationale",
+      "source_file": "main.py",
+      "source_location": "L126",
+      "_origin": "ast",
+      "community": 0,
+      "norm_label": "dimostra il batch processing",
+      "id": "main_rationale_126"
+    },
+    {
+      "label": "Menu interattivo per esplorare il sistema",
+      "file_type": "rationale",
+      "source_file": "main.py",
+      "source_location": "L146",
+      "_origin": "ast",
+      "community": 0,
+      "norm_label": "menu interattivo per esplorare il sistema",
+      "id": "main_rationale_146"
+    },
+    {
+      "label": "Esegue una demo completa delle funzionalit\u00e0",
+      "file_type": "rationale",
+      "source_file": "main.py",
+      "source_location": "L189",
+      "_origin": "ast",
+      "community": 0,
+      "norm_label": "esegue una demo completa delle funzionalita",
+      "id": "main_rationale_189"
+    },
+    {
+      "label": "Tenta l'integrazione con il database se disponibile",
+      "file_type": "rationale",
+      "source_file": "main.py",
+      "source_location": "L217",
+      "_origin": "ast",
+      "community": 0,
+      "norm_label": "tenta l'integrazione con il database se disponibile",
+      "id": "main_rationale_217"
+    },
+    {
+      "label": "Salva le molecole nel database se la sessione \u00e8 disponibile",
+      "file_type": "rationale",
+      "source_file": "main.py",
+      "source_location": "L241",
+      "_origin": "ast",
+      "community": 0,
+      "norm_label": "salva le molecole nel database se la sessione e disponibile",
+      "id": "main_rationale_241"
+    },
+    {
+      "label": "Funzione principale con CLI",
+      "file_type": "rationale",
+      "source_file": "main.py",
+      "source_location": "L270",
+      "_origin": "ast",
+      "community": 0,
+      "norm_label": "funzione principale con cli",
+      "id": "main_rationale_270"
     },
     {
       "label": "quantum-project",
@@ -386,510 +1098,9 @@
       "source_location": "L1",
       "version": "0.1.0",
       "_origin": "ast",
-      "community": 8,
+      "community": 12,
       "norm_label": "quantum-project",
-      "community_name": "quantum-project",
       "id": "pkg_quantum_project"
-    },
-    {
-      "label": "translator.py",
-      "file_type": "code",
-      "source_file": "lib/translator.py",
-      "source_location": "L1",
-      "_origin": "ast",
-      "id": "lib_translator",
-      "community": 4,
-      "norm_label": "translator.py"
-    },
-    {
-      "label": "AtomFeatures",
-      "file_type": "code",
-      "source_file": "lib/translator.py",
-      "source_location": "L12",
-      "_origin": "ast",
-      "id": "lib_translator_atomfeatures",
-      "community": 4,
-      "norm_label": "atomfeatures"
-    },
-    {
-      "label": ".to_vector()",
-      "file_type": "code",
-      "source_file": "lib/translator.py",
-      "source_location": "L21",
-      "_origin": "ast",
-      "id": "lib_translator_atomfeatures_to_vector",
-      "community": 3,
-      "norm_label": ".to_vector()"
-    },
-    {
-      "label": "ndarray",
-      "file_type": "code",
-      "source_file": "",
-      "source_location": "",
-      "_origin": "ast",
-      "id": "ndarray",
-      "community": 3,
-      "norm_label": "ndarray"
-    },
-    {
-      "label": "FeatureExtractor",
-      "file_type": "code",
-      "source_file": "lib/translator.py",
-      "source_location": "L35",
-      "_origin": "ast",
-      "id": "lib_translator_featureextractor",
-      "community": 4,
-      "norm_label": "featureextractor"
-    },
-    {
-      "label": ".__init__()",
-      "file_type": "code",
-      "source_file": "lib/translator.py",
-      "source_location": "L46",
-      "_origin": "ast",
-      "id": "lib_translator_featureextractor_init",
-      "community": 4,
-      "norm_label": ".__init__()"
-    },
-    {
-      "label": ".extract_from_atom()",
-      "file_type": "code",
-      "source_file": "lib/translator.py",
-      "source_location": "L49",
-      "_origin": "ast",
-      "id": "lib_translator_featureextractor_extract_from_atom",
-      "community": 4,
-      "norm_label": ".extract_from_atom()"
-    },
-    {
-      "label": "._encode_configuration()",
-      "file_type": "code",
-      "source_file": "lib/translator.py",
-      "source_location": "L67",
-      "_origin": "ast",
-      "id": "lib_translator_featureextractor_encode_configuration",
-      "community": 4,
-      "norm_label": "._encode_configuration()"
-    },
-    {
-      "label": "._calculate_valence_electrons()",
-      "file_type": "code",
-      "source_file": "lib/translator.py",
-      "source_location": "L78",
-      "_origin": "ast",
-      "id": "lib_translator_featureextractor_calculate_valence_electrons",
-      "community": 4,
-      "norm_label": "._calculate_valence_electrons()"
-    },
-    {
-      "label": "MolecularGraph",
-      "file_type": "code",
-      "source_file": "lib/translator.py",
-      "source_location": "L101",
-      "_origin": "ast",
-      "id": "lib_translator_moleculargraph",
-      "community": 1,
-      "norm_label": "moleculargraph"
-    },
-    {
-      "label": ".to_pyg_format()",
-      "file_type": "code",
-      "source_file": "lib/translator.py",
-      "source_location": "L109",
-      "_origin": "ast",
-      "id": "lib_translator_moleculargraph_to_pyg_format",
-      "community": 1,
-      "norm_label": ".to_pyg_format()"
-    },
-    {
-      "label": ".to_adjacency_matrix()",
-      "file_type": "code",
-      "source_file": "lib/translator.py",
-      "source_location": "L118",
-      "_origin": "ast",
-      "id": "lib_translator_moleculargraph_to_adjacency_matrix",
-      "community": 1,
-      "norm_label": ".to_adjacency_matrix()"
-    },
-    {
-      "label": "GraphBuilder",
-      "file_type": "code",
-      "source_file": "lib/translator.py",
-      "source_location": "L130",
-      "_origin": "ast",
-      "id": "lib_translator_graphbuilder",
-      "community": 3,
-      "norm_label": "graphbuilder"
-    },
-    {
-      "label": ".__init__()",
-      "file_type": "code",
-      "source_file": "lib/translator.py",
-      "source_location": "L133",
-      "_origin": "ast",
-      "id": "lib_translator_graphbuilder_init",
-      "community": 3,
-      "norm_label": ".__init__()"
-    },
-    {
-      "label": ".build_from_molecule()",
-      "file_type": "code",
-      "source_file": "lib/translator.py",
-      "source_location": "L136",
-      "_origin": "ast",
-      "id": "lib_translator_graphbuilder_build_from_molecule",
-      "community": 3,
-      "norm_label": ".build_from_molecule()"
-    },
-    {
-      "label": "._calculate_distance()",
-      "file_type": "code",
-      "source_file": "lib/translator.py",
-      "source_location": "L188",
-      "_origin": "ast",
-      "id": "lib_translator_graphbuilder_calculate_distance",
-      "community": 3,
-      "norm_label": "._calculate_distance()"
-    },
-    {
-      "label": "TensorConverter",
-      "file_type": "code",
-      "source_file": "lib/translator.py",
-      "source_location": "L193",
-      "_origin": "ast",
-      "id": "lib_translator_tensorconverter",
-      "community": 3,
-      "norm_label": "tensorconverter"
-    },
-    {
-      "label": ".normalize_features()",
-      "file_type": "code",
-      "source_file": "lib/translator.py",
-      "source_location": "L197",
-      "_origin": "ast",
-      "id": "lib_translator_tensorconverter_normalize_features",
-      "community": 3,
-      "norm_label": ".normalize_features()"
-    },
-    {
-      "label": ".graph_to_tensors()",
-      "file_type": "code",
-      "source_file": "lib/translator.py",
-      "source_location": "L214",
-      "_origin": "ast",
-      "id": "lib_translator_tensorconverter_graph_to_tensors",
-      "community": 1,
-      "norm_label": ".graph_to_tensors()"
-    },
-    {
-      "label": "QuantumEncoder",
-      "file_type": "code",
-      "source_file": "lib/translator.py",
-      "source_location": "L230",
-      "_origin": "ast",
-      "id": "lib_translator_quantumencoder",
-      "community": 1,
-      "norm_label": "quantumencoder"
-    },
-    {
-      "label": ".encode_hamiltonian()",
-      "file_type": "code",
-      "source_file": "lib/translator.py",
-      "source_location": "L234",
-      "_origin": "ast",
-      "id": "lib_translator_quantumencoder_encode_hamiltonian",
-      "community": 1,
-      "norm_label": ".encode_hamiltonian()"
-    },
-    {
-      "label": ".map_to_qubits()",
-      "file_type": "code",
-      "source_file": "lib/translator.py",
-      "source_location": "L272",
-      "_origin": "ast",
-      "id": "lib_translator_quantumencoder_map_to_qubits",
-      "community": 1,
-      "norm_label": ".map_to_qubits()"
-    },
-    {
-      "label": "Translator",
-      "file_type": "code",
-      "source_file": "lib/translator.py",
-      "source_location": "L292",
-      "_origin": "ast",
-      "id": "lib_translator_translator",
-      "community": 2,
-      "norm_label": "translator"
-    },
-    {
-      "label": ".__init__()",
-      "file_type": "code",
-      "source_file": "lib/translator.py",
-      "source_location": "L295",
-      "_origin": "ast",
-      "id": "lib_translator_translator_init",
-      "community": 3,
-      "norm_label": ".__init__()"
-    },
-    {
-      "label": ".translate_molecule()",
-      "file_type": "code",
-      "source_file": "lib/translator.py",
-      "source_location": "L301",
-      "_origin": "ast",
-      "id": "lib_translator_translator_translate_molecule",
-      "community": 1,
-      "norm_label": ".translate_molecule()"
-    },
-    {
-      "label": ".batch_translate()",
-      "file_type": "code",
-      "source_file": "lib/translator.py",
-      "source_location": "L321",
-      "_origin": "ast",
-      "id": "lib_translator_translator_batch_translate",
-      "community": 1,
-      "norm_label": ".batch_translate()"
-    },
-    {
-      "label": "debug_translation()",
-      "file_type": "code",
-      "source_file": "lib/translator.py",
-      "source_location": "L327",
-      "_origin": "ast",
-      "id": "lib_translator_debug_translation",
-      "community": 2,
-      "norm_label": "debug_translation()"
-    },
-    {
-      "label": "Modulo Traduttore: Converte oggetti chimici in rappresentazioni ML/QML",
-      "file_type": "rationale",
-      "source_file": "lib/translator.py",
-      "source_location": "L1",
-      "_origin": "ast",
-      "id": "lib_translator_rationale_1",
-      "community": 4,
-      "norm_label": "modulo traduttore: converte oggetti chimici in rappresentazioni ml/qml"
-    },
-    {
-      "label": "Vettore di caratteristiche per un atomo",
-      "file_type": "rationale",
-      "source_file": "lib/translator.py",
-      "source_location": "L13",
-      "_origin": "ast",
-      "id": "lib_translator_rationale_13",
-      "community": 4,
-      "norm_label": "vettore di caratteristiche per un atomo"
-    },
-    {
-      "label": "Converte in array numpy per ML",
-      "file_type": "rationale",
-      "source_file": "lib/translator.py",
-      "source_location": "L22",
-      "_origin": "ast",
-      "id": "lib_translator_rationale_22",
-      "community": 3,
-      "norm_label": "converte in array numpy per ml"
-    },
-    {
-      "label": "Estrae feature vectors dagli oggetti Atom",
-      "file_type": "rationale",
-      "source_file": "lib/translator.py",
-      "source_location": "L36",
-      "_origin": "ast",
-      "id": "lib_translator_rationale_36",
-      "community": 4,
-      "norm_label": "estrae feature vectors dagli oggetti atom"
-    },
-    {
-      "label": "Estrae feature vector da un oggetto Atom",
-      "file_type": "rationale",
-      "source_file": "lib/translator.py",
-      "source_location": "L50",
-      "_origin": "ast",
-      "id": "lib_translator_rationale_50",
-      "community": 4,
-      "norm_label": "estrae feature vector da un oggetto atom"
-    },
-    {
-      "label": "Codifica la configurazione elettronica come vettore",
-      "file_type": "rationale",
-      "source_file": "lib/translator.py",
-      "source_location": "L68",
-      "_origin": "ast",
-      "id": "lib_translator_rationale_68",
-      "community": 4,
-      "norm_label": "codifica la configurazione elettronica come vettore"
-    },
-    {
-      "label": "Calcola elettroni di valenza (semplificato)",
-      "file_type": "rationale",
-      "source_file": "lib/translator.py",
-      "source_location": "L79",
-      "_origin": "ast",
-      "id": "lib_translator_rationale_79",
-      "community": 4,
-      "norm_label": "calcola elettroni di valenza (semplificato)"
-    },
-    {
-      "label": "Rappresentazione grafo di una molecola",
-      "file_type": "rationale",
-      "source_file": "lib/translator.py",
-      "source_location": "L102",
-      "_origin": "ast",
-      "id": "lib_translator_rationale_102",
-      "community": 1,
-      "norm_label": "rappresentazione grafo di una molecola"
-    },
-    {
-      "label": "Converte in formato PyTorch Geometric",
-      "file_type": "rationale",
-      "source_file": "lib/translator.py",
-      "source_location": "L110",
-      "_origin": "ast",
-      "id": "lib_translator_rationale_110",
-      "community": 1,
-      "norm_label": "converte in formato pytorch geometric"
-    },
-    {
-      "label": "Genera matrice di adiacenza",
-      "file_type": "rationale",
-      "source_file": "lib/translator.py",
-      "source_location": "L119",
-      "_origin": "ast",
-      "id": "lib_translator_rationale_119",
-      "community": 1,
-      "norm_label": "genera matrice di adiacenza"
-    },
-    {
-      "label": "Costruisce grafi molecolari da oggetti Molecule",
-      "file_type": "rationale",
-      "source_file": "lib/translator.py",
-      "source_location": "L131",
-      "_origin": "ast",
-      "id": "lib_translator_rationale_131",
-      "community": 3,
-      "norm_label": "costruisce grafi molecolari da oggetti molecule"
-    },
-    {
-      "label": "Costruisce grafo da oggetto Molecule",
-      "file_type": "rationale",
-      "source_file": "lib/translator.py",
-      "source_location": "L137",
-      "_origin": "ast",
-      "id": "lib_translator_rationale_137",
-      "community": 3,
-      "norm_label": "costruisce grafo da oggetto molecule"
-    },
-    {
-      "label": "Calcola distanza euclidea tra due atomi",
-      "file_type": "rationale",
-      "source_file": "lib/translator.py",
-      "source_location": "L189",
-      "_origin": "ast",
-      "id": "lib_translator_rationale_189",
-      "community": 3,
-      "norm_label": "calcola distanza euclidea tra due atomi"
-    },
-    {
-      "label": "Converte grafi in tensori per ML",
-      "file_type": "rationale",
-      "source_file": "lib/translator.py",
-      "source_location": "L194",
-      "_origin": "ast",
-      "id": "lib_translator_rationale_194",
-      "community": 3,
-      "norm_label": "converte grafi in tensori per ml"
-    },
-    {
-      "label": "Normalizza feature vectors",
-      "file_type": "rationale",
-      "source_file": "lib/translator.py",
-      "source_location": "L198",
-      "_origin": "ast",
-      "id": "lib_translator_rationale_198",
-      "community": 3,
-      "norm_label": "normalizza feature vectors"
-    },
-    {
-      "label": "Converte grafo in dizionario di tensori",
-      "file_type": "rationale",
-      "source_file": "lib/translator.py",
-      "source_location": "L215",
-      "_origin": "ast",
-      "id": "lib_translator_rationale_215",
-      "community": 1,
-      "norm_label": "converte grafo in dizionario di tensori"
-    },
-    {
-      "label": "Prepara dati per Quantum Machine Learning",
-      "file_type": "rationale",
-      "source_file": "lib/translator.py",
-      "source_location": "L231",
-      "_origin": "ast",
-      "id": "lib_translator_rationale_231",
-      "community": 1,
-      "norm_label": "prepara dati per quantum machine learning"
-    },
-    {
-      "label": "Codifica Hamiltoniano molecolare semplificato",
-      "file_type": "rationale",
-      "source_file": "lib/translator.py",
-      "source_location": "L235",
-      "_origin": "ast",
-      "id": "lib_translator_rationale_235",
-      "community": 1,
-      "norm_label": "codifica hamiltoniano molecolare semplificato"
-    },
-    {
-      "label": "Mappa atomi a qubit per circuiti quantistici",
-      "file_type": "rationale",
-      "source_file": "lib/translator.py",
-      "source_location": "L273",
-      "_origin": "ast",
-      "id": "lib_translator_rationale_273",
-      "community": 1,
-      "norm_label": "mappa atomi a qubit per circuiti quantistici"
-    },
-    {
-      "label": "Classe principale che orchesta tutte le conversioni",
-      "file_type": "rationale",
-      "source_file": "lib/translator.py",
-      "source_location": "L293",
-      "_origin": "ast",
-      "id": "lib_translator_rationale_293",
-      "community": 2,
-      "norm_label": "classe principale che orchesta tutte le conversioni"
-    },
-    {
-      "label": "Converte molecola nel formato richiesto",
-      "file_type": "rationale",
-      "source_file": "lib/translator.py",
-      "source_location": "L302",
-      "_origin": "ast",
-      "id": "lib_translator_rationale_302",
-      "community": 1,
-      "norm_label": "converte molecola nel formato richiesto"
-    },
-    {
-      "label": "Converte batch di molecole",
-      "file_type": "rationale",
-      "source_file": "lib/translator.py",
-      "source_location": "L322",
-      "_origin": "ast",
-      "id": "lib_translator_rationale_322",
-      "community": 1,
-      "norm_label": "converte batch di molecole"
-    },
-    {
-      "label": "Funzione di debug per visualizzare la traduzione",
-      "file_type": "rationale",
-      "source_file": "lib/translator.py",
-      "source_location": "L328",
-      "_origin": "ast",
-      "id": "lib_translator_rationale_328",
-      "community": 2,
-      "norm_label": "funzione di debug per visualizzare la traduzione"
     },
     {
       "label": "test_translator.py",
@@ -897,9 +1108,9 @@
       "source_file": "test_translator.py",
       "source_location": "L1",
       "_origin": "ast",
-      "id": "test_translator",
-      "community": 2,
-      "norm_label": "test_translator.py"
+      "community": 4,
+      "norm_label": "test_translator.py",
+      "id": "test_translator"
     },
     {
       "label": "test_basic_translation()",
@@ -907,9 +1118,9 @@
       "source_file": "test_translator.py",
       "source_location": "L12",
       "_origin": "ast",
-      "id": "test_translator_test_basic_translation",
-      "community": 2,
-      "norm_label": "test_basic_translation()"
+      "community": 4,
+      "norm_label": "test_basic_translation()",
+      "id": "test_translator_test_basic_translation"
     },
     {
       "label": "test_quantum_translation()",
@@ -917,9 +1128,9 @@
       "source_file": "test_translator.py",
       "source_location": "L38",
       "_origin": "ast",
-      "id": "test_translator_test_quantum_translation",
-      "community": 2,
-      "norm_label": "test_quantum_translation()"
+      "community": 4,
+      "norm_label": "test_quantum_translation()",
+      "id": "test_translator_test_quantum_translation"
     },
     {
       "label": "test_pyg_format()",
@@ -927,9 +1138,9 @@
       "source_file": "test_translator.py",
       "source_location": "L64",
       "_origin": "ast",
-      "id": "test_translator_test_pyg_format",
-      "community": 2,
-      "norm_label": "test_pyg_format()"
+      "community": 4,
+      "norm_label": "test_pyg_format()",
+      "id": "test_translator_test_pyg_format"
     },
     {
       "label": "test_feature_extraction()",
@@ -937,9 +1148,9 @@
       "source_file": "test_translator.py",
       "source_location": "L84",
       "_origin": "ast",
-      "id": "test_translator_test_feature_extraction",
-      "community": 2,
-      "norm_label": "test_feature_extraction()"
+      "community": 4,
+      "norm_label": "test_feature_extraction()",
+      "id": "test_translator_test_feature_extraction"
     },
     {
       "label": "test_complex_molecule()",
@@ -947,9 +1158,9 @@
       "source_file": "test_translator.py",
       "source_location": "L115",
       "_origin": "ast",
-      "id": "test_translator_test_complex_molecule",
-      "community": 2,
-      "norm_label": "test_complex_molecule()"
+      "community": 4,
+      "norm_label": "test_complex_molecule()",
+      "id": "test_translator_test_complex_molecule"
     },
     {
       "label": "run_all_tests()",
@@ -957,9 +1168,9 @@
       "source_file": "test_translator.py",
       "source_location": "L154",
       "_origin": "ast",
-      "id": "test_translator_run_all_tests",
-      "community": 2,
-      "norm_label": "run_all_tests()"
+      "community": 4,
+      "norm_label": "run_all_tests()",
+      "id": "test_translator_run_all_tests"
     },
     {
       "label": "Test del modulo traduttore",
@@ -967,9 +1178,9 @@
       "source_file": "test_translator.py",
       "source_location": "L1",
       "_origin": "ast",
-      "id": "test_translator_rationale_1",
-      "community": 2,
-      "norm_label": "test del modulo traduttore"
+      "community": 4,
+      "norm_label": "test del modulo traduttore",
+      "id": "test_translator_rationale_1"
     },
     {
       "label": "Test base della traduzione della molecola H2",
@@ -977,9 +1188,9 @@
       "source_file": "test_translator.py",
       "source_location": "L13",
       "_origin": "ast",
-      "id": "test_translator_rationale_13",
-      "community": 2,
-      "norm_label": "test base della traduzione della molecola h2"
+      "community": 4,
+      "norm_label": "test base della traduzione della molecola h2",
+      "id": "test_translator_rationale_13"
     },
     {
       "label": "Test della traduzione per QML",
@@ -987,9 +1198,9 @@
       "source_file": "test_translator.py",
       "source_location": "L39",
       "_origin": "ast",
-      "id": "test_translator_rationale_39",
-      "community": 2,
-      "norm_label": "test della traduzione per qml"
+      "community": 4,
+      "norm_label": "test della traduzione per qml",
+      "id": "test_translator_rationale_39"
     },
     {
       "label": "Test del formato PyTorch Geometric",
@@ -997,9 +1208,9 @@
       "source_file": "test_translator.py",
       "source_location": "L65",
       "_origin": "ast",
-      "id": "test_translator_rationale_65",
-      "community": 2,
-      "norm_label": "test del formato pytorch geometric"
+      "community": 4,
+      "norm_label": "test del formato pytorch geometric",
+      "id": "test_translator_rationale_65"
     },
     {
       "label": "Test dell'estrazione delle feature",
@@ -1007,9 +1218,9 @@
       "source_file": "test_translator.py",
       "source_location": "L85",
       "_origin": "ast",
-      "id": "test_translator_rationale_85",
-      "community": 2,
-      "norm_label": "test dell'estrazione delle feature"
+      "community": 4,
+      "norm_label": "test dell'estrazione delle feature",
+      "id": "test_translator_rationale_85"
     },
     {
       "label": "Test con una molecola pi\u00f9 complessa",
@@ -1017,9 +1228,529 @@
       "source_file": "test_translator.py",
       "source_location": "L116",
       "_origin": "ast",
-      "id": "test_translator_rationale_116",
-      "community": 2,
-      "norm_label": "test con una molecola piu complessa"
+      "community": 4,
+      "norm_label": "test con una molecola piu complessa",
+      "id": "test_translator_rationale_116"
+    },
+    {
+      "label": "main.py Entry Point",
+      "file_type": "document",
+      "source_file": "MAIN_README.md",
+      "source_location": null,
+      "source_url": null,
+      "captured_at": null,
+      "author": null,
+      "contributor": null,
+      "community": 9,
+      "norm_label": "main.py entry point",
+      "id": "main_readme_main_py"
+    },
+    {
+      "label": "Demo Mode",
+      "file_type": "document",
+      "source_file": "MAIN_README.md",
+      "source_location": null,
+      "source_url": null,
+      "captured_at": null,
+      "author": null,
+      "contributor": null,
+      "community": 7,
+      "norm_label": "demo mode",
+      "id": "main_readme_demo_mode"
+    },
+    {
+      "label": "Quick Mode",
+      "file_type": "document",
+      "source_file": "MAIN_README.md",
+      "source_location": null,
+      "source_url": null,
+      "captured_at": null,
+      "author": null,
+      "contributor": null,
+      "community": 8,
+      "norm_label": "quick mode",
+      "id": "main_readme_quick_mode"
+    },
+    {
+      "label": "Interactive Mode",
+      "file_type": "document",
+      "source_file": "MAIN_README.md",
+      "source_location": null,
+      "source_url": null,
+      "captured_at": null,
+      "author": null,
+      "contributor": null,
+      "community": 9,
+      "norm_label": "interactive mode",
+      "id": "main_readme_interactive_mode"
+    },
+    {
+      "label": "PostgreSQL Integration",
+      "file_type": "document",
+      "source_file": "MAIN_README.md",
+      "source_location": null,
+      "source_url": null,
+      "captured_at": null,
+      "author": null,
+      "contributor": null,
+      "community": 9,
+      "norm_label": "postgresql integration",
+      "id": "main_readme_postgresql_integration"
+    },
+    {
+      "label": "Dihydrogen (H2)",
+      "file_type": "document",
+      "source_file": "MAIN_README.md",
+      "source_location": null,
+      "source_url": null,
+      "captured_at": null,
+      "author": null,
+      "contributor": null,
+      "community": 7,
+      "norm_label": "dihydrogen (h2)",
+      "id": "main_readme_h2_molecule"
+    },
+    {
+      "label": "Water (H2O)",
+      "file_type": "document",
+      "source_file": "MAIN_README.md",
+      "source_location": null,
+      "source_url": null,
+      "captured_at": null,
+      "author": null,
+      "contributor": null,
+      "community": 7,
+      "norm_label": "water (h2o)",
+      "id": "main_readme_h2o_molecule"
+    },
+    {
+      "label": "Methane (CH4)",
+      "file_type": "document",
+      "source_file": "MAIN_README.md",
+      "source_location": null,
+      "source_url": null,
+      "captured_at": null,
+      "author": null,
+      "contributor": null,
+      "community": 7,
+      "norm_label": "methane (ch4)",
+      "id": "main_readme_ch4_molecule"
+    },
+    {
+      "label": "Tensors Format",
+      "file_type": "document",
+      "source_file": "MAIN_README.md",
+      "source_location": null,
+      "source_url": null,
+      "captured_at": null,
+      "author": null,
+      "contributor": null,
+      "community": 8,
+      "norm_label": "tensors format",
+      "id": "main_readme_tensors_format"
+    },
+    {
+      "label": "PyTorch Geometric Format",
+      "file_type": "document",
+      "source_file": "MAIN_README.md",
+      "source_location": null,
+      "source_url": null,
+      "captured_at": null,
+      "author": null,
+      "contributor": null,
+      "community": 8,
+      "norm_label": "pytorch geometric format",
+      "id": "main_readme_pyg_format"
+    },
+    {
+      "label": "Quantum Format",
+      "file_type": "document",
+      "source_file": "MAIN_README.md",
+      "source_location": null,
+      "source_url": null,
+      "captured_at": null,
+      "author": null,
+      "contributor": null,
+      "community": 8,
+      "norm_label": "quantum format",
+      "id": "main_readme_quantum_format"
+    },
+    {
+      "label": "QML Chemical Discovery Engine",
+      "file_type": "document",
+      "source_file": "README.md",
+      "source_location": null,
+      "source_url": null,
+      "captured_at": null,
+      "author": null,
+      "contributor": null,
+      "community": 9,
+      "norm_label": "qml chemical discovery engine",
+      "id": "readme_qml_chemical_discovery_engine"
+    },
+    {
+      "label": "Physical Engine (Python OOP)",
+      "file_type": "rationale",
+      "source_file": "README.md",
+      "source_location": null,
+      "source_url": null,
+      "captured_at": null,
+      "author": null,
+      "contributor": null,
+      "community": 6,
+      "norm_label": "physical engine (python oop)",
+      "id": "readme_physical_engine"
+    },
+    {
+      "label": "Translator (Data Pipeline)",
+      "file_type": "rationale",
+      "source_file": "README.md",
+      "source_location": null,
+      "source_url": null,
+      "captured_at": null,
+      "author": null,
+      "contributor": null,
+      "community": 9,
+      "norm_label": "translator (data pipeline)",
+      "id": "readme_translator"
+    },
+    {
+      "label": "AI / QML",
+      "file_type": "rationale",
+      "source_file": "README.md",
+      "source_location": null,
+      "source_url": null,
+      "captured_at": null,
+      "author": null,
+      "contributor": null,
+      "community": 6,
+      "norm_label": "ai / qml",
+      "id": "readme_ai_qml"
+    },
+    {
+      "label": "Oracle (Predictive Model)",
+      "file_type": "rationale",
+      "source_file": "README.md",
+      "source_location": null,
+      "source_url": null,
+      "captured_at": null,
+      "author": null,
+      "contributor": null,
+      "community": 6,
+      "norm_label": "oracle (predictive model)",
+      "id": "readme_oracle"
+    },
+    {
+      "label": "Generator (RL Agent)",
+      "file_type": "rationale",
+      "source_file": "README.md",
+      "source_location": null,
+      "source_url": null,
+      "captured_at": null,
+      "author": null,
+      "contributor": null,
+      "community": 6,
+      "norm_label": "generator (rl agent)",
+      "id": "readme_generator"
+    },
+    {
+      "label": "Subatomic Class",
+      "file_type": "document",
+      "source_file": "README.md",
+      "source_location": null,
+      "source_url": null,
+      "captured_at": null,
+      "author": null,
+      "contributor": null,
+      "community": 6,
+      "norm_label": "subatomic class",
+      "id": "readme_subatomic_class"
+    },
+    {
+      "label": "Standard Model of Particles",
+      "file_type": "rationale",
+      "source_file": "README.md",
+      "source_location": null,
+      "source_url": null,
+      "captured_at": null,
+      "author": null,
+      "contributor": null,
+      "community": 6,
+      "norm_label": "standard model of particles",
+      "id": "readme_standard_model"
+    },
+    {
+      "label": "Aufbau Principle",
+      "file_type": "rationale",
+      "source_file": "README.md",
+      "source_location": null,
+      "source_url": null,
+      "captured_at": null,
+      "author": null,
+      "contributor": null,
+      "community": 6,
+      "norm_label": "aufbau principle",
+      "id": "readme_aufbau_principle"
+    },
+    {
+      "label": "Atom Class",
+      "file_type": "document",
+      "source_file": "README.md",
+      "source_location": null,
+      "source_url": null,
+      "captured_at": null,
+      "author": null,
+      "contributor": null,
+      "community": 6,
+      "norm_label": "atom class",
+      "id": "readme_atom_class"
+    },
+    {
+      "label": "Molecule Class",
+      "file_type": "document",
+      "source_file": "README.md",
+      "source_location": null,
+      "source_url": null,
+      "captured_at": null,
+      "author": null,
+      "contributor": null,
+      "community": 7,
+      "norm_label": "molecule class",
+      "id": "readme_molecule_class"
+    },
+    {
+      "label": "PostgreSQL Database",
+      "file_type": "document",
+      "source_file": "README.md",
+      "source_location": null,
+      "source_url": null,
+      "captured_at": null,
+      "author": null,
+      "contributor": null,
+      "community": 9,
+      "norm_label": "postgresql database",
+      "id": "readme_postgresql"
+    },
+    {
+      "label": "PyTorch Geometric",
+      "file_type": "document",
+      "source_file": "README.md",
+      "source_location": null,
+      "source_url": null,
+      "captured_at": null,
+      "author": null,
+      "contributor": null,
+      "community": 8,
+      "norm_label": "pytorch geometric",
+      "id": "readme_pytorch_geometric"
+    },
+    {
+      "label": "PennyLane",
+      "file_type": "document",
+      "source_file": "README.md",
+      "source_location": null,
+      "source_url": null,
+      "captured_at": null,
+      "author": null,
+      "contributor": null,
+      "community": 6,
+      "norm_label": "pennylane",
+      "id": "readme_pennylane"
+    },
+    {
+      "label": "Qiskit",
+      "file_type": "document",
+      "source_file": "README.md",
+      "source_location": null,
+      "source_url": null,
+      "captured_at": null,
+      "author": null,
+      "contributor": null,
+      "community": 6,
+      "norm_label": "qiskit",
+      "id": "readme_qiskit"
+    },
+    {
+      "label": "Graph Neural Networks",
+      "file_type": "rationale",
+      "source_file": "README.md",
+      "source_location": null,
+      "source_url": null,
+      "captured_at": null,
+      "author": null,
+      "contributor": null,
+      "community": 8,
+      "norm_label": "graph neural networks",
+      "id": "readme_graph_neural_networks"
+    },
+    {
+      "label": "Reinforcement Learning",
+      "file_type": "rationale",
+      "source_file": "README.md",
+      "source_location": null,
+      "source_url": null,
+      "captured_at": null,
+      "author": null,
+      "contributor": null,
+      "community": 6,
+      "norm_label": "reinforcement learning",
+      "id": "readme_reinforcement_learning"
+    },
+    {
+      "label": "Translator Module (lib/translator.py)",
+      "file_type": "document",
+      "source_file": "TRANSLATOR_README.md",
+      "source_location": null,
+      "source_url": null,
+      "captured_at": null,
+      "author": null,
+      "contributor": null,
+      "community": 7,
+      "norm_label": "translator module (lib/translator.py)",
+      "id": "translator_readme_translator_module"
+    },
+    {
+      "label": "FeatureExtractor",
+      "file_type": "document",
+      "source_file": "TRANSLATOR_README.md",
+      "source_location": null,
+      "source_url": null,
+      "captured_at": null,
+      "author": null,
+      "contributor": null,
+      "community": 7,
+      "norm_label": "featureextractor",
+      "id": "translator_readme_featureextractor"
+    },
+    {
+      "label": "GraphBuilder",
+      "file_type": "document",
+      "source_file": "TRANSLATOR_README.md",
+      "source_location": null,
+      "source_url": null,
+      "captured_at": null,
+      "author": null,
+      "contributor": null,
+      "community": 7,
+      "norm_label": "graphbuilder",
+      "id": "translator_readme_graphbuilder"
+    },
+    {
+      "label": "TensorConverter",
+      "file_type": "document",
+      "source_file": "TRANSLATOR_README.md",
+      "source_location": null,
+      "source_url": null,
+      "captured_at": null,
+      "author": null,
+      "contributor": null,
+      "community": 8,
+      "norm_label": "tensorconverter",
+      "id": "translator_readme_tensorconverter"
+    },
+    {
+      "label": "QuantumEncoder",
+      "file_type": "document",
+      "source_file": "TRANSLATOR_README.md",
+      "source_location": null,
+      "source_url": null,
+      "captured_at": null,
+      "author": null,
+      "contributor": null,
+      "community": 10,
+      "norm_label": "quantumencoder",
+      "id": "translator_readme_quantumencoder"
+    },
+    {
+      "label": "Feature Vector (26 dimensions)",
+      "file_type": "concept",
+      "source_file": "TRANSLATOR_README.md",
+      "source_location": null,
+      "source_url": null,
+      "captured_at": null,
+      "author": null,
+      "contributor": null,
+      "community": 7,
+      "norm_label": "feature vector (26 dimensions)",
+      "id": "translator_readme_feature_vector"
+    },
+    {
+      "label": "Molecular Hamiltonian",
+      "file_type": "concept",
+      "source_file": "TRANSLATOR_README.md",
+      "source_location": null,
+      "source_url": null,
+      "captured_at": null,
+      "author": null,
+      "contributor": null,
+      "community": 10,
+      "norm_label": "molecular hamiltonian",
+      "id": "translator_readme_hamiltonian"
+    },
+    {
+      "label": "Qubit Mapping",
+      "file_type": "concept",
+      "source_file": "TRANSLATOR_README.md",
+      "source_location": null,
+      "source_url": null,
+      "captured_at": null,
+      "author": null,
+      "contributor": null,
+      "community": 10,
+      "norm_label": "qubit mapping",
+      "id": "translator_readme_qubit_mapping"
+    },
+    {
+      "label": "VQE (Variational Quantum Eigensolver)",
+      "file_type": "concept",
+      "source_file": "TRANSLATOR_README.md",
+      "source_location": null,
+      "source_url": null,
+      "captured_at": null,
+      "author": null,
+      "contributor": null,
+      "community": 10,
+      "norm_label": "vqe (variational quantum eigensolver)",
+      "id": "translator_readme_vqe"
+    },
+    {
+      "label": "QAOA (Quantum Approximate Optimization Algorithm)",
+      "file_type": "concept",
+      "source_file": "TRANSLATOR_README.md",
+      "source_location": null,
+      "source_url": null,
+      "captured_at": null,
+      "author": null,
+      "contributor": null,
+      "community": 10,
+      "norm_label": "qaoa (quantum approximate optimization algorithm)",
+      "id": "translator_readme_qaoa"
+    },
+    {
+      "label": "Feature Normalization",
+      "file_type": "concept",
+      "source_file": "TRANSLATOR_README.md",
+      "source_location": null,
+      "source_url": null,
+      "captured_at": null,
+      "author": null,
+      "contributor": null,
+      "community": 8,
+      "norm_label": "feature normalization",
+      "id": "translator_readme_normalization"
+    },
+    {
+      "label": "Jordan-Wigner Transformation",
+      "file_type": "concept",
+      "source_file": "TRANSLATOR_README.md",
+      "source_location": null,
+      "source_url": null,
+      "captured_at": null,
+      "author": null,
+      "contributor": null,
+      "community": 10,
+      "norm_label": "jordan-wigner transformation",
+      "id": "translator_readme_jordan_wigner"
     }
   ],
   "links": [
@@ -1233,6 +1964,66 @@
       "target": "base"
     },
     {
+      "relation": "imports",
+      "context": "import",
+      "confidence": "EXTRACTED",
+      "source_file": "main.py",
+      "source_location": "L247",
+      "weight": 1.0,
+      "_origin": "ast",
+      "confidence_score": 1.0,
+      "source": "main",
+      "target": "lib_create_db_atom"
+    },
+    {
+      "relation": "imports",
+      "context": "import",
+      "confidence": "EXTRACTED",
+      "source_file": "main.py",
+      "source_location": "L247",
+      "weight": 1.0,
+      "_origin": "ast",
+      "confidence_score": 1.0,
+      "source": "main",
+      "target": "lib_create_db_molecule"
+    },
+    {
+      "relation": "calls",
+      "context": "call",
+      "confidence": "EXTRACTED",
+      "source_file": "main.py",
+      "source_location": "L253",
+      "weight": 1.0,
+      "_origin": "ast",
+      "confidence_score": 1.0,
+      "source": "main_save_molecules_to_db",
+      "target": "lib_create_db_molecule"
+    },
+    {
+      "relation": "imports",
+      "context": "import",
+      "confidence": "EXTRACTED",
+      "source_file": "main.py",
+      "source_location": "L219",
+      "weight": 1.0,
+      "_origin": "ast",
+      "confidence_score": 1.0,
+      "source": "main",
+      "target": "lib_create_db_create_database"
+    },
+    {
+      "relation": "calls",
+      "context": "call",
+      "confidence": "EXTRACTED",
+      "source_file": "main.py",
+      "source_location": "L225",
+      "weight": 1.0,
+      "_origin": "ast",
+      "confidence_score": 1.0,
+      "source": "main_try_database_integration",
+      "target": "lib_create_db_create_database"
+    },
+    {
       "relation": "contains",
       "confidence": "EXTRACTED",
       "source_file": "lib/matter.py",
@@ -1280,13 +2071,25 @@
       "relation": "imports_from",
       "context": "import",
       "confidence": "EXTRACTED",
+      "source_file": "main.py",
+      "source_location": "L8",
+      "weight": 1.0,
+      "_origin": "ast",
+      "confidence_score": 1.0,
+      "source": "main",
+      "target": "lib_matter"
+    },
+    {
+      "relation": "imports_from",
+      "context": "import",
+      "confidence": "EXTRACTED",
       "source_file": "test_translator.py",
       "source_location": "L8",
       "weight": 1.0,
       "_origin": "ast",
+      "confidence_score": 1.0,
       "source": "test_translator",
-      "target": "lib_matter",
-      "confidence_score": 1.0
+      "target": "lib_matter"
     },
     {
       "relation": "references",
@@ -1335,6 +2138,42 @@
       "target": "lib_matter_subatomic_show"
     },
     {
+      "relation": "imports",
+      "context": "import",
+      "confidence": "EXTRACTED",
+      "source_file": "main.py",
+      "source_location": "L8",
+      "weight": 1.0,
+      "_origin": "ast",
+      "confidence_score": 1.0,
+      "source": "main",
+      "target": "lib_matter_subatomic"
+    },
+    {
+      "relation": "imports",
+      "context": "import",
+      "confidence": "EXTRACTED",
+      "source_file": "test_translator.py",
+      "source_location": "L120",
+      "weight": 1.0,
+      "_origin": "ast",
+      "confidence_score": 1.0,
+      "source": "test_translator",
+      "target": "lib_matter_subatomic"
+    },
+    {
+      "relation": "calls",
+      "context": "call",
+      "confidence": "EXTRACTED",
+      "source_file": "test_translator.py",
+      "source_location": "L123",
+      "weight": 1.0,
+      "_origin": "ast",
+      "confidence_score": 1.0,
+      "source": "test_translator_test_complex_molecule",
+      "target": "lib_matter_subatomic"
+    },
+    {
       "relation": "method",
       "confidence": "EXTRACTED",
       "source_file": "lib/matter.py",
@@ -1344,6 +2183,18 @@
       "confidence_score": 1.0,
       "source": "lib_matter_interaction",
       "target": "lib_matter_interaction_init"
+    },
+    {
+      "relation": "imports",
+      "context": "import",
+      "confidence": "EXTRACTED",
+      "source_file": "main.py",
+      "source_location": "L8",
+      "weight": 1.0,
+      "_origin": "ast",
+      "confidence_score": 1.0,
+      "source": "main",
+      "target": "lib_matter_interaction"
     },
     {
       "relation": "method",
@@ -1425,6 +2276,54 @@
       "target": "lib_matter_atom"
     },
     {
+      "relation": "imports",
+      "context": "import",
+      "confidence": "EXTRACTED",
+      "source_file": "main.py",
+      "source_location": "L8",
+      "weight": 1.0,
+      "_origin": "ast",
+      "confidence_score": 1.0,
+      "source": "main",
+      "target": "lib_matter_atom"
+    },
+    {
+      "relation": "calls",
+      "context": "call",
+      "confidence": "EXTRACTED",
+      "source_file": "main.py",
+      "source_location": "L27",
+      "weight": 1.0,
+      "_origin": "ast",
+      "confidence_score": 1.0,
+      "source": "main_create_example_molecules",
+      "target": "lib_matter_atom"
+    },
+    {
+      "relation": "imports",
+      "context": "import",
+      "confidence": "EXTRACTED",
+      "source_file": "test_translator.py",
+      "source_location": "L120",
+      "weight": 1.0,
+      "_origin": "ast",
+      "confidence_score": 1.0,
+      "source": "test_translator",
+      "target": "lib_matter_atom"
+    },
+    {
+      "relation": "calls",
+      "context": "call",
+      "confidence": "EXTRACTED",
+      "source_file": "test_translator.py",
+      "source_location": "L127",
+      "weight": 1.0,
+      "_origin": "ast",
+      "confidence_score": 1.0,
+      "source": "test_translator_test_complex_molecule",
+      "target": "lib_matter_atom"
+    },
+    {
       "relation": "calls",
       "context": "call",
       "confidence": "EXTRACTED",
@@ -1492,6 +2391,54 @@
       "target": "lib_matter_molecule_net_charge"
     },
     {
+      "relation": "imports",
+      "context": "import",
+      "confidence": "EXTRACTED",
+      "source_file": "main.py",
+      "source_location": "L8",
+      "weight": 1.0,
+      "_origin": "ast",
+      "confidence_score": 1.0,
+      "source": "main",
+      "target": "lib_matter_molecule"
+    },
+    {
+      "relation": "calls",
+      "context": "call",
+      "confidence": "EXTRACTED",
+      "source_file": "main.py",
+      "source_location": "L28",
+      "weight": 1.0,
+      "_origin": "ast",
+      "confidence_score": 1.0,
+      "source": "main_create_example_molecules",
+      "target": "lib_matter_molecule"
+    },
+    {
+      "relation": "imports",
+      "context": "import",
+      "confidence": "EXTRACTED",
+      "source_file": "test_translator.py",
+      "source_location": "L120",
+      "weight": 1.0,
+      "_origin": "ast",
+      "confidence_score": 1.0,
+      "source": "test_translator",
+      "target": "lib_matter_molecule"
+    },
+    {
+      "relation": "calls",
+      "context": "call",
+      "confidence": "EXTRACTED",
+      "source_file": "test_translator.py",
+      "source_location": "L130",
+      "weight": 1.0,
+      "_origin": "ast",
+      "confidence_score": 1.0,
+      "source": "test_translator_test_complex_molecule",
+      "target": "lib_matter_molecule"
+    },
+    {
       "relation": "rationale_for",
       "confidence": "EXTRACTED",
       "source_file": "lib/matter.py",
@@ -1505,24 +2452,13 @@
     {
       "relation": "contains",
       "confidence": "EXTRACTED",
-      "source_file": "main.py",
-      "source_location": "L3",
-      "weight": 1.0,
-      "_origin": "ast",
-      "confidence_score": 1.0,
-      "source": "main",
-      "target": "main_main"
-    },
-    {
-      "relation": "contains",
-      "confidence": "EXTRACTED",
       "source_file": "lib/translator.py",
       "source_location": "L12",
       "weight": 1.0,
       "_origin": "ast",
+      "confidence_score": 1.0,
       "source": "lib_translator",
-      "target": "lib_translator_atomfeatures",
-      "confidence_score": 1.0
+      "target": "lib_translator_atomfeatures"
     },
     {
       "relation": "contains",
@@ -1531,9 +2467,9 @@
       "source_location": "L327",
       "weight": 1.0,
       "_origin": "ast",
+      "confidence_score": 1.0,
       "source": "lib_translator",
-      "target": "lib_translator_debug_translation",
-      "confidence_score": 1.0
+      "target": "lib_translator_debug_translation"
     },
     {
       "relation": "contains",
@@ -1542,9 +2478,9 @@
       "source_location": "L35",
       "weight": 1.0,
       "_origin": "ast",
+      "confidence_score": 1.0,
       "source": "lib_translator",
-      "target": "lib_translator_featureextractor",
-      "confidence_score": 1.0
+      "target": "lib_translator_featureextractor"
     },
     {
       "relation": "contains",
@@ -1553,9 +2489,9 @@
       "source_location": "L130",
       "weight": 1.0,
       "_origin": "ast",
+      "confidence_score": 1.0,
       "source": "lib_translator",
-      "target": "lib_translator_graphbuilder",
-      "confidence_score": 1.0
+      "target": "lib_translator_graphbuilder"
     },
     {
       "relation": "contains",
@@ -1564,9 +2500,9 @@
       "source_location": "L101",
       "weight": 1.0,
       "_origin": "ast",
+      "confidence_score": 1.0,
       "source": "lib_translator",
-      "target": "lib_translator_moleculargraph",
-      "confidence_score": 1.0
+      "target": "lib_translator_moleculargraph"
     },
     {
       "relation": "contains",
@@ -1575,9 +2511,9 @@
       "source_location": "L230",
       "weight": 1.0,
       "_origin": "ast",
+      "confidence_score": 1.0,
       "source": "lib_translator",
-      "target": "lib_translator_quantumencoder",
-      "confidence_score": 1.0
+      "target": "lib_translator_quantumencoder"
     },
     {
       "relation": "contains",
@@ -1586,9 +2522,9 @@
       "source_location": "L193",
       "weight": 1.0,
       "_origin": "ast",
+      "confidence_score": 1.0,
       "source": "lib_translator",
-      "target": "lib_translator_tensorconverter",
-      "confidence_score": 1.0
+      "target": "lib_translator_tensorconverter"
     },
     {
       "relation": "contains",
@@ -1597,9 +2533,9 @@
       "source_location": "L292",
       "weight": 1.0,
       "_origin": "ast",
+      "confidence_score": 1.0,
       "source": "lib_translator",
-      "target": "lib_translator_translator",
-      "confidence_score": 1.0
+      "target": "lib_translator_translator"
     },
     {
       "relation": "rationale_for",
@@ -1608,9 +2544,21 @@
       "source_location": "L1",
       "weight": 1.0,
       "_origin": "ast",
+      "confidence_score": 1.0,
       "source": "lib_translator_rationale_1",
-      "target": "lib_translator",
-      "confidence_score": 1.0
+      "target": "lib_translator"
+    },
+    {
+      "relation": "imports_from",
+      "context": "import",
+      "confidence": "EXTRACTED",
+      "source_file": "main.py",
+      "source_location": "L13",
+      "weight": 1.0,
+      "_origin": "ast",
+      "confidence_score": 1.0,
+      "source": "main",
+      "target": "lib_translator"
     },
     {
       "relation": "imports_from",
@@ -1620,9 +2568,9 @@
       "source_location": "L9",
       "weight": 1.0,
       "_origin": "ast",
+      "confidence_score": 1.0,
       "source": "test_translator",
-      "target": "lib_translator",
-      "confidence_score": 1.0
+      "target": "lib_translator"
     },
     {
       "relation": "method",
@@ -1631,9 +2579,9 @@
       "source_location": "L21",
       "weight": 1.0,
       "_origin": "ast",
+      "confidence_score": 1.0,
       "source": "lib_translator_atomfeatures",
-      "target": "lib_translator_atomfeatures_to_vector",
-      "confidence_score": 1.0
+      "target": "lib_translator_atomfeatures_to_vector"
     },
     {
       "relation": "references",
@@ -1643,9 +2591,9 @@
       "source_location": "L49",
       "weight": 1.0,
       "_origin": "ast",
+      "confidence_score": 1.0,
       "source": "lib_translator_featureextractor_extract_from_atom",
-      "target": "lib_translator_atomfeatures",
-      "confidence_score": 1.0
+      "target": "lib_translator_atomfeatures"
     },
     {
       "relation": "rationale_for",
@@ -1654,9 +2602,9 @@
       "source_location": "L13",
       "weight": 1.0,
       "_origin": "ast",
+      "confidence_score": 1.0,
       "source": "lib_translator_rationale_13",
-      "target": "lib_translator_atomfeatures",
-      "confidence_score": 1.0
+      "target": "lib_translator_atomfeatures"
     },
     {
       "relation": "references",
@@ -1666,9 +2614,9 @@
       "source_location": "L21",
       "weight": 1.0,
       "_origin": "ast",
+      "confidence_score": 1.0,
       "source": "lib_translator_atomfeatures_to_vector",
-      "target": "ndarray",
-      "confidence_score": 1.0
+      "target": "ndarray"
     },
     {
       "relation": "calls",
@@ -1678,9 +2626,9 @@
       "source_location": "L146",
       "weight": 1.0,
       "_origin": "ast",
+      "confidence_score": 1.0,
       "source": "lib_translator_graphbuilder_build_from_molecule",
-      "target": "lib_translator_atomfeatures_to_vector",
-      "confidence_score": 1.0
+      "target": "lib_translator_atomfeatures_to_vector"
     },
     {
       "relation": "rationale_for",
@@ -1689,9 +2637,9 @@
       "source_location": "L22",
       "weight": 1.0,
       "_origin": "ast",
+      "confidence_score": 1.0,
       "source": "lib_translator_rationale_22",
-      "target": "lib_translator_atomfeatures_to_vector",
-      "confidence_score": 1.0
+      "target": "lib_translator_atomfeatures_to_vector"
     },
     {
       "relation": "references",
@@ -1701,9 +2649,9 @@
       "source_location": "L188",
       "weight": 1.0,
       "_origin": "ast",
+      "confidence_score": 1.0,
       "source": "lib_translator_graphbuilder_calculate_distance",
-      "target": "ndarray",
-      "confidence_score": 1.0
+      "target": "ndarray"
     },
     {
       "relation": "references",
@@ -1713,9 +2661,9 @@
       "source_location": "L118",
       "weight": 1.0,
       "_origin": "ast",
+      "confidence_score": 1.0,
       "source": "lib_translator_moleculargraph_to_adjacency_matrix",
-      "target": "ndarray",
-      "confidence_score": 1.0
+      "target": "ndarray"
     },
     {
       "relation": "references",
@@ -1725,9 +2673,9 @@
       "source_location": "L197",
       "weight": 1.0,
       "_origin": "ast",
+      "confidence_score": 1.0,
       "source": "lib_translator_tensorconverter_normalize_features",
-      "target": "ndarray",
-      "confidence_score": 1.0
+      "target": "ndarray"
     },
     {
       "relation": "method",
@@ -1736,9 +2684,9 @@
       "source_location": "L78",
       "weight": 1.0,
       "_origin": "ast",
+      "confidence_score": 1.0,
       "source": "lib_translator_featureextractor",
-      "target": "lib_translator_featureextractor_calculate_valence_electrons",
-      "confidence_score": 1.0
+      "target": "lib_translator_featureextractor_calculate_valence_electrons"
     },
     {
       "relation": "method",
@@ -1747,9 +2695,9 @@
       "source_location": "L67",
       "weight": 1.0,
       "_origin": "ast",
+      "confidence_score": 1.0,
       "source": "lib_translator_featureextractor",
-      "target": "lib_translator_featureextractor_encode_configuration",
-      "confidence_score": 1.0
+      "target": "lib_translator_featureextractor_encode_configuration"
     },
     {
       "relation": "method",
@@ -1758,9 +2706,9 @@
       "source_location": "L49",
       "weight": 1.0,
       "_origin": "ast",
+      "confidence_score": 1.0,
       "source": "lib_translator_featureextractor",
-      "target": "lib_translator_featureextractor_extract_from_atom",
-      "confidence_score": 1.0
+      "target": "lib_translator_featureextractor_extract_from_atom"
     },
     {
       "relation": "method",
@@ -1769,9 +2717,9 @@
       "source_location": "L46",
       "weight": 1.0,
       "_origin": "ast",
+      "confidence_score": 1.0,
       "source": "lib_translator_featureextractor",
-      "target": "lib_translator_featureextractor_init",
-      "confidence_score": 1.0
+      "target": "lib_translator_featureextractor_init"
     },
     {
       "relation": "references",
@@ -1781,9 +2729,9 @@
       "source_location": "L133",
       "weight": 1.0,
       "_origin": "ast",
+      "confidence_score": 1.0,
       "source": "lib_translator_graphbuilder_init",
-      "target": "lib_translator_featureextractor",
-      "confidence_score": 1.0
+      "target": "lib_translator_featureextractor"
     },
     {
       "relation": "rationale_for",
@@ -1792,9 +2740,9 @@
       "source_location": "L36",
       "weight": 1.0,
       "_origin": "ast",
+      "confidence_score": 1.0,
       "source": "lib_translator_rationale_36",
-      "target": "lib_translator_featureextractor",
-      "confidence_score": 1.0
+      "target": "lib_translator_featureextractor"
     },
     {
       "relation": "calls",
@@ -1804,9 +2752,9 @@
       "source_location": "L296",
       "weight": 1.0,
       "_origin": "ast",
+      "confidence_score": 1.0,
       "source": "lib_translator_translator_init",
-      "target": "lib_translator_featureextractor",
-      "confidence_score": 1.0
+      "target": "lib_translator_featureextractor"
     },
     {
       "relation": "imports",
@@ -1816,9 +2764,9 @@
       "source_location": "L89",
       "weight": 1.0,
       "_origin": "ast",
+      "confidence_score": 1.0,
       "source": "test_translator",
-      "target": "lib_translator_featureextractor",
-      "confidence_score": 1.0
+      "target": "lib_translator_featureextractor"
     },
     {
       "relation": "calls",
@@ -1828,9 +2776,9 @@
       "source_location": "L91",
       "weight": 1.0,
       "_origin": "ast",
+      "confidence_score": 1.0,
       "source": "test_translator_test_feature_extraction",
-      "target": "lib_translator_featureextractor",
-      "confidence_score": 1.0
+      "target": "lib_translator_featureextractor"
     },
     {
       "relation": "calls",
@@ -1840,9 +2788,9 @@
       "source_location": "L56",
       "weight": 1.0,
       "_origin": "ast",
+      "confidence_score": 1.0,
       "source": "lib_translator_featureextractor_extract_from_atom",
-      "target": "lib_translator_featureextractor_calculate_valence_electrons",
-      "confidence_score": 1.0
+      "target": "lib_translator_featureextractor_calculate_valence_electrons"
     },
     {
       "relation": "calls",
@@ -1852,9 +2800,9 @@
       "source_location": "L53",
       "weight": 1.0,
       "_origin": "ast",
+      "confidence_score": 1.0,
       "source": "lib_translator_featureextractor_extract_from_atom",
-      "target": "lib_translator_featureextractor_encode_configuration",
-      "confidence_score": 1.0
+      "target": "lib_translator_featureextractor_encode_configuration"
     },
     {
       "relation": "calls",
@@ -1864,9 +2812,9 @@
       "source_location": "L145",
       "weight": 1.0,
       "_origin": "ast",
+      "confidence_score": 1.0,
       "source": "lib_translator_graphbuilder_build_from_molecule",
-      "target": "lib_translator_featureextractor_extract_from_atom",
-      "confidence_score": 1.0
+      "target": "lib_translator_featureextractor_extract_from_atom"
     },
     {
       "relation": "rationale_for",
@@ -1875,9 +2823,9 @@
       "source_location": "L50",
       "weight": 1.0,
       "_origin": "ast",
+      "confidence_score": 1.0,
       "source": "lib_translator_rationale_50",
-      "target": "lib_translator_featureextractor_extract_from_atom",
-      "confidence_score": 1.0
+      "target": "lib_translator_featureextractor_extract_from_atom"
     },
     {
       "relation": "rationale_for",
@@ -1886,9 +2834,9 @@
       "source_location": "L68",
       "weight": 1.0,
       "_origin": "ast",
+      "confidence_score": 1.0,
       "source": "lib_translator_rationale_68",
-      "target": "lib_translator_featureextractor_encode_configuration",
-      "confidence_score": 1.0
+      "target": "lib_translator_featureextractor_encode_configuration"
     },
     {
       "relation": "rationale_for",
@@ -1897,9 +2845,9 @@
       "source_location": "L79",
       "weight": 1.0,
       "_origin": "ast",
+      "confidence_score": 1.0,
       "source": "lib_translator_rationale_79",
-      "target": "lib_translator_featureextractor_calculate_valence_electrons",
-      "confidence_score": 1.0
+      "target": "lib_translator_featureextractor_calculate_valence_electrons"
     },
     {
       "relation": "references",
@@ -1909,9 +2857,9 @@
       "source_location": "L136",
       "weight": 1.0,
       "_origin": "ast",
+      "confidence_score": 1.0,
       "source": "lib_translator_graphbuilder_build_from_molecule",
-      "target": "lib_translator_moleculargraph",
-      "confidence_score": 1.0
+      "target": "lib_translator_moleculargraph"
     },
     {
       "relation": "method",
@@ -1920,9 +2868,9 @@
       "source_location": "L118",
       "weight": 1.0,
       "_origin": "ast",
+      "confidence_score": 1.0,
       "source": "lib_translator_moleculargraph",
-      "target": "lib_translator_moleculargraph_to_adjacency_matrix",
-      "confidence_score": 1.0
+      "target": "lib_translator_moleculargraph_to_adjacency_matrix"
     },
     {
       "relation": "method",
@@ -1931,9 +2879,9 @@
       "source_location": "L109",
       "weight": 1.0,
       "_origin": "ast",
+      "confidence_score": 1.0,
       "source": "lib_translator_moleculargraph",
-      "target": "lib_translator_moleculargraph_to_pyg_format",
-      "confidence_score": 1.0
+      "target": "lib_translator_moleculargraph_to_pyg_format"
     },
     {
       "relation": "references",
@@ -1943,9 +2891,9 @@
       "source_location": "L234",
       "weight": 1.0,
       "_origin": "ast",
+      "confidence_score": 1.0,
       "source": "lib_translator_quantumencoder_encode_hamiltonian",
-      "target": "lib_translator_moleculargraph",
-      "confidence_score": 1.0
+      "target": "lib_translator_moleculargraph"
     },
     {
       "relation": "references",
@@ -1955,9 +2903,9 @@
       "source_location": "L272",
       "weight": 1.0,
       "_origin": "ast",
+      "confidence_score": 1.0,
       "source": "lib_translator_quantumencoder_map_to_qubits",
-      "target": "lib_translator_moleculargraph",
-      "confidence_score": 1.0
+      "target": "lib_translator_moleculargraph"
     },
     {
       "relation": "rationale_for",
@@ -1966,9 +2914,9 @@
       "source_location": "L102",
       "weight": 1.0,
       "_origin": "ast",
+      "confidence_score": 1.0,
       "source": "lib_translator_rationale_102",
-      "target": "lib_translator_moleculargraph",
-      "confidence_score": 1.0
+      "target": "lib_translator_moleculargraph"
     },
     {
       "relation": "references",
@@ -1978,9 +2926,9 @@
       "source_location": "L214",
       "weight": 1.0,
       "_origin": "ast",
+      "confidence_score": 1.0,
       "source": "lib_translator_tensorconverter_graph_to_tensors",
-      "target": "lib_translator_moleculargraph",
-      "confidence_score": 1.0
+      "target": "lib_translator_moleculargraph"
     },
     {
       "relation": "rationale_for",
@@ -1989,9 +2937,9 @@
       "source_location": "L110",
       "weight": 1.0,
       "_origin": "ast",
+      "confidence_score": 1.0,
       "source": "lib_translator_rationale_110",
-      "target": "lib_translator_moleculargraph_to_pyg_format",
-      "confidence_score": 1.0
+      "target": "lib_translator_moleculargraph_to_pyg_format"
     },
     {
       "relation": "calls",
@@ -2001,9 +2949,9 @@
       "source_location": "L311",
       "weight": 1.0,
       "_origin": "ast",
+      "confidence_score": 1.0,
       "source": "lib_translator_translator_translate_molecule",
-      "target": "lib_translator_moleculargraph_to_pyg_format",
-      "confidence_score": 1.0
+      "target": "lib_translator_moleculargraph_to_pyg_format"
     },
     {
       "relation": "rationale_for",
@@ -2012,9 +2960,9 @@
       "source_location": "L119",
       "weight": 1.0,
       "_origin": "ast",
+      "confidence_score": 1.0,
       "source": "lib_translator_rationale_119",
-      "target": "lib_translator_moleculargraph_to_adjacency_matrix",
-      "confidence_score": 1.0
+      "target": "lib_translator_moleculargraph_to_adjacency_matrix"
     },
     {
       "relation": "calls",
@@ -2024,9 +2972,9 @@
       "source_location": "L226",
       "weight": 1.0,
       "_origin": "ast",
+      "confidence_score": 1.0,
       "source": "lib_translator_tensorconverter_graph_to_tensors",
-      "target": "lib_translator_moleculargraph_to_adjacency_matrix",
-      "confidence_score": 1.0
+      "target": "lib_translator_moleculargraph_to_adjacency_matrix"
     },
     {
       "relation": "method",
@@ -2035,9 +2983,9 @@
       "source_location": "L136",
       "weight": 1.0,
       "_origin": "ast",
+      "confidence_score": 1.0,
       "source": "lib_translator_graphbuilder",
-      "target": "lib_translator_graphbuilder_build_from_molecule",
-      "confidence_score": 1.0
+      "target": "lib_translator_graphbuilder_build_from_molecule"
     },
     {
       "relation": "method",
@@ -2046,9 +2994,9 @@
       "source_location": "L188",
       "weight": 1.0,
       "_origin": "ast",
+      "confidence_score": 1.0,
       "source": "lib_translator_graphbuilder",
-      "target": "lib_translator_graphbuilder_calculate_distance",
-      "confidence_score": 1.0
+      "target": "lib_translator_graphbuilder_calculate_distance"
     },
     {
       "relation": "method",
@@ -2057,9 +3005,9 @@
       "source_location": "L133",
       "weight": 1.0,
       "_origin": "ast",
+      "confidence_score": 1.0,
       "source": "lib_translator_graphbuilder",
-      "target": "lib_translator_graphbuilder_init",
-      "confidence_score": 1.0
+      "target": "lib_translator_graphbuilder_init"
     },
     {
       "relation": "rationale_for",
@@ -2068,9 +3016,9 @@
       "source_location": "L131",
       "weight": 1.0,
       "_origin": "ast",
+      "confidence_score": 1.0,
       "source": "lib_translator_rationale_131",
-      "target": "lib_translator_graphbuilder",
-      "confidence_score": 1.0
+      "target": "lib_translator_graphbuilder"
     },
     {
       "relation": "calls",
@@ -2080,9 +3028,9 @@
       "source_location": "L297",
       "weight": 1.0,
       "_origin": "ast",
+      "confidence_score": 1.0,
       "source": "lib_translator_translator_init",
-      "target": "lib_translator_graphbuilder",
-      "confidence_score": 1.0
+      "target": "lib_translator_graphbuilder"
     },
     {
       "relation": "calls",
@@ -2092,9 +3040,9 @@
       "source_location": "L166",
       "weight": 1.0,
       "_origin": "ast",
+      "confidence_score": 1.0,
       "source": "lib_translator_graphbuilder_build_from_molecule",
-      "target": "lib_translator_graphbuilder_calculate_distance",
-      "confidence_score": 1.0
+      "target": "lib_translator_graphbuilder_calculate_distance"
     },
     {
       "relation": "rationale_for",
@@ -2103,9 +3051,9 @@
       "source_location": "L137",
       "weight": 1.0,
       "_origin": "ast",
+      "confidence_score": 1.0,
       "source": "lib_translator_rationale_137",
-      "target": "lib_translator_graphbuilder_build_from_molecule",
-      "confidence_score": 1.0
+      "target": "lib_translator_graphbuilder_build_from_molecule"
     },
     {
       "relation": "calls",
@@ -2115,9 +3063,9 @@
       "source_location": "L305",
       "weight": 1.0,
       "_origin": "ast",
+      "confidence_score": 1.0,
       "source": "lib_translator_translator_translate_molecule",
-      "target": "lib_translator_graphbuilder_build_from_molecule",
-      "confidence_score": 1.0
+      "target": "lib_translator_graphbuilder_build_from_molecule"
     },
     {
       "relation": "rationale_for",
@@ -2126,9 +3074,9 @@
       "source_location": "L189",
       "weight": 1.0,
       "_origin": "ast",
+      "confidence_score": 1.0,
       "source": "lib_translator_rationale_189",
-      "target": "lib_translator_graphbuilder_calculate_distance",
-      "confidence_score": 1.0
+      "target": "lib_translator_graphbuilder_calculate_distance"
     },
     {
       "relation": "rationale_for",
@@ -2137,9 +3085,9 @@
       "source_location": "L194",
       "weight": 1.0,
       "_origin": "ast",
+      "confidence_score": 1.0,
       "source": "lib_translator_rationale_194",
-      "target": "lib_translator_tensorconverter",
-      "confidence_score": 1.0
+      "target": "lib_translator_tensorconverter"
     },
     {
       "relation": "method",
@@ -2148,9 +3096,9 @@
       "source_location": "L214",
       "weight": 1.0,
       "_origin": "ast",
+      "confidence_score": 1.0,
       "source": "lib_translator_tensorconverter",
-      "target": "lib_translator_tensorconverter_graph_to_tensors",
-      "confidence_score": 1.0
+      "target": "lib_translator_tensorconverter_graph_to_tensors"
     },
     {
       "relation": "method",
@@ -2159,9 +3107,9 @@
       "source_location": "L197",
       "weight": 1.0,
       "_origin": "ast",
+      "confidence_score": 1.0,
       "source": "lib_translator_tensorconverter",
-      "target": "lib_translator_tensorconverter_normalize_features",
-      "confidence_score": 1.0
+      "target": "lib_translator_tensorconverter_normalize_features"
     },
     {
       "relation": "calls",
@@ -2171,9 +3119,9 @@
       "source_location": "L298",
       "weight": 1.0,
       "_origin": "ast",
+      "confidence_score": 1.0,
       "source": "lib_translator_translator_init",
-      "target": "lib_translator_tensorconverter",
-      "confidence_score": 1.0
+      "target": "lib_translator_tensorconverter"
     },
     {
       "relation": "rationale_for",
@@ -2182,9 +3130,9 @@
       "source_location": "L198",
       "weight": 1.0,
       "_origin": "ast",
+      "confidence_score": 1.0,
       "source": "lib_translator_rationale_198",
-      "target": "lib_translator_tensorconverter_normalize_features",
-      "confidence_score": 1.0
+      "target": "lib_translator_tensorconverter_normalize_features"
     },
     {
       "relation": "calls",
@@ -2205,9 +3153,9 @@
       "source_location": "L215",
       "weight": 1.0,
       "_origin": "ast",
+      "confidence_score": 1.0,
       "source": "lib_translator_rationale_215",
-      "target": "lib_translator_tensorconverter_graph_to_tensors",
-      "confidence_score": 1.0
+      "target": "lib_translator_tensorconverter_graph_to_tensors"
     },
     {
       "relation": "calls",
@@ -2217,9 +3165,9 @@
       "source_location": "L309",
       "weight": 1.0,
       "_origin": "ast",
+      "confidence_score": 1.0,
       "source": "lib_translator_translator_translate_molecule",
-      "target": "lib_translator_tensorconverter_graph_to_tensors",
-      "confidence_score": 1.0
+      "target": "lib_translator_tensorconverter_graph_to_tensors"
     },
     {
       "relation": "method",
@@ -2228,9 +3176,9 @@
       "source_location": "L234",
       "weight": 1.0,
       "_origin": "ast",
+      "confidence_score": 1.0,
       "source": "lib_translator_quantumencoder",
-      "target": "lib_translator_quantumencoder_encode_hamiltonian",
-      "confidence_score": 1.0
+      "target": "lib_translator_quantumencoder_encode_hamiltonian"
     },
     {
       "relation": "method",
@@ -2239,9 +3187,9 @@
       "source_location": "L272",
       "weight": 1.0,
       "_origin": "ast",
+      "confidence_score": 1.0,
       "source": "lib_translator_quantumencoder",
-      "target": "lib_translator_quantumencoder_map_to_qubits",
-      "confidence_score": 1.0
+      "target": "lib_translator_quantumencoder_map_to_qubits"
     },
     {
       "relation": "rationale_for",
@@ -2250,9 +3198,9 @@
       "source_location": "L231",
       "weight": 1.0,
       "_origin": "ast",
+      "confidence_score": 1.0,
       "source": "lib_translator_rationale_231",
-      "target": "lib_translator_quantumencoder",
-      "confidence_score": 1.0
+      "target": "lib_translator_quantumencoder"
     },
     {
       "relation": "calls",
@@ -2262,9 +3210,9 @@
       "source_location": "L299",
       "weight": 1.0,
       "_origin": "ast",
+      "confidence_score": 1.0,
       "source": "lib_translator_translator_init",
-      "target": "lib_translator_quantumencoder",
-      "confidence_score": 1.0
+      "target": "lib_translator_quantumencoder"
     },
     {
       "relation": "rationale_for",
@@ -2273,9 +3221,9 @@
       "source_location": "L235",
       "weight": 1.0,
       "_origin": "ast",
+      "confidence_score": 1.0,
       "source": "lib_translator_rationale_235",
-      "target": "lib_translator_quantumencoder_encode_hamiltonian",
-      "confidence_score": 1.0
+      "target": "lib_translator_quantumencoder_encode_hamiltonian"
     },
     {
       "relation": "calls",
@@ -2285,9 +3233,9 @@
       "source_location": "L315",
       "weight": 1.0,
       "_origin": "ast",
+      "confidence_score": 1.0,
       "source": "lib_translator_translator_translate_molecule",
-      "target": "lib_translator_quantumencoder_encode_hamiltonian",
-      "confidence_score": 1.0
+      "target": "lib_translator_quantumencoder_encode_hamiltonian"
     },
     {
       "relation": "rationale_for",
@@ -2296,9 +3244,9 @@
       "source_location": "L273",
       "weight": 1.0,
       "_origin": "ast",
+      "confidence_score": 1.0,
       "source": "lib_translator_rationale_273",
-      "target": "lib_translator_quantumencoder_map_to_qubits",
-      "confidence_score": 1.0
+      "target": "lib_translator_quantumencoder_map_to_qubits"
     },
     {
       "relation": "calls",
@@ -2308,9 +3256,9 @@
       "source_location": "L316",
       "weight": 1.0,
       "_origin": "ast",
+      "confidence_score": 1.0,
       "source": "lib_translator_translator_translate_molecule",
-      "target": "lib_translator_quantumencoder_map_to_qubits",
-      "confidence_score": 1.0
+      "target": "lib_translator_quantumencoder_map_to_qubits"
     },
     {
       "relation": "calls",
@@ -2320,9 +3268,9 @@
       "source_location": "L329",
       "weight": 1.0,
       "_origin": "ast",
+      "confidence_score": 1.0,
       "source": "lib_translator_debug_translation",
-      "target": "lib_translator_translator",
-      "confidence_score": 1.0
+      "target": "lib_translator_translator"
     },
     {
       "relation": "rationale_for",
@@ -2331,9 +3279,9 @@
       "source_location": "L293",
       "weight": 1.0,
       "_origin": "ast",
+      "confidence_score": 1.0,
       "source": "lib_translator_rationale_293",
-      "target": "lib_translator_translator",
-      "confidence_score": 1.0
+      "target": "lib_translator_translator"
     },
     {
       "relation": "method",
@@ -2342,9 +3290,9 @@
       "source_location": "L321",
       "weight": 1.0,
       "_origin": "ast",
+      "confidence_score": 1.0,
       "source": "lib_translator_translator",
-      "target": "lib_translator_translator_batch_translate",
-      "confidence_score": 1.0
+      "target": "lib_translator_translator_batch_translate"
     },
     {
       "relation": "method",
@@ -2353,9 +3301,9 @@
       "source_location": "L295",
       "weight": 1.0,
       "_origin": "ast",
+      "confidence_score": 1.0,
       "source": "lib_translator_translator",
-      "target": "lib_translator_translator_init",
-      "confidence_score": 1.0
+      "target": "lib_translator_translator_init"
     },
     {
       "relation": "method",
@@ -2364,9 +3312,45 @@
       "source_location": "L301",
       "weight": 1.0,
       "_origin": "ast",
+      "confidence_score": 1.0,
       "source": "lib_translator_translator",
-      "target": "lib_translator_translator_translate_molecule",
-      "confidence_score": 1.0
+      "target": "lib_translator_translator_translate_molecule"
+    },
+    {
+      "relation": "imports",
+      "context": "import",
+      "confidence": "EXTRACTED",
+      "source_file": "main.py",
+      "source_location": "L13",
+      "weight": 1.0,
+      "_origin": "ast",
+      "confidence_score": 1.0,
+      "source": "main",
+      "target": "lib_translator_translator"
+    },
+    {
+      "relation": "calls",
+      "context": "call",
+      "confidence": "EXTRACTED",
+      "source_file": "main.py",
+      "source_location": "L84",
+      "weight": 1.0,
+      "_origin": "ast",
+      "confidence_score": 1.0,
+      "source": "main_demonstrate_translation",
+      "target": "lib_translator_translator"
+    },
+    {
+      "relation": "calls",
+      "context": "call",
+      "confidence": "EXTRACTED",
+      "source_file": "main.py",
+      "source_location": "L131",
+      "weight": 1.0,
+      "_origin": "ast",
+      "confidence_score": 1.0,
+      "source": "main_run_batch_processing",
+      "target": "lib_translator_translator"
     },
     {
       "relation": "imports",
@@ -2376,9 +3360,9 @@
       "source_location": "L9",
       "weight": 1.0,
       "_origin": "ast",
+      "confidence_score": 1.0,
       "source": "test_translator",
-      "target": "lib_translator_translator",
-      "confidence_score": 1.0
+      "target": "lib_translator_translator"
     },
     {
       "relation": "calls",
@@ -2388,9 +3372,9 @@
       "source_location": "L17",
       "weight": 1.0,
       "_origin": "ast",
+      "confidence_score": 1.0,
       "source": "test_translator_test_basic_translation",
-      "target": "lib_translator_translator",
-      "confidence_score": 1.0
+      "target": "lib_translator_translator"
     },
     {
       "relation": "calls",
@@ -2400,9 +3384,9 @@
       "source_location": "L140",
       "weight": 1.0,
       "_origin": "ast",
+      "confidence_score": 1.0,
       "source": "test_translator_test_complex_molecule",
-      "target": "lib_translator_translator",
-      "confidence_score": 1.0
+      "target": "lib_translator_translator"
     },
     {
       "relation": "calls",
@@ -2412,9 +3396,9 @@
       "source_location": "L69",
       "weight": 1.0,
       "_origin": "ast",
+      "confidence_score": 1.0,
       "source": "test_translator_test_pyg_format",
-      "target": "lib_translator_translator",
-      "confidence_score": 1.0
+      "target": "lib_translator_translator"
     },
     {
       "relation": "calls",
@@ -2424,9 +3408,9 @@
       "source_location": "L43",
       "weight": 1.0,
       "_origin": "ast",
+      "confidence_score": 1.0,
       "source": "test_translator_test_quantum_translation",
-      "target": "lib_translator_translator",
-      "confidence_score": 1.0
+      "target": "lib_translator_translator"
     },
     {
       "relation": "calls",
@@ -2436,9 +3420,9 @@
       "source_location": "L337",
       "weight": 1.0,
       "_origin": "ast",
+      "confidence_score": 1.0,
       "source": "lib_translator_debug_translation",
-      "target": "lib_translator_translator_translate_molecule",
-      "confidence_score": 1.0
+      "target": "lib_translator_translator_translate_molecule"
     },
     {
       "relation": "rationale_for",
@@ -2447,9 +3431,9 @@
       "source_location": "L302",
       "weight": 1.0,
       "_origin": "ast",
+      "confidence_score": 1.0,
       "source": "lib_translator_rationale_302",
-      "target": "lib_translator_translator_translate_molecule",
-      "confidence_score": 1.0
+      "target": "lib_translator_translator_translate_molecule"
     },
     {
       "relation": "calls",
@@ -2459,9 +3443,9 @@
       "source_location": "L323",
       "weight": 1.0,
       "_origin": "ast",
+      "confidence_score": 1.0,
       "source": "lib_translator_translator_batch_translate",
-      "target": "lib_translator_translator_translate_molecule",
-      "confidence_score": 1.0
+      "target": "lib_translator_translator_translate_molecule"
     },
     {
       "relation": "rationale_for",
@@ -2470,9 +3454,9 @@
       "source_location": "L322",
       "weight": 1.0,
       "_origin": "ast",
+      "confidence_score": 1.0,
       "source": "lib_translator_rationale_322",
-      "target": "lib_translator_translator_batch_translate",
-      "confidence_score": 1.0
+      "target": "lib_translator_translator_batch_translate"
     },
     {
       "relation": "rationale_for",
@@ -2481,9 +3465,33 @@
       "source_location": "L328",
       "weight": 1.0,
       "_origin": "ast",
+      "confidence_score": 1.0,
       "source": "lib_translator_rationale_328",
-      "target": "lib_translator_debug_translation",
-      "confidence_score": 1.0
+      "target": "lib_translator_debug_translation"
+    },
+    {
+      "relation": "imports",
+      "context": "import",
+      "confidence": "EXTRACTED",
+      "source_file": "main.py",
+      "source_location": "L13",
+      "weight": 1.0,
+      "_origin": "ast",
+      "confidence_score": 1.0,
+      "source": "main",
+      "target": "lib_translator_debug_translation"
+    },
+    {
+      "relation": "calls",
+      "context": "call",
+      "confidence": "EXTRACTED",
+      "source_file": "main.py",
+      "source_location": "L122",
+      "weight": 1.0,
+      "_origin": "ast",
+      "confidence_score": 1.0,
+      "source": "main_demonstrate_detailed_analysis",
+      "target": "lib_translator_debug_translation"
     },
     {
       "relation": "imports",
@@ -2493,9 +3501,444 @@
       "source_location": "L9",
       "weight": 1.0,
       "_origin": "ast",
+      "confidence_score": 1.0,
       "source": "test_translator",
-      "target": "lib_translator_debug_translation",
-      "confidence_score": 1.0
+      "target": "lib_translator_debug_translation"
+    },
+    {
+      "relation": "contains",
+      "confidence": "EXTRACTED",
+      "source_file": "main.py",
+      "source_location": "L16",
+      "weight": 1.0,
+      "_origin": "ast",
+      "confidence_score": 1.0,
+      "source": "main",
+      "target": "main_create_example_molecules"
+    },
+    {
+      "relation": "contains",
+      "confidence": "EXTRACTED",
+      "source_file": "main.py",
+      "source_location": "L59",
+      "weight": 1.0,
+      "_origin": "ast",
+      "confidence_score": 1.0,
+      "source": "main",
+      "target": "main_demonstrate_basic_properties"
+    },
+    {
+      "relation": "contains",
+      "confidence": "EXTRACTED",
+      "source_file": "main.py",
+      "source_location": "L115",
+      "weight": 1.0,
+      "_origin": "ast",
+      "confidence_score": 1.0,
+      "source": "main",
+      "target": "main_demonstrate_detailed_analysis"
+    },
+    {
+      "relation": "contains",
+      "confidence": "EXTRACTED",
+      "source_file": "main.py",
+      "source_location": "L78",
+      "weight": 1.0,
+      "_origin": "ast",
+      "confidence_score": 1.0,
+      "source": "main",
+      "target": "main_demonstrate_translation"
+    },
+    {
+      "relation": "contains",
+      "confidence": "EXTRACTED",
+      "source_file": "main.py",
+      "source_location": "L145",
+      "weight": 1.0,
+      "_origin": "ast",
+      "confidence_score": 1.0,
+      "source": "main",
+      "target": "main_interactive_menu"
+    },
+    {
+      "relation": "contains",
+      "confidence": "EXTRACTED",
+      "source_file": "main.py",
+      "source_location": "L269",
+      "weight": 1.0,
+      "_origin": "ast",
+      "confidence_score": 1.0,
+      "source": "main",
+      "target": "main_main"
+    },
+    {
+      "relation": "contains",
+      "confidence": "EXTRACTED",
+      "source_file": "main.py",
+      "source_location": "L125",
+      "weight": 1.0,
+      "_origin": "ast",
+      "confidence_score": 1.0,
+      "source": "main",
+      "target": "main_run_batch_processing"
+    },
+    {
+      "relation": "contains",
+      "confidence": "EXTRACTED",
+      "source_file": "main.py",
+      "source_location": "L188",
+      "weight": 1.0,
+      "_origin": "ast",
+      "confidence_score": 1.0,
+      "source": "main",
+      "target": "main_run_demo"
+    },
+    {
+      "relation": "contains",
+      "confidence": "EXTRACTED",
+      "source_file": "main.py",
+      "source_location": "L240",
+      "weight": 1.0,
+      "_origin": "ast",
+      "confidence_score": 1.0,
+      "source": "main",
+      "target": "main_save_molecules_to_db"
+    },
+    {
+      "relation": "contains",
+      "confidence": "EXTRACTED",
+      "source_file": "main.py",
+      "source_location": "L216",
+      "weight": 1.0,
+      "_origin": "ast",
+      "confidence_score": 1.0,
+      "source": "main",
+      "target": "main_try_database_integration"
+    },
+    {
+      "relation": "rationale_for",
+      "confidence": "EXTRACTED",
+      "source_file": "main.py",
+      "source_location": "L1",
+      "weight": 1.0,
+      "_origin": "ast",
+      "confidence_score": 1.0,
+      "source": "main_rationale_1",
+      "target": "main"
+    },
+    {
+      "relation": "calls",
+      "context": "call",
+      "confidence": "EXTRACTED",
+      "source_file": "main.py",
+      "source_location": "L152",
+      "weight": 1.0,
+      "_origin": "ast",
+      "confidence_score": 1.0,
+      "source": "main_interactive_menu",
+      "target": "main_create_example_molecules"
+    },
+    {
+      "relation": "calls",
+      "context": "call",
+      "confidence": "EXTRACTED",
+      "source_file": "main.py",
+      "source_location": "L313",
+      "weight": 1.0,
+      "_origin": "ast",
+      "confidence_score": 1.0,
+      "source": "main_main",
+      "target": "main_create_example_molecules"
+    },
+    {
+      "relation": "rationale_for",
+      "confidence": "EXTRACTED",
+      "source_file": "main.py",
+      "source_location": "L17",
+      "weight": 1.0,
+      "_origin": "ast",
+      "confidence_score": 1.0,
+      "source": "main_rationale_17",
+      "target": "main_create_example_molecules"
+    },
+    {
+      "relation": "calls",
+      "context": "call",
+      "confidence": "EXTRACTED",
+      "source_file": "main.py",
+      "source_location": "L195",
+      "weight": 1.0,
+      "_origin": "ast",
+      "confidence_score": 1.0,
+      "source": "main_run_demo",
+      "target": "main_create_example_molecules"
+    },
+    {
+      "relation": "calls",
+      "context": "call",
+      "confidence": "EXTRACTED",
+      "source_file": "main.py",
+      "source_location": "L168",
+      "weight": 1.0,
+      "_origin": "ast",
+      "confidence_score": 1.0,
+      "source": "main_interactive_menu",
+      "target": "main_demonstrate_basic_properties"
+    },
+    {
+      "relation": "calls",
+      "context": "call",
+      "confidence": "EXTRACTED",
+      "source_file": "main.py",
+      "source_location": "L343",
+      "weight": 1.0,
+      "_origin": "ast",
+      "confidence_score": 1.0,
+      "source": "main_main",
+      "target": "main_demonstrate_basic_properties"
+    },
+    {
+      "relation": "rationale_for",
+      "confidence": "EXTRACTED",
+      "source_file": "main.py",
+      "source_location": "L60",
+      "weight": 1.0,
+      "_origin": "ast",
+      "confidence_score": 1.0,
+      "source": "main_rationale_60",
+      "target": "main_demonstrate_basic_properties"
+    },
+    {
+      "relation": "calls",
+      "context": "call",
+      "confidence": "EXTRACTED",
+      "source_file": "main.py",
+      "source_location": "L198",
+      "weight": 1.0,
+      "_origin": "ast",
+      "confidence_score": 1.0,
+      "source": "main_run_demo",
+      "target": "main_demonstrate_basic_properties"
+    },
+    {
+      "relation": "calls",
+      "context": "call",
+      "confidence": "EXTRACTED",
+      "source_file": "main.py",
+      "source_location": "L170",
+      "weight": 1.0,
+      "_origin": "ast",
+      "confidence_score": 1.0,
+      "source": "main_interactive_menu",
+      "target": "main_demonstrate_translation"
+    },
+    {
+      "relation": "calls",
+      "context": "call",
+      "confidence": "EXTRACTED",
+      "source_file": "main.py",
+      "source_location": "L344",
+      "weight": 1.0,
+      "_origin": "ast",
+      "confidence_score": 1.0,
+      "source": "main_main",
+      "target": "main_demonstrate_translation"
+    },
+    {
+      "relation": "rationale_for",
+      "confidence": "EXTRACTED",
+      "source_file": "main.py",
+      "source_location": "L79",
+      "weight": 1.0,
+      "_origin": "ast",
+      "confidence_score": 1.0,
+      "source": "main_rationale_79",
+      "target": "main_demonstrate_translation"
+    },
+    {
+      "relation": "calls",
+      "context": "call",
+      "confidence": "EXTRACTED",
+      "source_file": "main.py",
+      "source_location": "L201",
+      "weight": 1.0,
+      "_origin": "ast",
+      "confidence_score": 1.0,
+      "source": "main_run_demo",
+      "target": "main_demonstrate_translation"
+    },
+    {
+      "relation": "calls",
+      "context": "call",
+      "confidence": "EXTRACTED",
+      "source_file": "main.py",
+      "source_location": "L176",
+      "weight": 1.0,
+      "_origin": "ast",
+      "confidence_score": 1.0,
+      "source": "main_interactive_menu",
+      "target": "main_demonstrate_detailed_analysis"
+    },
+    {
+      "relation": "rationale_for",
+      "confidence": "EXTRACTED",
+      "source_file": "main.py",
+      "source_location": "L116",
+      "weight": 1.0,
+      "_origin": "ast",
+      "confidence_score": 1.0,
+      "source": "main_rationale_116",
+      "target": "main_demonstrate_detailed_analysis"
+    },
+    {
+      "relation": "calls",
+      "context": "call",
+      "confidence": "EXTRACTED",
+      "source_file": "main.py",
+      "source_location": "L209",
+      "weight": 1.0,
+      "_origin": "ast",
+      "confidence_score": 1.0,
+      "source": "main_run_demo",
+      "target": "main_demonstrate_detailed_analysis"
+    },
+    {
+      "relation": "calls",
+      "context": "call",
+      "confidence": "EXTRACTED",
+      "source_file": "main.py",
+      "source_location": "L180",
+      "weight": 1.0,
+      "_origin": "ast",
+      "confidence_score": 1.0,
+      "source": "main_interactive_menu",
+      "target": "main_run_batch_processing"
+    },
+    {
+      "relation": "rationale_for",
+      "confidence": "EXTRACTED",
+      "source_file": "main.py",
+      "source_location": "L126",
+      "weight": 1.0,
+      "_origin": "ast",
+      "confidence_score": 1.0,
+      "source": "main_rationale_126",
+      "target": "main_run_batch_processing"
+    },
+    {
+      "relation": "calls",
+      "context": "call",
+      "confidence": "EXTRACTED",
+      "source_file": "main.py",
+      "source_location": "L206",
+      "weight": 1.0,
+      "_origin": "ast",
+      "confidence_score": 1.0,
+      "source": "main_run_demo",
+      "target": "main_run_batch_processing"
+    },
+    {
+      "relation": "calls",
+      "context": "call",
+      "confidence": "EXTRACTED",
+      "source_file": "main.py",
+      "source_location": "L328",
+      "weight": 1.0,
+      "_origin": "ast",
+      "confidence_score": 1.0,
+      "source": "main_main",
+      "target": "main_interactive_menu"
+    },
+    {
+      "relation": "rationale_for",
+      "confidence": "EXTRACTED",
+      "source_file": "main.py",
+      "source_location": "L146",
+      "weight": 1.0,
+      "_origin": "ast",
+      "confidence_score": 1.0,
+      "source": "main_rationale_146",
+      "target": "main_interactive_menu"
+    },
+    {
+      "relation": "calls",
+      "context": "call",
+      "confidence": "EXTRACTED",
+      "source_file": "main.py",
+      "source_location": "L319",
+      "weight": 1.0,
+      "_origin": "ast",
+      "confidence_score": 1.0,
+      "source": "main_main",
+      "target": "main_run_demo"
+    },
+    {
+      "relation": "rationale_for",
+      "confidence": "EXTRACTED",
+      "source_file": "main.py",
+      "source_location": "L189",
+      "weight": 1.0,
+      "_origin": "ast",
+      "confidence_score": 1.0,
+      "source": "main_rationale_189",
+      "target": "main_run_demo"
+    },
+    {
+      "relation": "calls",
+      "context": "call",
+      "confidence": "EXTRACTED",
+      "source_file": "main.py",
+      "source_location": "L310",
+      "weight": 1.0,
+      "_origin": "ast",
+      "confidence_score": 1.0,
+      "source": "main_main",
+      "target": "main_try_database_integration"
+    },
+    {
+      "relation": "rationale_for",
+      "confidence": "EXTRACTED",
+      "source_file": "main.py",
+      "source_location": "L217",
+      "weight": 1.0,
+      "_origin": "ast",
+      "confidence_score": 1.0,
+      "source": "main_rationale_217",
+      "target": "main_try_database_integration"
+    },
+    {
+      "relation": "calls",
+      "context": "call",
+      "confidence": "EXTRACTED",
+      "source_file": "main.py",
+      "source_location": "L317",
+      "weight": 1.0,
+      "_origin": "ast",
+      "confidence_score": 1.0,
+      "source": "main_main",
+      "target": "main_save_molecules_to_db"
+    },
+    {
+      "relation": "rationale_for",
+      "confidence": "EXTRACTED",
+      "source_file": "main.py",
+      "source_location": "L241",
+      "weight": 1.0,
+      "_origin": "ast",
+      "confidence_score": 1.0,
+      "source": "main_rationale_241",
+      "target": "main_save_molecules_to_db"
+    },
+    {
+      "relation": "rationale_for",
+      "confidence": "EXTRACTED",
+      "source_file": "main.py",
+      "source_location": "L270",
+      "weight": 1.0,
+      "_origin": "ast",
+      "confidence_score": 1.0,
+      "source": "main_rationale_270",
+      "target": "main_main"
     },
     {
       "relation": "contains",
@@ -2504,9 +3947,9 @@
       "source_location": "L154",
       "weight": 1.0,
       "_origin": "ast",
+      "confidence_score": 1.0,
       "source": "test_translator",
-      "target": "test_translator_run_all_tests",
-      "confidence_score": 1.0
+      "target": "test_translator_run_all_tests"
     },
     {
       "relation": "contains",
@@ -2515,9 +3958,9 @@
       "source_location": "L12",
       "weight": 1.0,
       "_origin": "ast",
+      "confidence_score": 1.0,
       "source": "test_translator",
-      "target": "test_translator_test_basic_translation",
-      "confidence_score": 1.0
+      "target": "test_translator_test_basic_translation"
     },
     {
       "relation": "contains",
@@ -2526,9 +3969,9 @@
       "source_location": "L115",
       "weight": 1.0,
       "_origin": "ast",
+      "confidence_score": 1.0,
       "source": "test_translator",
-      "target": "test_translator_test_complex_molecule",
-      "confidence_score": 1.0
+      "target": "test_translator_test_complex_molecule"
     },
     {
       "relation": "contains",
@@ -2537,9 +3980,9 @@
       "source_location": "L84",
       "weight": 1.0,
       "_origin": "ast",
+      "confidence_score": 1.0,
       "source": "test_translator",
-      "target": "test_translator_test_feature_extraction",
-      "confidence_score": 1.0
+      "target": "test_translator_test_feature_extraction"
     },
     {
       "relation": "contains",
@@ -2548,9 +3991,9 @@
       "source_location": "L64",
       "weight": 1.0,
       "_origin": "ast",
+      "confidence_score": 1.0,
       "source": "test_translator",
-      "target": "test_translator_test_pyg_format",
-      "confidence_score": 1.0
+      "target": "test_translator_test_pyg_format"
     },
     {
       "relation": "contains",
@@ -2559,9 +4002,9 @@
       "source_location": "L38",
       "weight": 1.0,
       "_origin": "ast",
+      "confidence_score": 1.0,
       "source": "test_translator",
-      "target": "test_translator_test_quantum_translation",
-      "confidence_score": 1.0
+      "target": "test_translator_test_quantum_translation"
     },
     {
       "relation": "rationale_for",
@@ -2570,9 +4013,9 @@
       "source_location": "L1",
       "weight": 1.0,
       "_origin": "ast",
+      "confidence_score": 1.0,
       "source": "test_translator_rationale_1",
-      "target": "test_translator",
-      "confidence_score": 1.0
+      "target": "test_translator"
     },
     {
       "relation": "rationale_for",
@@ -2581,9 +4024,9 @@
       "source_location": "L13",
       "weight": 1.0,
       "_origin": "ast",
+      "confidence_score": 1.0,
       "source": "test_translator_rationale_13",
-      "target": "test_translator_test_basic_translation",
-      "confidence_score": 1.0
+      "target": "test_translator_test_basic_translation"
     },
     {
       "relation": "indirect_call",
@@ -2593,9 +4036,9 @@
       "source_location": "L160",
       "weight": 1.0,
       "_origin": "ast",
+      "confidence_score": 0.5,
       "source": "test_translator_run_all_tests",
-      "target": "test_translator_test_basic_translation",
-      "confidence_score": 0.5
+      "target": "test_translator_test_basic_translation"
     },
     {
       "relation": "rationale_for",
@@ -2604,9 +4047,9 @@
       "source_location": "L39",
       "weight": 1.0,
       "_origin": "ast",
+      "confidence_score": 1.0,
       "source": "test_translator_rationale_39",
-      "target": "test_translator_test_quantum_translation",
-      "confidence_score": 1.0
+      "target": "test_translator_test_quantum_translation"
     },
     {
       "relation": "indirect_call",
@@ -2616,9 +4059,9 @@
       "source_location": "L161",
       "weight": 1.0,
       "_origin": "ast",
+      "confidence_score": 0.5,
       "source": "test_translator_run_all_tests",
-      "target": "test_translator_test_quantum_translation",
-      "confidence_score": 0.5
+      "target": "test_translator_test_quantum_translation"
     },
     {
       "relation": "rationale_for",
@@ -2627,9 +4070,9 @@
       "source_location": "L65",
       "weight": 1.0,
       "_origin": "ast",
+      "confidence_score": 1.0,
       "source": "test_translator_rationale_65",
-      "target": "test_translator_test_pyg_format",
-      "confidence_score": 1.0
+      "target": "test_translator_test_pyg_format"
     },
     {
       "relation": "indirect_call",
@@ -2639,9 +4082,9 @@
       "source_location": "L162",
       "weight": 1.0,
       "_origin": "ast",
+      "confidence_score": 0.5,
       "source": "test_translator_run_all_tests",
-      "target": "test_translator_test_pyg_format",
-      "confidence_score": 0.5
+      "target": "test_translator_test_pyg_format"
     },
     {
       "relation": "rationale_for",
@@ -2650,9 +4093,9 @@
       "source_location": "L85",
       "weight": 1.0,
       "_origin": "ast",
+      "confidence_score": 1.0,
       "source": "test_translator_rationale_85",
-      "target": "test_translator_test_feature_extraction",
-      "confidence_score": 1.0
+      "target": "test_translator_test_feature_extraction"
     },
     {
       "relation": "indirect_call",
@@ -2662,9 +4105,9 @@
       "source_location": "L163",
       "weight": 1.0,
       "_origin": "ast",
+      "confidence_score": 0.5,
       "source": "test_translator_run_all_tests",
-      "target": "test_translator_test_feature_extraction",
-      "confidence_score": 0.5
+      "target": "test_translator_test_feature_extraction"
     },
     {
       "relation": "rationale_for",
@@ -2673,9 +4116,9 @@
       "source_location": "L116",
       "weight": 1.0,
       "_origin": "ast",
+      "confidence_score": 1.0,
       "source": "test_translator_rationale_116",
-      "target": "test_translator_test_complex_molecule",
-      "confidence_score": 1.0
+      "target": "test_translator_test_complex_molecule"
     },
     {
       "relation": "indirect_call",
@@ -2685,11 +4128,675 @@
       "source_location": "L164",
       "weight": 1.0,
       "_origin": "ast",
+      "confidence_score": 0.5,
       "source": "test_translator_run_all_tests",
-      "target": "test_translator_test_complex_molecule",
-      "confidence_score": 0.5
+      "target": "test_translator_test_complex_molecule"
+    },
+    {
+      "relation": "references",
+      "confidence": "EXTRACTED",
+      "confidence_score": 1.0,
+      "source_file": "MAIN_README.md",
+      "source_location": null,
+      "weight": 1.0,
+      "source": "main_readme_main_py",
+      "target": "main_readme_demo_mode"
+    },
+    {
+      "relation": "references",
+      "confidence": "EXTRACTED",
+      "confidence_score": 1.0,
+      "source_file": "MAIN_README.md",
+      "source_location": null,
+      "weight": 1.0,
+      "source": "main_readme_main_py",
+      "target": "main_readme_interactive_mode"
+    },
+    {
+      "relation": "references",
+      "confidence": "EXTRACTED",
+      "confidence_score": 1.0,
+      "source_file": "MAIN_README.md",
+      "source_location": null,
+      "weight": 1.0,
+      "source": "main_readme_main_py",
+      "target": "main_readme_postgresql_integration"
+    },
+    {
+      "relation": "references",
+      "confidence": "EXTRACTED",
+      "confidence_score": 1.0,
+      "source_file": "MAIN_README.md",
+      "source_location": null,
+      "weight": 1.0,
+      "source": "main_readme_main_py",
+      "target": "main_readme_quick_mode"
+    },
+    {
+      "relation": "references",
+      "confidence": "EXTRACTED",
+      "confidence_score": 1.0,
+      "source_file": "MAIN_README.md",
+      "source_location": null,
+      "weight": 1.0,
+      "source": "main_readme_main_py",
+      "target": "readme_qml_chemical_discovery_engine"
+    },
+    {
+      "relation": "references",
+      "confidence": "EXTRACTED",
+      "confidence_score": 1.0,
+      "source_file": "MAIN_README.md",
+      "source_location": null,
+      "weight": 1.0,
+      "source": "main_readme_main_py",
+      "target": "readme_translator"
+    },
+    {
+      "relation": "references",
+      "confidence": "EXTRACTED",
+      "confidence_score": 1.0,
+      "source_file": "MAIN_README.md",
+      "source_location": null,
+      "weight": 1.0,
+      "source": "main_readme_demo_mode",
+      "target": "main_readme_ch4_molecule"
+    },
+    {
+      "relation": "references",
+      "confidence": "EXTRACTED",
+      "confidence_score": 1.0,
+      "source_file": "MAIN_README.md",
+      "source_location": null,
+      "weight": 1.0,
+      "source": "main_readme_demo_mode",
+      "target": "main_readme_h2_molecule"
+    },
+    {
+      "relation": "references",
+      "confidence": "EXTRACTED",
+      "confidence_score": 1.0,
+      "source_file": "MAIN_README.md",
+      "source_location": null,
+      "weight": 1.0,
+      "source": "main_readme_demo_mode",
+      "target": "main_readme_h2o_molecule"
+    },
+    {
+      "relation": "references",
+      "confidence": "EXTRACTED",
+      "confidence_score": 1.0,
+      "source_file": "MAIN_README.md",
+      "source_location": null,
+      "weight": 1.0,
+      "source": "main_readme_demo_mode",
+      "target": "main_readme_pyg_format"
+    },
+    {
+      "relation": "references",
+      "confidence": "EXTRACTED",
+      "confidence_score": 1.0,
+      "source_file": "MAIN_README.md",
+      "source_location": null,
+      "weight": 1.0,
+      "source": "main_readme_demo_mode",
+      "target": "main_readme_quantum_format"
+    },
+    {
+      "relation": "references",
+      "confidence": "EXTRACTED",
+      "confidence_score": 1.0,
+      "source_file": "MAIN_README.md",
+      "source_location": null,
+      "weight": 1.0,
+      "source": "main_readme_demo_mode",
+      "target": "main_readme_tensors_format"
+    },
+    {
+      "relation": "references",
+      "confidence": "EXTRACTED",
+      "confidence_score": 1.0,
+      "source_file": "MAIN_README.md",
+      "source_location": null,
+      "weight": 1.0,
+      "source": "main_readme_quick_mode",
+      "target": "main_readme_pyg_format"
+    },
+    {
+      "relation": "references",
+      "confidence": "EXTRACTED",
+      "confidence_score": 1.0,
+      "source_file": "MAIN_README.md",
+      "source_location": null,
+      "weight": 1.0,
+      "source": "main_readme_quick_mode",
+      "target": "main_readme_quantum_format"
+    },
+    {
+      "relation": "references",
+      "confidence": "EXTRACTED",
+      "confidence_score": 1.0,
+      "source_file": "MAIN_README.md",
+      "source_location": null,
+      "weight": 1.0,
+      "source": "main_readme_quick_mode",
+      "target": "main_readme_tensors_format"
+    },
+    {
+      "relation": "references",
+      "confidence": "EXTRACTED",
+      "confidence_score": 1.0,
+      "source_file": "MAIN_README.md",
+      "source_location": null,
+      "weight": 1.0,
+      "source": "main_readme_postgresql_integration",
+      "target": "readme_postgresql"
+    },
+    {
+      "relation": "semantically_similar_to",
+      "confidence": "INFERRED",
+      "confidence_score": 0.85,
+      "source_file": "MAIN_README.md",
+      "source_location": null,
+      "weight": 1.0,
+      "source": "main_readme_h2_molecule",
+      "target": "readme_molecule_class"
+    },
+    {
+      "relation": "semantically_similar_to",
+      "confidence": "INFERRED",
+      "confidence_score": 0.85,
+      "source_file": "MAIN_README.md",
+      "source_location": null,
+      "weight": 1.0,
+      "source": "main_readme_h2o_molecule",
+      "target": "readme_molecule_class"
+    },
+    {
+      "relation": "semantically_similar_to",
+      "confidence": "INFERRED",
+      "confidence_score": 0.85,
+      "source_file": "MAIN_README.md",
+      "source_location": null,
+      "weight": 1.0,
+      "source": "main_readme_ch4_molecule",
+      "target": "readme_molecule_class"
+    },
+    {
+      "relation": "semantically_similar_to",
+      "confidence": "INFERRED",
+      "confidence_score": 0.85,
+      "source_file": "MAIN_README.md",
+      "source_location": null,
+      "weight": 1.0,
+      "source": "main_readme_tensors_format",
+      "target": "translator_readme_tensorconverter"
+    },
+    {
+      "relation": "semantically_similar_to",
+      "confidence": "INFERRED",
+      "confidence_score": 0.85,
+      "source_file": "MAIN_README.md",
+      "source_location": null,
+      "weight": 1.0,
+      "source": "main_readme_pyg_format",
+      "target": "readme_pytorch_geometric"
+    },
+    {
+      "relation": "semantically_similar_to",
+      "confidence": "INFERRED",
+      "confidence_score": 0.85,
+      "source_file": "MAIN_README.md",
+      "source_location": null,
+      "weight": 1.0,
+      "source": "main_readme_quantum_format",
+      "target": "translator_readme_quantumencoder"
+    },
+    {
+      "relation": "references",
+      "confidence": "EXTRACTED",
+      "confidence_score": 1.0,
+      "source_file": "README.md",
+      "source_location": null,
+      "weight": 1.0,
+      "source": "readme_postgresql",
+      "target": "readme_qml_chemical_discovery_engine"
+    },
+    {
+      "relation": "references",
+      "confidence": "EXTRACTED",
+      "confidence_score": 1.0,
+      "source_file": "README.md",
+      "source_location": null,
+      "weight": 1.0,
+      "source": "readme_qml_chemical_discovery_engine",
+      "target": "readme_ai_qml"
+    },
+    {
+      "relation": "references",
+      "confidence": "EXTRACTED",
+      "confidence_score": 1.0,
+      "source_file": "README.md",
+      "source_location": null,
+      "weight": 1.0,
+      "source": "readme_qml_chemical_discovery_engine",
+      "target": "readme_physical_engine"
+    },
+    {
+      "relation": "references",
+      "confidence": "EXTRACTED",
+      "confidence_score": 1.0,
+      "source_file": "README.md",
+      "source_location": null,
+      "weight": 1.0,
+      "source": "readme_qml_chemical_discovery_engine",
+      "target": "readme_translator"
+    },
+    {
+      "relation": "references",
+      "confidence": "EXTRACTED",
+      "confidence_score": 1.0,
+      "source_file": "README.md",
+      "source_location": null,
+      "weight": 1.0,
+      "source": "readme_generator",
+      "target": "readme_physical_engine"
+    },
+    {
+      "relation": "references",
+      "confidence": "EXTRACTED",
+      "confidence_score": 1.0,
+      "source_file": "README.md",
+      "source_location": null,
+      "weight": 1.0,
+      "source": "readme_oracle",
+      "target": "readme_physical_engine"
+    },
+    {
+      "relation": "rationale_for",
+      "confidence": "EXTRACTED",
+      "confidence_score": 1.0,
+      "source_file": "README.md",
+      "source_location": null,
+      "weight": 1.0,
+      "source": "readme_physical_engine",
+      "target": "readme_ai_qml"
+    },
+    {
+      "relation": "references",
+      "confidence": "EXTRACTED",
+      "confidence_score": 1.0,
+      "source_file": "README.md",
+      "source_location": null,
+      "weight": 1.0,
+      "source": "readme_physical_engine",
+      "target": "readme_atom_class"
+    },
+    {
+      "relation": "references",
+      "confidence": "EXTRACTED",
+      "confidence_score": 1.0,
+      "source_file": "README.md",
+      "source_location": null,
+      "weight": 1.0,
+      "source": "readme_physical_engine",
+      "target": "readme_aufbau_principle"
+    },
+    {
+      "relation": "references",
+      "confidence": "EXTRACTED",
+      "confidence_score": 1.0,
+      "source_file": "README.md",
+      "source_location": null,
+      "weight": 1.0,
+      "source": "readme_physical_engine",
+      "target": "readme_molecule_class"
+    },
+    {
+      "relation": "references",
+      "confidence": "EXTRACTED",
+      "confidence_score": 1.0,
+      "source_file": "README.md",
+      "source_location": null,
+      "weight": 1.0,
+      "source": "readme_physical_engine",
+      "target": "readme_standard_model"
+    },
+    {
+      "relation": "references",
+      "confidence": "EXTRACTED",
+      "confidence_score": 1.0,
+      "source_file": "README.md",
+      "source_location": null,
+      "weight": 1.0,
+      "source": "readme_physical_engine",
+      "target": "readme_subatomic_class"
+    },
+    {
+      "relation": "rationale_for",
+      "confidence": "EXTRACTED",
+      "confidence_score": 1.0,
+      "source_file": "README.md",
+      "source_location": null,
+      "weight": 1.0,
+      "source": "readme_translator",
+      "target": "readme_ai_qml"
+    },
+    {
+      "relation": "references",
+      "confidence": "EXTRACTED",
+      "confidence_score": 1.0,
+      "source_file": "README.md",
+      "source_location": null,
+      "weight": 1.0,
+      "source": "readme_translator",
+      "target": "translator_readme_translator_module"
+    },
+    {
+      "relation": "references",
+      "confidence": "EXTRACTED",
+      "confidence_score": 1.0,
+      "source_file": "README.md",
+      "source_location": null,
+      "weight": 1.0,
+      "source": "readme_ai_qml",
+      "target": "readme_generator"
+    },
+    {
+      "relation": "references",
+      "confidence": "EXTRACTED",
+      "confidence_score": 1.0,
+      "source_file": "README.md",
+      "source_location": null,
+      "weight": 1.0,
+      "source": "readme_ai_qml",
+      "target": "readme_graph_neural_networks"
+    },
+    {
+      "relation": "references",
+      "confidence": "EXTRACTED",
+      "confidence_score": 1.0,
+      "source_file": "README.md",
+      "source_location": null,
+      "weight": 1.0,
+      "source": "readme_ai_qml",
+      "target": "readme_oracle"
+    },
+    {
+      "relation": "references",
+      "confidence": "EXTRACTED",
+      "confidence_score": 1.0,
+      "source_file": "README.md",
+      "source_location": null,
+      "weight": 1.0,
+      "source": "readme_ai_qml",
+      "target": "readme_reinforcement_learning"
+    },
+    {
+      "relation": "references",
+      "confidence": "EXTRACTED",
+      "confidence_score": 1.0,
+      "source_file": "README.md",
+      "source_location": null,
+      "weight": 1.0,
+      "source": "readme_pennylane",
+      "target": "readme_ai_qml"
+    },
+    {
+      "relation": "references",
+      "confidence": "EXTRACTED",
+      "confidence_score": 1.0,
+      "source_file": "README.md",
+      "source_location": null,
+      "weight": 1.0,
+      "source": "readme_qiskit",
+      "target": "readme_ai_qml"
+    },
+    {
+      "relation": "conceptually_related_to",
+      "confidence": "INFERRED",
+      "confidence_score": 0.85,
+      "source_file": "README.md",
+      "source_location": null,
+      "weight": 1.0,
+      "source": "readme_oracle",
+      "target": "readme_generator"
+    },
+    {
+      "relation": "references",
+      "confidence": "EXTRACTED",
+      "confidence_score": 1.0,
+      "source_file": "README.md",
+      "source_location": null,
+      "weight": 1.0,
+      "source": "readme_subatomic_class",
+      "target": "readme_standard_model"
+    },
+    {
+      "relation": "references",
+      "confidence": "EXTRACTED",
+      "confidence_score": 1.0,
+      "source_file": "README.md",
+      "source_location": null,
+      "weight": 1.0,
+      "source": "readme_atom_class",
+      "target": "readme_aufbau_principle"
+    },
+    {
+      "relation": "references",
+      "confidence": "INFERRED",
+      "confidence_score": 0.95,
+      "source_file": "README.md",
+      "source_location": null,
+      "weight": 1.0,
+      "source": "readme_molecule_class",
+      "target": "readme_atom_class"
+    },
+    {
+      "relation": "references",
+      "confidence": "EXTRACTED",
+      "confidence_score": 1.0,
+      "source_file": "TRANSLATOR_README.md",
+      "source_location": null,
+      "weight": 1.0,
+      "source": "translator_readme_translator_module",
+      "target": "readme_atom_class"
+    },
+    {
+      "relation": "references",
+      "confidence": "EXTRACTED",
+      "confidence_score": 1.0,
+      "source_file": "TRANSLATOR_README.md",
+      "source_location": null,
+      "weight": 1.0,
+      "source": "translator_readme_graphbuilder",
+      "target": "readme_molecule_class"
+    },
+    {
+      "relation": "references",
+      "confidence": "EXTRACTED",
+      "confidence_score": 1.0,
+      "source_file": "TRANSLATOR_README.md",
+      "source_location": null,
+      "weight": 1.0,
+      "source": "translator_readme_translator_module",
+      "target": "readme_molecule_class"
+    },
+    {
+      "relation": "references",
+      "confidence": "INFERRED",
+      "confidence_score": 0.85,
+      "source_file": "README.md",
+      "source_location": null,
+      "weight": 1.0,
+      "source": "readme_pytorch_geometric",
+      "target": "readme_graph_neural_networks"
+    },
+    {
+      "relation": "references",
+      "confidence": "INFERRED",
+      "confidence_score": 0.85,
+      "source_file": "TRANSLATOR_README.md",
+      "source_location": null,
+      "weight": 1.0,
+      "source": "translator_readme_tensorconverter",
+      "target": "readme_pytorch_geometric"
+    },
+    {
+      "relation": "references",
+      "confidence": "EXTRACTED",
+      "confidence_score": 1.0,
+      "source_file": "TRANSLATOR_README.md",
+      "source_location": null,
+      "weight": 1.0,
+      "source": "translator_readme_translator_module",
+      "target": "translator_readme_featureextractor"
+    },
+    {
+      "relation": "references",
+      "confidence": "EXTRACTED",
+      "confidence_score": 1.0,
+      "source_file": "TRANSLATOR_README.md",
+      "source_location": null,
+      "weight": 1.0,
+      "source": "translator_readme_translator_module",
+      "target": "translator_readme_graphbuilder"
+    },
+    {
+      "relation": "references",
+      "confidence": "EXTRACTED",
+      "confidence_score": 1.0,
+      "source_file": "TRANSLATOR_README.md",
+      "source_location": null,
+      "weight": 1.0,
+      "source": "translator_readme_translator_module",
+      "target": "translator_readme_quantumencoder"
+    },
+    {
+      "relation": "references",
+      "confidence": "EXTRACTED",
+      "confidence_score": 1.0,
+      "source_file": "TRANSLATOR_README.md",
+      "source_location": null,
+      "weight": 1.0,
+      "source": "translator_readme_translator_module",
+      "target": "translator_readme_tensorconverter"
+    },
+    {
+      "relation": "references",
+      "confidence": "EXTRACTED",
+      "confidence_score": 1.0,
+      "source_file": "TRANSLATOR_README.md",
+      "source_location": null,
+      "weight": 1.0,
+      "source": "translator_readme_featureextractor",
+      "target": "translator_readme_feature_vector"
+    },
+    {
+      "relation": "references",
+      "confidence": "EXTRACTED",
+      "confidence_score": 1.0,
+      "source_file": "TRANSLATOR_README.md",
+      "source_location": null,
+      "weight": 1.0,
+      "source": "translator_readme_tensorconverter",
+      "target": "translator_readme_normalization"
+    },
+    {
+      "relation": "references",
+      "confidence": "EXTRACTED",
+      "confidence_score": 1.0,
+      "source_file": "TRANSLATOR_README.md",
+      "source_location": null,
+      "weight": 1.0,
+      "source": "translator_readme_quantumencoder",
+      "target": "translator_readme_hamiltonian"
+    },
+    {
+      "relation": "references",
+      "confidence": "EXTRACTED",
+      "confidence_score": 1.0,
+      "source_file": "TRANSLATOR_README.md",
+      "source_location": null,
+      "weight": 1.0,
+      "source": "translator_readme_quantumencoder",
+      "target": "translator_readme_qaoa"
+    },
+    {
+      "relation": "references",
+      "confidence": "EXTRACTED",
+      "confidence_score": 1.0,
+      "source_file": "TRANSLATOR_README.md",
+      "source_location": null,
+      "weight": 1.0,
+      "source": "translator_readme_quantumencoder",
+      "target": "translator_readme_qubit_mapping"
+    },
+    {
+      "relation": "references",
+      "confidence": "EXTRACTED",
+      "confidence_score": 1.0,
+      "source_file": "TRANSLATOR_README.md",
+      "source_location": null,
+      "weight": 1.0,
+      "source": "translator_readme_quantumencoder",
+      "target": "translator_readme_vqe"
+    },
+    {
+      "relation": "references",
+      "confidence": "EXTRACTED",
+      "confidence_score": 1.0,
+      "source_file": "TRANSLATOR_README.md",
+      "source_location": null,
+      "weight": 1.0,
+      "source": "translator_readme_qubit_mapping",
+      "target": "translator_readme_jordan_wigner"
     }
   ],
-  "hyperedges": [],
-  "built_at_commit": "764688538c3704aedebc3a38f57e6040d6d309d7"
+  "hyperedges": [
+    {
+      "id": "qml_system_architecture",
+      "label": "QML System Three-Layer Architecture",
+      "nodes": [
+        "readme_qml_chemical_discovery_engine",
+        "readme_physical_engine",
+        "readme_translator",
+        "readme_ai_qml"
+      ],
+      "relation": "form",
+      "confidence": "EXTRACTED",
+      "confidence_score": 1.0,
+      "source_file": "README.md"
+    },
+    {
+      "id": "translator_components",
+      "label": "Translator Module Components",
+      "nodes": [
+        "translator_readme_translator_module",
+        "translator_readme_featureextractor",
+        "translator_readme_graphbuilder",
+        "translator_readme_tensorconverter",
+        "translator_readme_quantumencoder"
+      ],
+      "relation": "participate_in",
+      "confidence": "EXTRACTED",
+      "confidence_score": 1.0,
+      "source_file": "TRANSLATOR_README.md"
+    },
+    {
+      "id": "main_execution_modes",
+      "label": "main.py Execution Modes",
+      "nodes": [
+        "main_readme_main_py",
+        "main_readme_demo_mode",
+        "main_readme_quick_mode",
+        "main_readme_interactive_mode"
+      ],
+      "relation": "participate_in",
+      "confidence": "EXTRACTED",
+      "confidence_score": 1.0,
+      "source_file": "MAIN_README.md"
+    }
+  ],
+  "built_at_commit": "5362dcb164d6366cf458aa9facca511c4ff2ff36"
 }
