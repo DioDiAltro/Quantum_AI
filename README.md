@@ -56,19 +56,23 @@ Database: PostgreSQL
 
 ### 🚧 Fase 2: Chimica Molecolare e Traduzione Dati (IN CORSO)
 
-- [ ] Sviluppo della classe Molecule:
+- [x] Sviluppo della classe Molecule:
 
-- [ ] Struttura dati per unire più oggetti Atom.
+- [x] Struttura dati per unire più oggetti Atom.
 
-- [ ] Gestione degli elettroni di valenza e dei legami chimici.
+- [x] Gestione degli elettroni di valenza e dei legami chimici.
 
-- [ ] Calcolo della massa molecolare e della carica netta.
+- [x] Calcolo della massa molecolare e della carica netta.
 
-- [ ] Sviluppo del Modulo "Traduttore":
+- [x] Sviluppo del Modulo "Traduttore":
 
-- [ ] Estrazione dei "Feature Vectors" (tensori numerici) dai singoli atomi.
+- [x] Estrazione dei "Feature Vectors" (tensori numerici) dai singoli atomi.
 
-- [ ] Rappresentazione della molecola come Grafo (Nodi = Atomi, Archi = Legami).
+- [x] Rappresentazione della molecola come Grafo (Nodi = Atomi, Archi = Legami).
+
+- [x] Conversione in tensori per ML/QML (PyTorch Geometric, Quantum Encoding)
+
+- [x] Documentazione completa del modulo traduttore
 
 ### 🔮 Fase 3: L'Oracolo della Stabilità (AI/QML) (PIANIFICATA)
 
@@ -99,3 +103,27 @@ sudo service postgresql start
 # Accedi alla shell interattiva di PostgreSQL
 sudo -u postgres psql
 ```
+
+## 🔄 Modulo Traduttore
+
+Il modulo `lib/translator.py` converte gli oggetti chimici in rappresentazioni ML/QML:
+
+### Funzionalità Principali
+- **FeatureExtractor**: Estrae vettori di caratteristiche dagli atomi (26 feature)
+- **GraphBuilder**: Costruisce grafi molecolari con attributi spaziali
+- **TensorConverter**: Converte in tensori per PyTorch/TensorFlow
+- **QuantumEncoder**: Prepara dati per circuiti quantistici (Hamiltoniani, Qubit mapping)
+
+### Esempio di Utilizzo
+
+```python
+from lib.translator import Translator
+from lib.matter import H2
+
+translator = Translator()
+
+# Formati disponibili: "tensors", "pyg", "quantum"
+result = translator.translate_molecule(H2, "quantum")
+```
+
+Per la documentazione completa, vedi [TRANSLATOR_README.md](TRANSLATOR_README.md)
