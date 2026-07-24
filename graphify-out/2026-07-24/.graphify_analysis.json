@@ -237,31 +237,8 @@
       "why": "connects across different repos/directories"
     }
   ],
-  "questions": [
-    {
-      "type": "bridge_node",
-      "question": "Why does `FeatureExtractor` connect `translator.py` to `test_translator.py`, `.build_from_molecule`?",
-      "why": "High betweenness centrality (0.122) - this node is a cross-community bridge."
-    },
-    {
-      "type": "bridge_node",
-      "question": "Why does `Translator` connect `test_translator.py` to `.translate_molecule`, `.build_from_molecule`, `translator.py`?",
-      "why": "High betweenness centrality (0.111) - this node is a cross-community bridge."
-    },
-    {
-      "type": "isolated_nodes",
-      "question": "What connects `quantum-project` to the rest of the system?",
-      "why": "1 weakly-connected nodes found - possible documentation gaps or missing edges."
-    },
-    {
-      "type": "low_cohesion",
-      "question": "Should `Atom` be split into smaller, more focused modules?",
-      "why": "Cohesion score 0.13450292397660818 - nodes in this community are weakly interconnected."
-    },
-    {
-      "type": "low_cohesion",
-      "question": "Should `.translate_molecule` be split into smaller, more focused modules?",
-      "why": "Cohesion score 0.1437908496732026 - nodes in this community are weakly interconnected."
-    }
-  ]
+  "tokens": {
+    "input": 0,
+    "output": 0
+  }
 }

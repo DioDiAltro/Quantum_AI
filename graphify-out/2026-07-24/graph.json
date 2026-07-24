@@ -33,7 +33,7 @@
       "_origin": "ast",
       "community": 5,
       "norm_label": "subatomiccomposition",
-      "community_name": "create_db.py",
+      "community_name": "Base",
       "id": "lib_create_db_subatomiccomposition"
     },
     {
@@ -44,7 +44,7 @@
       "_origin": "ast",
       "community": 5,
       "norm_label": "base",
-      "community_name": "create_db.py",
+      "community_name": "Base",
       "id": "base"
     },
     {
@@ -55,7 +55,7 @@
       "_origin": "ast",
       "community": 5,
       "norm_label": "subatomicparticle",
-      "community_name": "create_db.py",
+      "community_name": "Base",
       "id": "lib_create_db_subatomicparticle"
     },
     {
@@ -88,7 +88,7 @@
       "_origin": "ast",
       "community": 5,
       "norm_label": "atom",
-      "community_name": "create_db.py",
+      "community_name": "Base",
       "id": "lib_create_db_atom"
     },
     {
@@ -99,7 +99,7 @@
       "_origin": "ast",
       "community": 5,
       "norm_label": "moleculeatomposition",
-      "community_name": "create_db.py",
+      "community_name": "Base",
       "id": "lib_create_db_moleculeatomposition"
     },
     {
@@ -132,7 +132,7 @@
       "_origin": "ast",
       "community": 5,
       "norm_label": "vqesimulationresult",
-      "community_name": "create_db.py",
+      "community_name": "Base",
       "id": "lib_create_db_vqesimulationresult"
     },
     {
@@ -154,7 +154,7 @@
       "_origin": "ast",
       "community": 0,
       "norm_label": "matter.py",
-      "community_name": "Atom",
+      "community_name": "Subatomic",
       "id": "lib_matter"
     },
     {
@@ -165,7 +165,7 @@
       "_origin": "ast",
       "community": 0,
       "norm_label": "subatomic",
-      "community_name": "Atom",
+      "community_name": "Subatomic",
       "id": "lib_matter_subatomic"
     },
     {
@@ -176,7 +176,7 @@
       "_origin": "ast",
       "community": 0,
       "norm_label": ".__init__()",
-      "community_name": "Atom",
+      "community_name": "Subatomic",
       "id": "lib_matter_subatomic_init"
     },
     {
@@ -187,7 +187,7 @@
       "_origin": "ast",
       "community": 0,
       "norm_label": ".show()",
-      "community_name": "Atom",
+      "community_name": "Subatomic",
       "id": "lib_matter_subatomic_show"
     },
     {
@@ -198,7 +198,7 @@
       "_origin": "ast",
       "community": 0,
       "norm_label": "interaction",
-      "community_name": "Atom",
+      "community_name": "Subatomic",
       "id": "lib_matter_interaction"
     },
     {
@@ -209,7 +209,7 @@
       "_origin": "ast",
       "community": 0,
       "norm_label": ".__init__()",
-      "community_name": "Atom",
+      "community_name": "Subatomic",
       "id": "lib_matter_interaction_init"
     },
     {
@@ -286,7 +286,7 @@
       "_origin": "ast",
       "community": 0,
       "norm_label": "molecule",
-      "community_name": "Atom",
+      "community_name": "Molecule",
       "id": "lib_matter_molecule"
     },
     {
@@ -297,7 +297,7 @@
       "_origin": "ast",
       "community": 0,
       "norm_label": ".__init__()",
-      "community_name": "Atom",
+      "community_name": "Molecule",
       "id": "lib_matter_molecule_init"
     },
     {
@@ -308,7 +308,7 @@
       "_origin": "ast",
       "community": 0,
       "norm_label": ".add_atom()",
-      "community_name": "Atom",
+      "community_name": "Molecule",
       "id": "lib_matter_molecule_add_atom"
     },
     {
@@ -319,7 +319,7 @@
       "_origin": "ast",
       "community": 0,
       "norm_label": ".add_bond()",
-      "community_name": "Atom",
+      "community_name": "Molecule",
       "id": "lib_matter_molecule_add_bond"
     },
     {
@@ -330,7 +330,7 @@
       "_origin": "ast",
       "community": 0,
       "norm_label": ".molecular_mass()",
-      "community_name": "Atom",
+      "community_name": "Molecule",
       "id": "lib_matter_molecule_molecular_mass"
     },
     {
@@ -341,7 +341,7 @@
       "_origin": "ast",
       "community": 0,
       "norm_label": ".net_charge()",
-      "community_name": "Atom",
+      "community_name": "Molecule",
       "id": "lib_matter_molecule_net_charge"
     },
     {
@@ -352,7 +352,7 @@
       "_origin": "ast",
       "community": 0,
       "norm_label": "aggiunge un atomo specificando la sua posizione 3d nello spazio.",
-      "community_name": "Atom",
+      "community_name": "Molecule",
       "id": "lib_matter_rationale_113"
     },
     {
@@ -397,10 +397,9 @@
       "source_file": "lib/translator.py",
       "source_location": "L1",
       "_origin": "ast",
-      "community": 4,
-      "norm_label": "translator.py",
       "id": "lib_translator",
-      "community_name": "translator.py"
+      "community": 4,
+      "norm_label": "translator.py"
     },
     {
       "label": "AtomFeatures",
@@ -408,10 +407,9 @@
       "source_file": "lib/translator.py",
       "source_location": "L12",
       "_origin": "ast",
-      "community": 4,
-      "norm_label": "atomfeatures",
       "id": "lib_translator_atomfeatures",
-      "community_name": "translator.py"
+      "community": 4,
+      "norm_label": "atomfeatures"
     },
     {
       "label": ".to_vector()",
@@ -419,10 +417,9 @@
       "source_file": "lib/translator.py",
       "source_location": "L21",
       "_origin": "ast",
-      "community": 3,
-      "norm_label": ".to_vector()",
       "id": "lib_translator_atomfeatures_to_vector",
-      "community_name": ".build_from_molecule"
+      "community": 3,
+      "norm_label": ".to_vector()"
     },
     {
       "label": "ndarray",
@@ -430,10 +427,9 @@
       "source_file": "",
       "source_location": "",
       "_origin": "ast",
-      "community": 3,
-      "norm_label": "ndarray",
       "id": "ndarray",
-      "community_name": ".build_from_molecule"
+      "community": 3,
+      "norm_label": "ndarray"
     },
     {
       "label": "FeatureExtractor",
@@ -441,10 +437,9 @@
       "source_file": "lib/translator.py",
       "source_location": "L35",
       "_origin": "ast",
-      "community": 4,
-      "norm_label": "featureextractor",
       "id": "lib_translator_featureextractor",
-      "community_name": "translator.py"
+      "community": 4,
+      "norm_label": "featureextractor"
     },
     {
       "label": ".__init__()",
@@ -452,10 +447,9 @@
       "source_file": "lib/translator.py",
       "source_location": "L46",
       "_origin": "ast",
-      "community": 4,
-      "norm_label": ".__init__()",
       "id": "lib_translator_featureextractor_init",
-      "community_name": "translator.py"
+      "community": 4,
+      "norm_label": ".__init__()"
     },
     {
       "label": ".extract_from_atom()",
@@ -463,10 +457,9 @@
       "source_file": "lib/translator.py",
       "source_location": "L49",
       "_origin": "ast",
-      "community": 4,
-      "norm_label": ".extract_from_atom()",
       "id": "lib_translator_featureextractor_extract_from_atom",
-      "community_name": "translator.py"
+      "community": 4,
+      "norm_label": ".extract_from_atom()"
     },
     {
       "label": "._encode_configuration()",
@@ -474,10 +467,9 @@
       "source_file": "lib/translator.py",
       "source_location": "L67",
       "_origin": "ast",
-      "community": 4,
-      "norm_label": "._encode_configuration()",
       "id": "lib_translator_featureextractor_encode_configuration",
-      "community_name": "translator.py"
+      "community": 4,
+      "norm_label": "._encode_configuration()"
     },
     {
       "label": "._calculate_valence_electrons()",
@@ -485,10 +477,9 @@
       "source_file": "lib/translator.py",
       "source_location": "L78",
       "_origin": "ast",
-      "community": 4,
-      "norm_label": "._calculate_valence_electrons()",
       "id": "lib_translator_featureextractor_calculate_valence_electrons",
-      "community_name": "translator.py"
+      "community": 4,
+      "norm_label": "._calculate_valence_electrons()"
     },
     {
       "label": "MolecularGraph",
@@ -496,10 +487,9 @@
       "source_file": "lib/translator.py",
       "source_location": "L101",
       "_origin": "ast",
-      "community": 1,
-      "norm_label": "moleculargraph",
       "id": "lib_translator_moleculargraph",
-      "community_name": ".translate_molecule"
+      "community": 1,
+      "norm_label": "moleculargraph"
     },
     {
       "label": ".to_pyg_format()",
@@ -507,10 +497,9 @@
       "source_file": "lib/translator.py",
       "source_location": "L109",
       "_origin": "ast",
-      "community": 1,
-      "norm_label": ".to_pyg_format()",
       "id": "lib_translator_moleculargraph_to_pyg_format",
-      "community_name": ".translate_molecule"
+      "community": 1,
+      "norm_label": ".to_pyg_format()"
     },
     {
       "label": ".to_adjacency_matrix()",
@@ -518,10 +507,9 @@
       "source_file": "lib/translator.py",
       "source_location": "L118",
       "_origin": "ast",
-      "community": 1,
-      "norm_label": ".to_adjacency_matrix()",
       "id": "lib_translator_moleculargraph_to_adjacency_matrix",
-      "community_name": ".translate_molecule"
+      "community": 1,
+      "norm_label": ".to_adjacency_matrix()"
     },
     {
       "label": "GraphBuilder",
@@ -529,10 +517,9 @@
       "source_file": "lib/translator.py",
       "source_location": "L130",
       "_origin": "ast",
-      "community": 3,
-      "norm_label": "graphbuilder",
       "id": "lib_translator_graphbuilder",
-      "community_name": ".build_from_molecule"
+      "community": 3,
+      "norm_label": "graphbuilder"
     },
     {
       "label": ".__init__()",
@@ -540,10 +527,9 @@
       "source_file": "lib/translator.py",
       "source_location": "L133",
       "_origin": "ast",
-      "community": 3,
-      "norm_label": ".__init__()",
       "id": "lib_translator_graphbuilder_init",
-      "community_name": ".build_from_molecule"
+      "community": 3,
+      "norm_label": ".__init__()"
     },
     {
       "label": ".build_from_molecule()",
@@ -551,10 +537,9 @@
       "source_file": "lib/translator.py",
       "source_location": "L136",
       "_origin": "ast",
-      "community": 3,
-      "norm_label": ".build_from_molecule()",
       "id": "lib_translator_graphbuilder_build_from_molecule",
-      "community_name": ".build_from_molecule"
+      "community": 3,
+      "norm_label": ".build_from_molecule()"
     },
     {
       "label": "._calculate_distance()",
@@ -562,10 +547,9 @@
       "source_file": "lib/translator.py",
       "source_location": "L188",
       "_origin": "ast",
-      "community": 3,
-      "norm_label": "._calculate_distance()",
       "id": "lib_translator_graphbuilder_calculate_distance",
-      "community_name": ".build_from_molecule"
+      "community": 3,
+      "norm_label": "._calculate_distance()"
     },
     {
       "label": "TensorConverter",
@@ -573,10 +557,9 @@
       "source_file": "lib/translator.py",
       "source_location": "L193",
       "_origin": "ast",
-      "community": 3,
-      "norm_label": "tensorconverter",
       "id": "lib_translator_tensorconverter",
-      "community_name": ".build_from_molecule"
+      "community": 3,
+      "norm_label": "tensorconverter"
     },
     {
       "label": ".normalize_features()",
@@ -584,10 +567,9 @@
       "source_file": "lib/translator.py",
       "source_location": "L197",
       "_origin": "ast",
-      "community": 3,
-      "norm_label": ".normalize_features()",
       "id": "lib_translator_tensorconverter_normalize_features",
-      "community_name": ".build_from_molecule"
+      "community": 3,
+      "norm_label": ".normalize_features()"
     },
     {
       "label": ".graph_to_tensors()",
@@ -595,10 +577,9 @@
       "source_file": "lib/translator.py",
       "source_location": "L214",
       "_origin": "ast",
-      "community": 1,
-      "norm_label": ".graph_to_tensors()",
       "id": "lib_translator_tensorconverter_graph_to_tensors",
-      "community_name": ".translate_molecule"
+      "community": 1,
+      "norm_label": ".graph_to_tensors()"
     },
     {
       "label": "QuantumEncoder",
@@ -606,10 +587,9 @@
       "source_file": "lib/translator.py",
       "source_location": "L230",
       "_origin": "ast",
-      "community": 1,
-      "norm_label": "quantumencoder",
       "id": "lib_translator_quantumencoder",
-      "community_name": ".translate_molecule"
+      "community": 1,
+      "norm_label": "quantumencoder"
     },
     {
       "label": ".encode_hamiltonian()",
@@ -617,10 +597,9 @@
       "source_file": "lib/translator.py",
       "source_location": "L234",
       "_origin": "ast",
-      "community": 1,
-      "norm_label": ".encode_hamiltonian()",
       "id": "lib_translator_quantumencoder_encode_hamiltonian",
-      "community_name": ".translate_molecule"
+      "community": 1,
+      "norm_label": ".encode_hamiltonian()"
     },
     {
       "label": ".map_to_qubits()",
@@ -628,10 +607,9 @@
       "source_file": "lib/translator.py",
       "source_location": "L272",
       "_origin": "ast",
-      "community": 1,
-      "norm_label": ".map_to_qubits()",
       "id": "lib_translator_quantumencoder_map_to_qubits",
-      "community_name": ".translate_molecule"
+      "community": 1,
+      "norm_label": ".map_to_qubits()"
     },
     {
       "label": "Translator",
@@ -639,10 +617,9 @@
       "source_file": "lib/translator.py",
       "source_location": "L292",
       "_origin": "ast",
-      "community": 2,
-      "norm_label": "translator",
       "id": "lib_translator_translator",
-      "community_name": "test_translator.py"
+      "community": 2,
+      "norm_label": "translator"
     },
     {
       "label": ".__init__()",
@@ -650,10 +627,9 @@
       "source_file": "lib/translator.py",
       "source_location": "L295",
       "_origin": "ast",
-      "community": 3,
-      "norm_label": ".__init__()",
       "id": "lib_translator_translator_init",
-      "community_name": ".build_from_molecule"
+      "community": 3,
+      "norm_label": ".__init__()"
     },
     {
       "label": ".translate_molecule()",
@@ -661,10 +637,9 @@
       "source_file": "lib/translator.py",
       "source_location": "L301",
       "_origin": "ast",
-      "community": 1,
-      "norm_label": ".translate_molecule()",
       "id": "lib_translator_translator_translate_molecule",
-      "community_name": ".translate_molecule"
+      "community": 1,
+      "norm_label": ".translate_molecule()"
     },
     {
       "label": ".batch_translate()",
@@ -672,10 +647,9 @@
       "source_file": "lib/translator.py",
       "source_location": "L321",
       "_origin": "ast",
-      "community": 1,
-      "norm_label": ".batch_translate()",
       "id": "lib_translator_translator_batch_translate",
-      "community_name": ".translate_molecule"
+      "community": 1,
+      "norm_label": ".batch_translate()"
     },
     {
       "label": "debug_translation()",
@@ -683,10 +657,9 @@
       "source_file": "lib/translator.py",
       "source_location": "L327",
       "_origin": "ast",
-      "community": 2,
-      "norm_label": "debug_translation()",
       "id": "lib_translator_debug_translation",
-      "community_name": "test_translator.py"
+      "community": 2,
+      "norm_label": "debug_translation()"
     },
     {
       "label": "Modulo Traduttore: Converte oggetti chimici in rappresentazioni ML/QML",
@@ -694,10 +667,9 @@
       "source_file": "lib/translator.py",
       "source_location": "L1",
       "_origin": "ast",
-      "community": 4,
-      "norm_label": "modulo traduttore: converte oggetti chimici in rappresentazioni ml/qml",
       "id": "lib_translator_rationale_1",
-      "community_name": "translator.py"
+      "community": 4,
+      "norm_label": "modulo traduttore: converte oggetti chimici in rappresentazioni ml/qml"
     },
     {
       "label": "Vettore di caratteristiche per un atomo",
@@ -705,10 +677,9 @@
       "source_file": "lib/translator.py",
       "source_location": "L13",
       "_origin": "ast",
-      "community": 4,
-      "norm_label": "vettore di caratteristiche per un atomo",
       "id": "lib_translator_rationale_13",
-      "community_name": "translator.py"
+      "community": 4,
+      "norm_label": "vettore di caratteristiche per un atomo"
     },
     {
       "label": "Converte in array numpy per ML",
@@ -716,10 +687,9 @@
       "source_file": "lib/translator.py",
       "source_location": "L22",
       "_origin": "ast",
-      "community": 3,
-      "norm_label": "converte in array numpy per ml",
       "id": "lib_translator_rationale_22",
-      "community_name": ".build_from_molecule"
+      "community": 3,
+      "norm_label": "converte in array numpy per ml"
     },
     {
       "label": "Estrae feature vectors dagli oggetti Atom",
@@ -727,10 +697,9 @@
       "source_file": "lib/translator.py",
       "source_location": "L36",
       "_origin": "ast",
-      "community": 4,
-      "norm_label": "estrae feature vectors dagli oggetti atom",
       "id": "lib_translator_rationale_36",
-      "community_name": "translator.py"
+      "community": 4,
+      "norm_label": "estrae feature vectors dagli oggetti atom"
     },
     {
       "label": "Estrae feature vector da un oggetto Atom",
@@ -738,10 +707,9 @@
       "source_file": "lib/translator.py",
       "source_location": "L50",
       "_origin": "ast",
-      "community": 4,
-      "norm_label": "estrae feature vector da un oggetto atom",
       "id": "lib_translator_rationale_50",
-      "community_name": "translator.py"
+      "community": 4,
+      "norm_label": "estrae feature vector da un oggetto atom"
     },
     {
       "label": "Codifica la configurazione elettronica come vettore",
@@ -749,10 +717,9 @@
       "source_file": "lib/translator.py",
       "source_location": "L68",
       "_origin": "ast",
-      "community": 4,
-      "norm_label": "codifica la configurazione elettronica come vettore",
       "id": "lib_translator_rationale_68",
-      "community_name": "translator.py"
+      "community": 4,
+      "norm_label": "codifica la configurazione elettronica come vettore"
     },
     {
       "label": "Calcola elettroni di valenza (semplificato)",
@@ -760,10 +727,9 @@
       "source_file": "lib/translator.py",
       "source_location": "L79",
       "_origin": "ast",
-      "community": 4,
-      "norm_label": "calcola elettroni di valenza (semplificato)",
       "id": "lib_translator_rationale_79",
-      "community_name": "translator.py"
+      "community": 4,
+      "norm_label": "calcola elettroni di valenza (semplificato)"
     },
     {
       "label": "Rappresentazione grafo di una molecola",
@@ -771,10 +737,9 @@
       "source_file": "lib/translator.py",
       "source_location": "L102",
       "_origin": "ast",
-      "community": 1,
-      "norm_label": "rappresentazione grafo di una molecola",
       "id": "lib_translator_rationale_102",
-      "community_name": ".translate_molecule"
+      "community": 1,
+      "norm_label": "rappresentazione grafo di una molecola"
     },
     {
       "label": "Converte in formato PyTorch Geometric",
@@ -782,10 +747,9 @@
       "source_file": "lib/translator.py",
       "source_location": "L110",
       "_origin": "ast",
-      "community": 1,
-      "norm_label": "converte in formato pytorch geometric",
       "id": "lib_translator_rationale_110",
-      "community_name": ".translate_molecule"
+      "community": 1,
+      "norm_label": "converte in formato pytorch geometric"
     },
     {
       "label": "Genera matrice di adiacenza",
@@ -793,10 +757,9 @@
       "source_file": "lib/translator.py",
       "source_location": "L119",
       "_origin": "ast",
-      "community": 1,
-      "norm_label": "genera matrice di adiacenza",
       "id": "lib_translator_rationale_119",
-      "community_name": ".translate_molecule"
+      "community": 1,
+      "norm_label": "genera matrice di adiacenza"
     },
     {
       "label": "Costruisce grafi molecolari da oggetti Molecule",
@@ -804,10 +767,9 @@
       "source_file": "lib/translator.py",
       "source_location": "L131",
       "_origin": "ast",
-      "community": 3,
-      "norm_label": "costruisce grafi molecolari da oggetti molecule",
       "id": "lib_translator_rationale_131",
-      "community_name": ".build_from_molecule"
+      "community": 3,
+      "norm_label": "costruisce grafi molecolari da oggetti molecule"
     },
     {
       "label": "Costruisce grafo da oggetto Molecule",
@@ -815,10 +777,9 @@
       "source_file": "lib/translator.py",
       "source_location": "L137",
       "_origin": "ast",
-      "community": 3,
-      "norm_label": "costruisce grafo da oggetto molecule",
       "id": "lib_translator_rationale_137",
-      "community_name": ".build_from_molecule"
+      "community": 3,
+      "norm_label": "costruisce grafo da oggetto molecule"
     },
     {
       "label": "Calcola distanza euclidea tra due atomi",
@@ -826,10 +787,9 @@
       "source_file": "lib/translator.py",
       "source_location": "L189",
       "_origin": "ast",
-      "community": 3,
-      "norm_label": "calcola distanza euclidea tra due atomi",
       "id": "lib_translator_rationale_189",
-      "community_name": ".build_from_molecule"
+      "community": 3,
+      "norm_label": "calcola distanza euclidea tra due atomi"
     },
     {
       "label": "Converte grafi in tensori per ML",
@@ -837,10 +797,9 @@
       "source_file": "lib/translator.py",
       "source_location": "L194",
       "_origin": "ast",
-      "community": 3,
-      "norm_label": "converte grafi in tensori per ml",
       "id": "lib_translator_rationale_194",
-      "community_name": ".build_from_molecule"
+      "community": 3,
+      "norm_label": "converte grafi in tensori per ml"
     },
     {
       "label": "Normalizza feature vectors",
@@ -848,10 +807,9 @@
       "source_file": "lib/translator.py",
       "source_location": "L198",
       "_origin": "ast",
-      "community": 3,
-      "norm_label": "normalizza feature vectors",
       "id": "lib_translator_rationale_198",
-      "community_name": ".build_from_molecule"
+      "community": 3,
+      "norm_label": "normalizza feature vectors"
     },
     {
       "label": "Converte grafo in dizionario di tensori",
@@ -859,10 +817,9 @@
       "source_file": "lib/translator.py",
       "source_location": "L215",
       "_origin": "ast",
-      "community": 1,
-      "norm_label": "converte grafo in dizionario di tensori",
       "id": "lib_translator_rationale_215",
-      "community_name": ".translate_molecule"
+      "community": 1,
+      "norm_label": "converte grafo in dizionario di tensori"
     },
     {
       "label": "Prepara dati per Quantum Machine Learning",
@@ -870,10 +827,9 @@
       "source_file": "lib/translator.py",
       "source_location": "L231",
       "_origin": "ast",
-      "community": 1,
-      "norm_label": "prepara dati per quantum machine learning",
       "id": "lib_translator_rationale_231",
-      "community_name": ".translate_molecule"
+      "community": 1,
+      "norm_label": "prepara dati per quantum machine learning"
     },
     {
       "label": "Codifica Hamiltoniano molecolare semplificato",
@@ -881,10 +837,9 @@
       "source_file": "lib/translator.py",
       "source_location": "L235",
       "_origin": "ast",
-      "community": 1,
-      "norm_label": "codifica hamiltoniano molecolare semplificato",
       "id": "lib_translator_rationale_235",
-      "community_name": ".translate_molecule"
+      "community": 1,
+      "norm_label": "codifica hamiltoniano molecolare semplificato"
     },
     {
       "label": "Mappa atomi a qubit per circuiti quantistici",
@@ -892,10 +847,9 @@
       "source_file": "lib/translator.py",
       "source_location": "L273",
       "_origin": "ast",
-      "community": 1,
-      "norm_label": "mappa atomi a qubit per circuiti quantistici",
       "id": "lib_translator_rationale_273",
-      "community_name": ".translate_molecule"
+      "community": 1,
+      "norm_label": "mappa atomi a qubit per circuiti quantistici"
     },
     {
       "label": "Classe principale che orchesta tutte le conversioni",
@@ -903,10 +857,9 @@
       "source_file": "lib/translator.py",
       "source_location": "L293",
       "_origin": "ast",
-      "community": 2,
-      "norm_label": "classe principale che orchesta tutte le conversioni",
       "id": "lib_translator_rationale_293",
-      "community_name": "test_translator.py"
+      "community": 2,
+      "norm_label": "classe principale che orchesta tutte le conversioni"
     },
     {
       "label": "Converte molecola nel formato richiesto",
@@ -914,10 +867,9 @@
       "source_file": "lib/translator.py",
       "source_location": "L302",
       "_origin": "ast",
-      "community": 1,
-      "norm_label": "converte molecola nel formato richiesto",
       "id": "lib_translator_rationale_302",
-      "community_name": ".translate_molecule"
+      "community": 1,
+      "norm_label": "converte molecola nel formato richiesto"
     },
     {
       "label": "Converte batch di molecole",
@@ -925,10 +877,9 @@
       "source_file": "lib/translator.py",
       "source_location": "L322",
       "_origin": "ast",
-      "community": 1,
-      "norm_label": "converte batch di molecole",
       "id": "lib_translator_rationale_322",
-      "community_name": ".translate_molecule"
+      "community": 1,
+      "norm_label": "converte batch di molecole"
     },
     {
       "label": "Funzione di debug per visualizzare la traduzione",
@@ -936,10 +887,9 @@
       "source_file": "lib/translator.py",
       "source_location": "L328",
       "_origin": "ast",
-      "community": 2,
-      "norm_label": "funzione di debug per visualizzare la traduzione",
       "id": "lib_translator_rationale_328",
-      "community_name": "test_translator.py"
+      "community": 2,
+      "norm_label": "funzione di debug per visualizzare la traduzione"
     },
     {
       "label": "test_translator.py",
@@ -947,10 +897,9 @@
       "source_file": "test_translator.py",
       "source_location": "L1",
       "_origin": "ast",
-      "community": 2,
-      "norm_label": "test_translator.py",
       "id": "test_translator",
-      "community_name": "test_translator.py"
+      "community": 2,
+      "norm_label": "test_translator.py"
     },
     {
       "label": "test_basic_translation()",
@@ -958,10 +907,9 @@
       "source_file": "test_translator.py",
       "source_location": "L12",
       "_origin": "ast",
-      "community": 2,
-      "norm_label": "test_basic_translation()",
       "id": "test_translator_test_basic_translation",
-      "community_name": "test_translator.py"
+      "community": 2,
+      "norm_label": "test_basic_translation()"
     },
     {
       "label": "test_quantum_translation()",
@@ -969,10 +917,9 @@
       "source_file": "test_translator.py",
       "source_location": "L38",
       "_origin": "ast",
-      "community": 2,
-      "norm_label": "test_quantum_translation()",
       "id": "test_translator_test_quantum_translation",
-      "community_name": "test_translator.py"
+      "community": 2,
+      "norm_label": "test_quantum_translation()"
     },
     {
       "label": "test_pyg_format()",
@@ -980,10 +927,9 @@
       "source_file": "test_translator.py",
       "source_location": "L64",
       "_origin": "ast",
-      "community": 2,
-      "norm_label": "test_pyg_format()",
       "id": "test_translator_test_pyg_format",
-      "community_name": "test_translator.py"
+      "community": 2,
+      "norm_label": "test_pyg_format()"
     },
     {
       "label": "test_feature_extraction()",
@@ -991,10 +937,9 @@
       "source_file": "test_translator.py",
       "source_location": "L84",
       "_origin": "ast",
-      "community": 2,
-      "norm_label": "test_feature_extraction()",
       "id": "test_translator_test_feature_extraction",
-      "community_name": "test_translator.py"
+      "community": 2,
+      "norm_label": "test_feature_extraction()"
     },
     {
       "label": "test_complex_molecule()",
@@ -1002,10 +947,9 @@
       "source_file": "test_translator.py",
       "source_location": "L115",
       "_origin": "ast",
-      "community": 2,
-      "norm_label": "test_complex_molecule()",
       "id": "test_translator_test_complex_molecule",
-      "community_name": "test_translator.py"
+      "community": 2,
+      "norm_label": "test_complex_molecule()"
     },
     {
       "label": "run_all_tests()",
@@ -1013,10 +957,9 @@
       "source_file": "test_translator.py",
       "source_location": "L154",
       "_origin": "ast",
-      "community": 2,
-      "norm_label": "run_all_tests()",
       "id": "test_translator_run_all_tests",
-      "community_name": "test_translator.py"
+      "community": 2,
+      "norm_label": "run_all_tests()"
     },
     {
       "label": "Test del modulo traduttore",
@@ -1024,10 +967,9 @@
       "source_file": "test_translator.py",
       "source_location": "L1",
       "_origin": "ast",
-      "community": 2,
-      "norm_label": "test del modulo traduttore",
       "id": "test_translator_rationale_1",
-      "community_name": "test_translator.py"
+      "community": 2,
+      "norm_label": "test del modulo traduttore"
     },
     {
       "label": "Test base della traduzione della molecola H2",
@@ -1035,10 +977,9 @@
       "source_file": "test_translator.py",
       "source_location": "L13",
       "_origin": "ast",
-      "community": 2,
-      "norm_label": "test base della traduzione della molecola h2",
       "id": "test_translator_rationale_13",
-      "community_name": "test_translator.py"
+      "community": 2,
+      "norm_label": "test base della traduzione della molecola h2"
     },
     {
       "label": "Test della traduzione per QML",
@@ -1046,10 +987,9 @@
       "source_file": "test_translator.py",
       "source_location": "L39",
       "_origin": "ast",
-      "community": 2,
-      "norm_label": "test della traduzione per qml",
       "id": "test_translator_rationale_39",
-      "community_name": "test_translator.py"
+      "community": 2,
+      "norm_label": "test della traduzione per qml"
     },
     {
       "label": "Test del formato PyTorch Geometric",
@@ -1057,10 +997,9 @@
       "source_file": "test_translator.py",
       "source_location": "L65",
       "_origin": "ast",
-      "community": 2,
-      "norm_label": "test del formato pytorch geometric",
       "id": "test_translator_rationale_65",
-      "community_name": "test_translator.py"
+      "community": 2,
+      "norm_label": "test del formato pytorch geometric"
     },
     {
       "label": "Test dell'estrazione delle feature",
@@ -1068,10 +1007,9 @@
       "source_file": "test_translator.py",
       "source_location": "L85",
       "_origin": "ast",
-      "community": 2,
-      "norm_label": "test dell'estrazione delle feature",
       "id": "test_translator_rationale_85",
-      "community_name": "test_translator.py"
+      "community": 2,
+      "norm_label": "test dell'estrazione delle feature"
     },
     {
       "label": "Test con una molecola pi\u00f9 complessa",
@@ -1079,10 +1017,9 @@
       "source_file": "test_translator.py",
       "source_location": "L116",
       "_origin": "ast",
-      "community": 2,
-      "norm_label": "test con una molecola piu complessa",
       "id": "test_translator_rationale_116",
-      "community_name": "test_translator.py"
+      "community": 2,
+      "norm_label": "test con una molecola piu complessa"
     }
   ],
   "links": [
@@ -1347,9 +1284,9 @@
       "source_location": "L8",
       "weight": 1.0,
       "_origin": "ast",
-      "confidence_score": 1.0,
       "source": "test_translator",
-      "target": "lib_matter"
+      "target": "lib_matter",
+      "confidence_score": 1.0
     },
     {
       "relation": "references",
@@ -1583,9 +1520,9 @@
       "source_location": "L12",
       "weight": 1.0,
       "_origin": "ast",
-      "confidence_score": 1.0,
       "source": "lib_translator",
-      "target": "lib_translator_atomfeatures"
+      "target": "lib_translator_atomfeatures",
+      "confidence_score": 1.0
     },
     {
       "relation": "contains",
@@ -1594,9 +1531,9 @@
       "source_location": "L327",
       "weight": 1.0,
       "_origin": "ast",
-      "confidence_score": 1.0,
       "source": "lib_translator",
-      "target": "lib_translator_debug_translation"
+      "target": "lib_translator_debug_translation",
+      "confidence_score": 1.0
     },
     {
       "relation": "contains",
@@ -1605,9 +1542,9 @@
       "source_location": "L35",
       "weight": 1.0,
       "_origin": "ast",
-      "confidence_score": 1.0,
       "source": "lib_translator",
-      "target": "lib_translator_featureextractor"
+      "target": "lib_translator_featureextractor",
+      "confidence_score": 1.0
     },
     {
       "relation": "contains",
@@ -1616,9 +1553,9 @@
       "source_location": "L130",
       "weight": 1.0,
       "_origin": "ast",
-      "confidence_score": 1.0,
       "source": "lib_translator",
-      "target": "lib_translator_graphbuilder"
+      "target": "lib_translator_graphbuilder",
+      "confidence_score": 1.0
     },
     {
       "relation": "contains",
@@ -1627,9 +1564,9 @@
       "source_location": "L101",
       "weight": 1.0,
       "_origin": "ast",
-      "confidence_score": 1.0,
       "source": "lib_translator",
-      "target": "lib_translator_moleculargraph"
+      "target": "lib_translator_moleculargraph",
+      "confidence_score": 1.0
     },
     {
       "relation": "contains",
@@ -1638,9 +1575,9 @@
       "source_location": "L230",
       "weight": 1.0,
       "_origin": "ast",
-      "confidence_score": 1.0,
       "source": "lib_translator",
-      "target": "lib_translator_quantumencoder"
+      "target": "lib_translator_quantumencoder",
+      "confidence_score": 1.0
     },
     {
       "relation": "contains",
@@ -1649,9 +1586,9 @@
       "source_location": "L193",
       "weight": 1.0,
       "_origin": "ast",
-      "confidence_score": 1.0,
       "source": "lib_translator",
-      "target": "lib_translator_tensorconverter"
+      "target": "lib_translator_tensorconverter",
+      "confidence_score": 1.0
     },
     {
       "relation": "contains",
@@ -1660,9 +1597,9 @@
       "source_location": "L292",
       "weight": 1.0,
       "_origin": "ast",
-      "confidence_score": 1.0,
       "source": "lib_translator",
-      "target": "lib_translator_translator"
+      "target": "lib_translator_translator",
+      "confidence_score": 1.0
     },
     {
       "relation": "rationale_for",
@@ -1671,9 +1608,9 @@
       "source_location": "L1",
       "weight": 1.0,
       "_origin": "ast",
-      "confidence_score": 1.0,
       "source": "lib_translator_rationale_1",
-      "target": "lib_translator"
+      "target": "lib_translator",
+      "confidence_score": 1.0
     },
     {
       "relation": "imports_from",
@@ -1683,9 +1620,9 @@
       "source_location": "L9",
       "weight": 1.0,
       "_origin": "ast",
-      "confidence_score": 1.0,
       "source": "test_translator",
-      "target": "lib_translator"
+      "target": "lib_translator",
+      "confidence_score": 1.0
     },
     {
       "relation": "method",
@@ -1694,9 +1631,9 @@
       "source_location": "L21",
       "weight": 1.0,
       "_origin": "ast",
-      "confidence_score": 1.0,
       "source": "lib_translator_atomfeatures",
-      "target": "lib_translator_atomfeatures_to_vector"
+      "target": "lib_translator_atomfeatures_to_vector",
+      "confidence_score": 1.0
     },
     {
       "relation": "references",
@@ -1706,9 +1643,9 @@
       "source_location": "L49",
       "weight": 1.0,
       "_origin": "ast",
-      "confidence_score": 1.0,
       "source": "lib_translator_featureextractor_extract_from_atom",
-      "target": "lib_translator_atomfeatures"
+      "target": "lib_translator_atomfeatures",
+      "confidence_score": 1.0
     },
     {
       "relation": "rationale_for",
@@ -1717,9 +1654,9 @@
       "source_location": "L13",
       "weight": 1.0,
       "_origin": "ast",
-      "confidence_score": 1.0,
       "source": "lib_translator_rationale_13",
-      "target": "lib_translator_atomfeatures"
+      "target": "lib_translator_atomfeatures",
+      "confidence_score": 1.0
     },
     {
       "relation": "references",
@@ -1729,9 +1666,9 @@
       "source_location": "L21",
       "weight": 1.0,
       "_origin": "ast",
-      "confidence_score": 1.0,
       "source": "lib_translator_atomfeatures_to_vector",
-      "target": "ndarray"
+      "target": "ndarray",
+      "confidence_score": 1.0
     },
     {
       "relation": "calls",
@@ -1741,9 +1678,9 @@
       "source_location": "L146",
       "weight": 1.0,
       "_origin": "ast",
-      "confidence_score": 1.0,
       "source": "lib_translator_graphbuilder_build_from_molecule",
-      "target": "lib_translator_atomfeatures_to_vector"
+      "target": "lib_translator_atomfeatures_to_vector",
+      "confidence_score": 1.0
     },
     {
       "relation": "rationale_for",
@@ -1752,9 +1689,9 @@
       "source_location": "L22",
       "weight": 1.0,
       "_origin": "ast",
-      "confidence_score": 1.0,
       "source": "lib_translator_rationale_22",
-      "target": "lib_translator_atomfeatures_to_vector"
+      "target": "lib_translator_atomfeatures_to_vector",
+      "confidence_score": 1.0
     },
     {
       "relation": "references",
@@ -1764,9 +1701,9 @@
       "source_location": "L188",
       "weight": 1.0,
       "_origin": "ast",
-      "confidence_score": 1.0,
       "source": "lib_translator_graphbuilder_calculate_distance",
-      "target": "ndarray"
+      "target": "ndarray",
+      "confidence_score": 1.0
     },
     {
       "relation": "references",
@@ -1776,9 +1713,9 @@
       "source_location": "L118",
       "weight": 1.0,
       "_origin": "ast",
-      "confidence_score": 1.0,
       "source": "lib_translator_moleculargraph_to_adjacency_matrix",
-      "target": "ndarray"
+      "target": "ndarray",
+      "confidence_score": 1.0
     },
     {
       "relation": "references",
@@ -1788,9 +1725,9 @@
       "source_location": "L197",
       "weight": 1.0,
       "_origin": "ast",
-      "confidence_score": 1.0,
       "source": "lib_translator_tensorconverter_normalize_features",
-      "target": "ndarray"
+      "target": "ndarray",
+      "confidence_score": 1.0
     },
     {
       "relation": "method",
@@ -1799,9 +1736,9 @@
       "source_location": "L78",
       "weight": 1.0,
       "_origin": "ast",
-      "confidence_score": 1.0,
       "source": "lib_translator_featureextractor",
-      "target": "lib_translator_featureextractor_calculate_valence_electrons"
+      "target": "lib_translator_featureextractor_calculate_valence_electrons",
+      "confidence_score": 1.0
     },
     {
       "relation": "method",
@@ -1810,9 +1747,9 @@
       "source_location": "L67",
       "weight": 1.0,
       "_origin": "ast",
-      "confidence_score": 1.0,
       "source": "lib_translator_featureextractor",
-      "target": "lib_translator_featureextractor_encode_configuration"
+      "target": "lib_translator_featureextractor_encode_configuration",
+      "confidence_score": 1.0
     },
     {
       "relation": "method",
@@ -1821,9 +1758,9 @@
       "source_location": "L49",
       "weight": 1.0,
       "_origin": "ast",
-      "confidence_score": 1.0,
       "source": "lib_translator_featureextractor",
-      "target": "lib_translator_featureextractor_extract_from_atom"
+      "target": "lib_translator_featureextractor_extract_from_atom",
+      "confidence_score": 1.0
     },
     {
       "relation": "method",
@@ -1832,9 +1769,9 @@
       "source_location": "L46",
       "weight": 1.0,
       "_origin": "ast",
-      "confidence_score": 1.0,
       "source": "lib_translator_featureextractor",
-      "target": "lib_translator_featureextractor_init"
+      "target": "lib_translator_featureextractor_init",
+      "confidence_score": 1.0
     },
     {
       "relation": "references",
@@ -1844,9 +1781,9 @@
       "source_location": "L133",
       "weight": 1.0,
       "_origin": "ast",
-      "confidence_score": 1.0,
       "source": "lib_translator_graphbuilder_init",
-      "target": "lib_translator_featureextractor"
+      "target": "lib_translator_featureextractor",
+      "confidence_score": 1.0
     },
     {
       "relation": "rationale_for",
@@ -1855,9 +1792,9 @@
       "source_location": "L36",
       "weight": 1.0,
       "_origin": "ast",
-      "confidence_score": 1.0,
       "source": "lib_translator_rationale_36",
-      "target": "lib_translator_featureextractor"
+      "target": "lib_translator_featureextractor",
+      "confidence_score": 1.0
     },
     {
       "relation": "calls",
@@ -1867,9 +1804,9 @@
       "source_location": "L296",
       "weight": 1.0,
       "_origin": "ast",
-      "confidence_score": 1.0,
       "source": "lib_translator_translator_init",
-      "target": "lib_translator_featureextractor"
+      "target": "lib_translator_featureextractor",
+      "confidence_score": 1.0
     },
     {
       "relation": "imports",
@@ -1879,9 +1816,9 @@
       "source_location": "L89",
       "weight": 1.0,
       "_origin": "ast",
-      "confidence_score": 1.0,
       "source": "test_translator",
-      "target": "lib_translator_featureextractor"
+      "target": "lib_translator_featureextractor",
+      "confidence_score": 1.0
     },
     {
       "relation": "calls",
@@ -1891,9 +1828,9 @@
       "source_location": "L91",
       "weight": 1.0,
       "_origin": "ast",
-      "confidence_score": 1.0,
       "source": "test_translator_test_feature_extraction",
-      "target": "lib_translator_featureextractor"
+      "target": "lib_translator_featureextractor",
+      "confidence_score": 1.0
     },
     {
       "relation": "calls",
@@ -1903,9 +1840,9 @@
       "source_location": "L56",
       "weight": 1.0,
       "_origin": "ast",
-      "confidence_score": 1.0,
       "source": "lib_translator_featureextractor_extract_from_atom",
-      "target": "lib_translator_featureextractor_calculate_valence_electrons"
+      "target": "lib_translator_featureextractor_calculate_valence_electrons",
+      "confidence_score": 1.0
     },
     {
       "relation": "calls",
@@ -1915,9 +1852,9 @@
       "source_location": "L53",
       "weight": 1.0,
       "_origin": "ast",
-      "confidence_score": 1.0,
       "source": "lib_translator_featureextractor_extract_from_atom",
-      "target": "lib_translator_featureextractor_encode_configuration"
+      "target": "lib_translator_featureextractor_encode_configuration",
+      "confidence_score": 1.0
     },
     {
       "relation": "calls",
@@ -1927,9 +1864,9 @@
       "source_location": "L145",
       "weight": 1.0,
       "_origin": "ast",
-      "confidence_score": 1.0,
       "source": "lib_translator_graphbuilder_build_from_molecule",
-      "target": "lib_translator_featureextractor_extract_from_atom"
+      "target": "lib_translator_featureextractor_extract_from_atom",
+      "confidence_score": 1.0
     },
     {
       "relation": "rationale_for",
@@ -1938,9 +1875,9 @@
       "source_location": "L50",
       "weight": 1.0,
       "_origin": "ast",
-      "confidence_score": 1.0,
       "source": "lib_translator_rationale_50",
-      "target": "lib_translator_featureextractor_extract_from_atom"
+      "target": "lib_translator_featureextractor_extract_from_atom",
+      "confidence_score": 1.0
     },
     {
       "relation": "rationale_for",
@@ -1949,9 +1886,9 @@
       "source_location": "L68",
       "weight": 1.0,
       "_origin": "ast",
-      "confidence_score": 1.0,
       "source": "lib_translator_rationale_68",
-      "target": "lib_translator_featureextractor_encode_configuration"
+      "target": "lib_translator_featureextractor_encode_configuration",
+      "confidence_score": 1.0
     },
     {
       "relation": "rationale_for",
@@ -1960,9 +1897,9 @@
       "source_location": "L79",
       "weight": 1.0,
       "_origin": "ast",
-      "confidence_score": 1.0,
       "source": "lib_translator_rationale_79",
-      "target": "lib_translator_featureextractor_calculate_valence_electrons"
+      "target": "lib_translator_featureextractor_calculate_valence_electrons",
+      "confidence_score": 1.0
     },
     {
       "relation": "references",
@@ -1972,9 +1909,9 @@
       "source_location": "L136",
       "weight": 1.0,
       "_origin": "ast",
-      "confidence_score": 1.0,
       "source": "lib_translator_graphbuilder_build_from_molecule",
-      "target": "lib_translator_moleculargraph"
+      "target": "lib_translator_moleculargraph",
+      "confidence_score": 1.0
     },
     {
       "relation": "method",
@@ -1983,9 +1920,9 @@
       "source_location": "L118",
       "weight": 1.0,
       "_origin": "ast",
-      "confidence_score": 1.0,
       "source": "lib_translator_moleculargraph",
-      "target": "lib_translator_moleculargraph_to_adjacency_matrix"
+      "target": "lib_translator_moleculargraph_to_adjacency_matrix",
+      "confidence_score": 1.0
     },
     {
       "relation": "method",
@@ -1994,9 +1931,9 @@
       "source_location": "L109",
       "weight": 1.0,
       "_origin": "ast",
-      "confidence_score": 1.0,
       "source": "lib_translator_moleculargraph",
-      "target": "lib_translator_moleculargraph_to_pyg_format"
+      "target": "lib_translator_moleculargraph_to_pyg_format",
+      "confidence_score": 1.0
     },
     {
       "relation": "references",
@@ -2006,9 +1943,9 @@
       "source_location": "L234",
       "weight": 1.0,
       "_origin": "ast",
-      "confidence_score": 1.0,
       "source": "lib_translator_quantumencoder_encode_hamiltonian",
-      "target": "lib_translator_moleculargraph"
+      "target": "lib_translator_moleculargraph",
+      "confidence_score": 1.0
     },
     {
       "relation": "references",
@@ -2018,9 +1955,9 @@
       "source_location": "L272",
       "weight": 1.0,
       "_origin": "ast",
-      "confidence_score": 1.0,
       "source": "lib_translator_quantumencoder_map_to_qubits",
-      "target": "lib_translator_moleculargraph"
+      "target": "lib_translator_moleculargraph",
+      "confidence_score": 1.0
     },
     {
       "relation": "rationale_for",
@@ -2029,9 +1966,9 @@
       "source_location": "L102",
       "weight": 1.0,
       "_origin": "ast",
-      "confidence_score": 1.0,
       "source": "lib_translator_rationale_102",
-      "target": "lib_translator_moleculargraph"
+      "target": "lib_translator_moleculargraph",
+      "confidence_score": 1.0
     },
     {
       "relation": "references",
@@ -2041,9 +1978,9 @@
       "source_location": "L214",
       "weight": 1.0,
       "_origin": "ast",
-      "confidence_score": 1.0,
       "source": "lib_translator_tensorconverter_graph_to_tensors",
-      "target": "lib_translator_moleculargraph"
+      "target": "lib_translator_moleculargraph",
+      "confidence_score": 1.0
     },
     {
       "relation": "rationale_for",
@@ -2052,9 +1989,9 @@
       "source_location": "L110",
       "weight": 1.0,
       "_origin": "ast",
-      "confidence_score": 1.0,
       "source": "lib_translator_rationale_110",
-      "target": "lib_translator_moleculargraph_to_pyg_format"
+      "target": "lib_translator_moleculargraph_to_pyg_format",
+      "confidence_score": 1.0
     },
     {
       "relation": "calls",
@@ -2064,9 +2001,9 @@
       "source_location": "L311",
       "weight": 1.0,
       "_origin": "ast",
-      "confidence_score": 1.0,
       "source": "lib_translator_translator_translate_molecule",
-      "target": "lib_translator_moleculargraph_to_pyg_format"
+      "target": "lib_translator_moleculargraph_to_pyg_format",
+      "confidence_score": 1.0
     },
     {
       "relation": "rationale_for",
@@ -2075,9 +2012,9 @@
       "source_location": "L119",
       "weight": 1.0,
       "_origin": "ast",
-      "confidence_score": 1.0,
       "source": "lib_translator_rationale_119",
-      "target": "lib_translator_moleculargraph_to_adjacency_matrix"
+      "target": "lib_translator_moleculargraph_to_adjacency_matrix",
+      "confidence_score": 1.0
     },
     {
       "relation": "calls",
@@ -2087,9 +2024,9 @@
       "source_location": "L226",
       "weight": 1.0,
       "_origin": "ast",
-      "confidence_score": 1.0,
       "source": "lib_translator_tensorconverter_graph_to_tensors",
-      "target": "lib_translator_moleculargraph_to_adjacency_matrix"
+      "target": "lib_translator_moleculargraph_to_adjacency_matrix",
+      "confidence_score": 1.0
     },
     {
       "relation": "method",
@@ -2098,9 +2035,9 @@
       "source_location": "L136",
       "weight": 1.0,
       "_origin": "ast",
-      "confidence_score": 1.0,
       "source": "lib_translator_graphbuilder",
-      "target": "lib_translator_graphbuilder_build_from_molecule"
+      "target": "lib_translator_graphbuilder_build_from_molecule",
+      "confidence_score": 1.0
     },
     {
       "relation": "method",
@@ -2109,9 +2046,9 @@
       "source_location": "L188",
       "weight": 1.0,
       "_origin": "ast",
-      "confidence_score": 1.0,
       "source": "lib_translator_graphbuilder",
-      "target": "lib_translator_graphbuilder_calculate_distance"
+      "target": "lib_translator_graphbuilder_calculate_distance",
+      "confidence_score": 1.0
     },
     {
       "relation": "method",
@@ -2120,9 +2057,9 @@
       "source_location": "L133",
       "weight": 1.0,
       "_origin": "ast",
-      "confidence_score": 1.0,
       "source": "lib_translator_graphbuilder",
-      "target": "lib_translator_graphbuilder_init"
+      "target": "lib_translator_graphbuilder_init",
+      "confidence_score": 1.0
     },
     {
       "relation": "rationale_for",
@@ -2131,9 +2068,9 @@
       "source_location": "L131",
       "weight": 1.0,
       "_origin": "ast",
-      "confidence_score": 1.0,
       "source": "lib_translator_rationale_131",
-      "target": "lib_translator_graphbuilder"
+      "target": "lib_translator_graphbuilder",
+      "confidence_score": 1.0
     },
     {
       "relation": "calls",
@@ -2143,9 +2080,9 @@
       "source_location": "L297",
       "weight": 1.0,
       "_origin": "ast",
-      "confidence_score": 1.0,
       "source": "lib_translator_translator_init",
-      "target": "lib_translator_graphbuilder"
+      "target": "lib_translator_graphbuilder",
+      "confidence_score": 1.0
     },
     {
       "relation": "calls",
@@ -2155,9 +2092,9 @@
       "source_location": "L166",
       "weight": 1.0,
       "_origin": "ast",
-      "confidence_score": 1.0,
       "source": "lib_translator_graphbuilder_build_from_molecule",
-      "target": "lib_translator_graphbuilder_calculate_distance"
+      "target": "lib_translator_graphbuilder_calculate_distance",
+      "confidence_score": 1.0
     },
     {
       "relation": "rationale_for",
@@ -2166,9 +2103,9 @@
       "source_location": "L137",
       "weight": 1.0,
       "_origin": "ast",
-      "confidence_score": 1.0,
       "source": "lib_translator_rationale_137",
-      "target": "lib_translator_graphbuilder_build_from_molecule"
+      "target": "lib_translator_graphbuilder_build_from_molecule",
+      "confidence_score": 1.0
     },
     {
       "relation": "calls",
@@ -2178,9 +2115,9 @@
       "source_location": "L305",
       "weight": 1.0,
       "_origin": "ast",
-      "confidence_score": 1.0,
       "source": "lib_translator_translator_translate_molecule",
-      "target": "lib_translator_graphbuilder_build_from_molecule"
+      "target": "lib_translator_graphbuilder_build_from_molecule",
+      "confidence_score": 1.0
     },
     {
       "relation": "rationale_for",
@@ -2189,9 +2126,9 @@
       "source_location": "L189",
       "weight": 1.0,
       "_origin": "ast",
-      "confidence_score": 1.0,
       "source": "lib_translator_rationale_189",
-      "target": "lib_translator_graphbuilder_calculate_distance"
+      "target": "lib_translator_graphbuilder_calculate_distance",
+      "confidence_score": 1.0
     },
     {
       "relation": "rationale_for",
@@ -2200,9 +2137,9 @@
       "source_location": "L194",
       "weight": 1.0,
       "_origin": "ast",
-      "confidence_score": 1.0,
       "source": "lib_translator_rationale_194",
-      "target": "lib_translator_tensorconverter"
+      "target": "lib_translator_tensorconverter",
+      "confidence_score": 1.0
     },
     {
       "relation": "method",
@@ -2211,9 +2148,9 @@
       "source_location": "L214",
       "weight": 1.0,
       "_origin": "ast",
-      "confidence_score": 1.0,
       "source": "lib_translator_tensorconverter",
-      "target": "lib_translator_tensorconverter_graph_to_tensors"
+      "target": "lib_translator_tensorconverter_graph_to_tensors",
+      "confidence_score": 1.0
     },
     {
       "relation": "method",
@@ -2222,9 +2159,9 @@
       "source_location": "L197",
       "weight": 1.0,
       "_origin": "ast",
-      "confidence_score": 1.0,
       "source": "lib_translator_tensorconverter",
-      "target": "lib_translator_tensorconverter_normalize_features"
+      "target": "lib_translator_tensorconverter_normalize_features",
+      "confidence_score": 1.0
     },
     {
       "relation": "calls",
@@ -2234,9 +2171,9 @@
       "source_location": "L298",
       "weight": 1.0,
       "_origin": "ast",
-      "confidence_score": 1.0,
       "source": "lib_translator_translator_init",
-      "target": "lib_translator_tensorconverter"
+      "target": "lib_translator_tensorconverter",
+      "confidence_score": 1.0
     },
     {
       "relation": "rationale_for",
@@ -2245,9 +2182,9 @@
       "source_location": "L198",
       "weight": 1.0,
       "_origin": "ast",
-      "confidence_score": 1.0,
       "source": "lib_translator_rationale_198",
-      "target": "lib_translator_tensorconverter_normalize_features"
+      "target": "lib_translator_tensorconverter_normalize_features",
+      "confidence_score": 1.0
     },
     {
       "relation": "calls",
@@ -2268,9 +2205,9 @@
       "source_location": "L215",
       "weight": 1.0,
       "_origin": "ast",
-      "confidence_score": 1.0,
       "source": "lib_translator_rationale_215",
-      "target": "lib_translator_tensorconverter_graph_to_tensors"
+      "target": "lib_translator_tensorconverter_graph_to_tensors",
+      "confidence_score": 1.0
     },
     {
       "relation": "calls",
@@ -2280,9 +2217,9 @@
       "source_location": "L309",
       "weight": 1.0,
       "_origin": "ast",
-      "confidence_score": 1.0,
       "source": "lib_translator_translator_translate_molecule",
-      "target": "lib_translator_tensorconverter_graph_to_tensors"
+      "target": "lib_translator_tensorconverter_graph_to_tensors",
+      "confidence_score": 1.0
     },
     {
       "relation": "method",
@@ -2291,9 +2228,9 @@
       "source_location": "L234",
       "weight": 1.0,
       "_origin": "ast",
-      "confidence_score": 1.0,
       "source": "lib_translator_quantumencoder",
-      "target": "lib_translator_quantumencoder_encode_hamiltonian"
+      "target": "lib_translator_quantumencoder_encode_hamiltonian",
+      "confidence_score": 1.0
     },
     {
       "relation": "method",
@@ -2302,9 +2239,9 @@
       "source_location": "L272",
       "weight": 1.0,
       "_origin": "ast",
-      "confidence_score": 1.0,
       "source": "lib_translator_quantumencoder",
-      "target": "lib_translator_quantumencoder_map_to_qubits"
+      "target": "lib_translator_quantumencoder_map_to_qubits",
+      "confidence_score": 1.0
     },
     {
       "relation": "rationale_for",
@@ -2313,9 +2250,9 @@
       "source_location": "L231",
       "weight": 1.0,
       "_origin": "ast",
-      "confidence_score": 1.0,
       "source": "lib_translator_rationale_231",
-      "target": "lib_translator_quantumencoder"
+      "target": "lib_translator_quantumencoder",
+      "confidence_score": 1.0
     },
     {
       "relation": "calls",
@@ -2325,9 +2262,9 @@
       "source_location": "L299",
       "weight": 1.0,
       "_origin": "ast",
-      "confidence_score": 1.0,
       "source": "lib_translator_translator_init",
-      "target": "lib_translator_quantumencoder"
+      "target": "lib_translator_quantumencoder",
+      "confidence_score": 1.0
     },
     {
       "relation": "rationale_for",
@@ -2336,9 +2273,9 @@
       "source_location": "L235",
       "weight": 1.0,
       "_origin": "ast",
-      "confidence_score": 1.0,
       "source": "lib_translator_rationale_235",
-      "target": "lib_translator_quantumencoder_encode_hamiltonian"
+      "target": "lib_translator_quantumencoder_encode_hamiltonian",
+      "confidence_score": 1.0
     },
     {
       "relation": "calls",
@@ -2348,9 +2285,9 @@
       "source_location": "L315",
       "weight": 1.0,
       "_origin": "ast",
-      "confidence_score": 1.0,
       "source": "lib_translator_translator_translate_molecule",
-      "target": "lib_translator_quantumencoder_encode_hamiltonian"
+      "target": "lib_translator_quantumencoder_encode_hamiltonian",
+      "confidence_score": 1.0
     },
     {
       "relation": "rationale_for",
@@ -2359,9 +2296,9 @@
       "source_location": "L273",
       "weight": 1.0,
       "_origin": "ast",
-      "confidence_score": 1.0,
       "source": "lib_translator_rationale_273",
-      "target": "lib_translator_quantumencoder_map_to_qubits"
+      "target": "lib_translator_quantumencoder_map_to_qubits",
+      "confidence_score": 1.0
     },
     {
       "relation": "calls",
@@ -2371,9 +2308,9 @@
       "source_location": "L316",
       "weight": 1.0,
       "_origin": "ast",
-      "confidence_score": 1.0,
       "source": "lib_translator_translator_translate_molecule",
-      "target": "lib_translator_quantumencoder_map_to_qubits"
+      "target": "lib_translator_quantumencoder_map_to_qubits",
+      "confidence_score": 1.0
     },
     {
       "relation": "calls",
@@ -2383,9 +2320,9 @@
       "source_location": "L329",
       "weight": 1.0,
       "_origin": "ast",
-      "confidence_score": 1.0,
       "source": "lib_translator_debug_translation",
-      "target": "lib_translator_translator"
+      "target": "lib_translator_translator",
+      "confidence_score": 1.0
     },
     {
       "relation": "rationale_for",
@@ -2394,9 +2331,9 @@
       "source_location": "L293",
       "weight": 1.0,
       "_origin": "ast",
-      "confidence_score": 1.0,
       "source": "lib_translator_rationale_293",
-      "target": "lib_translator_translator"
+      "target": "lib_translator_translator",
+      "confidence_score": 1.0
     },
     {
       "relation": "method",
@@ -2405,9 +2342,9 @@
       "source_location": "L321",
       "weight": 1.0,
       "_origin": "ast",
-      "confidence_score": 1.0,
       "source": "lib_translator_translator",
-      "target": "lib_translator_translator_batch_translate"
+      "target": "lib_translator_translator_batch_translate",
+      "confidence_score": 1.0
     },
     {
       "relation": "method",
@@ -2416,9 +2353,9 @@
       "source_location": "L295",
       "weight": 1.0,
       "_origin": "ast",
-      "confidence_score": 1.0,
       "source": "lib_translator_translator",
-      "target": "lib_translator_translator_init"
+      "target": "lib_translator_translator_init",
+      "confidence_score": 1.0
     },
     {
       "relation": "method",
@@ -2427,9 +2364,9 @@
       "source_location": "L301",
       "weight": 1.0,
       "_origin": "ast",
-      "confidence_score": 1.0,
       "source": "lib_translator_translator",
-      "target": "lib_translator_translator_translate_molecule"
+      "target": "lib_translator_translator_translate_molecule",
+      "confidence_score": 1.0
     },
     {
       "relation": "imports",
@@ -2439,9 +2376,9 @@
       "source_location": "L9",
       "weight": 1.0,
       "_origin": "ast",
-      "confidence_score": 1.0,
       "source": "test_translator",
-      "target": "lib_translator_translator"
+      "target": "lib_translator_translator",
+      "confidence_score": 1.0
     },
     {
       "relation": "calls",
@@ -2451,9 +2388,9 @@
       "source_location": "L17",
       "weight": 1.0,
       "_origin": "ast",
-      "confidence_score": 1.0,
       "source": "test_translator_test_basic_translation",
-      "target": "lib_translator_translator"
+      "target": "lib_translator_translator",
+      "confidence_score": 1.0
     },
     {
       "relation": "calls",
@@ -2463,9 +2400,9 @@
       "source_location": "L140",
       "weight": 1.0,
       "_origin": "ast",
-      "confidence_score": 1.0,
       "source": "test_translator_test_complex_molecule",
-      "target": "lib_translator_translator"
+      "target": "lib_translator_translator",
+      "confidence_score": 1.0
     },
     {
       "relation": "calls",
@@ -2475,9 +2412,9 @@
       "source_location": "L69",
       "weight": 1.0,
       "_origin": "ast",
-      "confidence_score": 1.0,
       "source": "test_translator_test_pyg_format",
-      "target": "lib_translator_translator"
+      "target": "lib_translator_translator",
+      "confidence_score": 1.0
     },
     {
       "relation": "calls",
@@ -2487,9 +2424,9 @@
       "source_location": "L43",
       "weight": 1.0,
       "_origin": "ast",
-      "confidence_score": 1.0,
       "source": "test_translator_test_quantum_translation",
-      "target": "lib_translator_translator"
+      "target": "lib_translator_translator",
+      "confidence_score": 1.0
     },
     {
       "relation": "calls",
@@ -2499,9 +2436,9 @@
       "source_location": "L337",
       "weight": 1.0,
       "_origin": "ast",
-      "confidence_score": 1.0,
       "source": "lib_translator_debug_translation",
-      "target": "lib_translator_translator_translate_molecule"
+      "target": "lib_translator_translator_translate_molecule",
+      "confidence_score": 1.0
     },
     {
       "relation": "rationale_for",
@@ -2510,9 +2447,9 @@
       "source_location": "L302",
       "weight": 1.0,
       "_origin": "ast",
-      "confidence_score": 1.0,
       "source": "lib_translator_rationale_302",
-      "target": "lib_translator_translator_translate_molecule"
+      "target": "lib_translator_translator_translate_molecule",
+      "confidence_score": 1.0
     },
     {
       "relation": "calls",
@@ -2522,9 +2459,9 @@
       "source_location": "L323",
       "weight": 1.0,
       "_origin": "ast",
-      "confidence_score": 1.0,
       "source": "lib_translator_translator_batch_translate",
-      "target": "lib_translator_translator_translate_molecule"
+      "target": "lib_translator_translator_translate_molecule",
+      "confidence_score": 1.0
     },
     {
       "relation": "rationale_for",
@@ -2533,9 +2470,9 @@
       "source_location": "L322",
       "weight": 1.0,
       "_origin": "ast",
-      "confidence_score": 1.0,
       "source": "lib_translator_rationale_322",
-      "target": "lib_translator_translator_batch_translate"
+      "target": "lib_translator_translator_batch_translate",
+      "confidence_score": 1.0
     },
     {
       "relation": "rationale_for",
@@ -2544,9 +2481,9 @@
       "source_location": "L328",
       "weight": 1.0,
       "_origin": "ast",
-      "confidence_score": 1.0,
       "source": "lib_translator_rationale_328",
-      "target": "lib_translator_debug_translation"
+      "target": "lib_translator_debug_translation",
+      "confidence_score": 1.0
     },
     {
       "relation": "imports",
@@ -2556,9 +2493,9 @@
       "source_location": "L9",
       "weight": 1.0,
       "_origin": "ast",
-      "confidence_score": 1.0,
       "source": "test_translator",
-      "target": "lib_translator_debug_translation"
+      "target": "lib_translator_debug_translation",
+      "confidence_score": 1.0
     },
     {
       "relation": "contains",
@@ -2567,9 +2504,9 @@
       "source_location": "L154",
       "weight": 1.0,
       "_origin": "ast",
-      "confidence_score": 1.0,
       "source": "test_translator",
-      "target": "test_translator_run_all_tests"
+      "target": "test_translator_run_all_tests",
+      "confidence_score": 1.0
     },
     {
       "relation": "contains",
@@ -2578,9 +2515,9 @@
       "source_location": "L12",
       "weight": 1.0,
       "_origin": "ast",
-      "confidence_score": 1.0,
       "source": "test_translator",
-      "target": "test_translator_test_basic_translation"
+      "target": "test_translator_test_basic_translation",
+      "confidence_score": 1.0
     },
     {
       "relation": "contains",
@@ -2589,9 +2526,9 @@
       "source_location": "L115",
       "weight": 1.0,
       "_origin": "ast",
-      "confidence_score": 1.0,
       "source": "test_translator",
-      "target": "test_translator_test_complex_molecule"
+      "target": "test_translator_test_complex_molecule",
+      "confidence_score": 1.0
     },
     {
       "relation": "contains",
@@ -2600,9 +2537,9 @@
       "source_location": "L84",
       "weight": 1.0,
       "_origin": "ast",
-      "confidence_score": 1.0,
       "source": "test_translator",
-      "target": "test_translator_test_feature_extraction"
+      "target": "test_translator_test_feature_extraction",
+      "confidence_score": 1.0
     },
     {
       "relation": "contains",
@@ -2611,9 +2548,9 @@
       "source_location": "L64",
       "weight": 1.0,
       "_origin": "ast",
-      "confidence_score": 1.0,
       "source": "test_translator",
-      "target": "test_translator_test_pyg_format"
+      "target": "test_translator_test_pyg_format",
+      "confidence_score": 1.0
     },
     {
       "relation": "contains",
@@ -2622,9 +2559,9 @@
       "source_location": "L38",
       "weight": 1.0,
       "_origin": "ast",
-      "confidence_score": 1.0,
       "source": "test_translator",
-      "target": "test_translator_test_quantum_translation"
+      "target": "test_translator_test_quantum_translation",
+      "confidence_score": 1.0
     },
     {
       "relation": "rationale_for",
@@ -2633,9 +2570,9 @@
       "source_location": "L1",
       "weight": 1.0,
       "_origin": "ast",
-      "confidence_score": 1.0,
       "source": "test_translator_rationale_1",
-      "target": "test_translator"
+      "target": "test_translator",
+      "confidence_score": 1.0
     },
     {
       "relation": "rationale_for",
@@ -2644,9 +2581,9 @@
       "source_location": "L13",
       "weight": 1.0,
       "_origin": "ast",
-      "confidence_score": 1.0,
       "source": "test_translator_rationale_13",
-      "target": "test_translator_test_basic_translation"
+      "target": "test_translator_test_basic_translation",
+      "confidence_score": 1.0
     },
     {
       "relation": "indirect_call",
@@ -2656,9 +2593,9 @@
       "source_location": "L160",
       "weight": 1.0,
       "_origin": "ast",
-      "confidence_score": 0.5,
       "source": "test_translator_run_all_tests",
-      "target": "test_translator_test_basic_translation"
+      "target": "test_translator_test_basic_translation",
+      "confidence_score": 0.5
     },
     {
       "relation": "rationale_for",
@@ -2667,9 +2604,9 @@
       "source_location": "L39",
       "weight": 1.0,
       "_origin": "ast",
-      "confidence_score": 1.0,
       "source": "test_translator_rationale_39",
-      "target": "test_translator_test_quantum_translation"
+      "target": "test_translator_test_quantum_translation",
+      "confidence_score": 1.0
     },
     {
       "relation": "indirect_call",
@@ -2679,9 +2616,9 @@
       "source_location": "L161",
       "weight": 1.0,
       "_origin": "ast",
-      "confidence_score": 0.5,
       "source": "test_translator_run_all_tests",
-      "target": "test_translator_test_quantum_translation"
+      "target": "test_translator_test_quantum_translation",
+      "confidence_score": 0.5
     },
     {
       "relation": "rationale_for",
@@ -2690,9 +2627,9 @@
       "source_location": "L65",
       "weight": 1.0,
       "_origin": "ast",
-      "confidence_score": 1.0,
       "source": "test_translator_rationale_65",
-      "target": "test_translator_test_pyg_format"
+      "target": "test_translator_test_pyg_format",
+      "confidence_score": 1.0
     },
     {
       "relation": "indirect_call",
@@ -2702,9 +2639,9 @@
       "source_location": "L162",
       "weight": 1.0,
       "_origin": "ast",
-      "confidence_score": 0.5,
       "source": "test_translator_run_all_tests",
-      "target": "test_translator_test_pyg_format"
+      "target": "test_translator_test_pyg_format",
+      "confidence_score": 0.5
     },
     {
       "relation": "rationale_for",
@@ -2713,9 +2650,9 @@
       "source_location": "L85",
       "weight": 1.0,
       "_origin": "ast",
-      "confidence_score": 1.0,
       "source": "test_translator_rationale_85",
-      "target": "test_translator_test_feature_extraction"
+      "target": "test_translator_test_feature_extraction",
+      "confidence_score": 1.0
     },
     {
       "relation": "indirect_call",
@@ -2725,9 +2662,9 @@
       "source_location": "L163",
       "weight": 1.0,
       "_origin": "ast",
-      "confidence_score": 0.5,
       "source": "test_translator_run_all_tests",
-      "target": "test_translator_test_feature_extraction"
+      "target": "test_translator_test_feature_extraction",
+      "confidence_score": 0.5
     },
     {
       "relation": "rationale_for",
@@ -2736,9 +2673,9 @@
       "source_location": "L116",
       "weight": 1.0,
       "_origin": "ast",
-      "confidence_score": 1.0,
       "source": "test_translator_rationale_116",
-      "target": "test_translator_test_complex_molecule"
+      "target": "test_translator_test_complex_molecule",
+      "confidence_score": 1.0
     },
     {
       "relation": "indirect_call",
@@ -2748,9 +2685,9 @@
       "source_location": "L164",
       "weight": 1.0,
       "_origin": "ast",
-      "confidence_score": 0.5,
       "source": "test_translator_run_all_tests",
-      "target": "test_translator_test_complex_molecule"
+      "target": "test_translator_test_complex_molecule",
+      "confidence_score": 0.5
     }
   ],
   "hyperedges": [],
