@@ -1,0 +1,152 @@
+{
+  "communities": {
+    "0": [
+      "lib_matter_molecule",
+      "lib_matter_molecule_add_atom",
+      "lib_matter_molecule_add_bond",
+      "lib_matter_molecule_init",
+      "lib_matter_molecule_molecular_mass",
+      "lib_matter_molecule_net_charge",
+      "lib_matter_rationale_113"
+    ],
+    "1": [
+      "base",
+      "lib_create_db_atom",
+      "lib_create_db_moleculeatomposition",
+      "lib_create_db_subatomiccomposition",
+      "lib_create_db_subatomicparticle",
+      "lib_create_db_vqesimulationresult"
+    ],
+    "2": [
+      "lib_create_db",
+      "lib_create_db_atomcomposition",
+      "lib_create_db_create_database",
+      "lib_create_db_interaction",
+      "lib_create_db_molecule",
+      "lib_create_db_moleculebond"
+    ],
+    "3": [
+      "lib_matter",
+      "lib_matter_interaction",
+      "lib_matter_interaction_init",
+      "lib_matter_subatomic",
+      "lib_matter_subatomic_init",
+      "lib_matter_subatomic_show"
+    ],
+    "4": [
+      "lib_matter_atom",
+      "lib_matter_atom_get_configuration",
+      "lib_matter_atom_init",
+      "lib_matter_atom_ion_type",
+      "lib_matter_atom_is_ion",
+      "lib_matter_atom_show_configuration"
+    ],
+    "5": [
+      "main",
+      "main_main"
+    ],
+    "6": [
+      "lib_init"
+    ],
+    "7": [
+      "pkg_quantum_project"
+    ]
+  },
+  "cohesion": {
+    "0": 0.2857142857142857,
+    "1": 0.3333333333333333,
+    "2": 0.3333333333333333,
+    "3": 0.4,
+    "4": 0.4,
+    "5": 1.0,
+    "6": 1.0,
+    "7": 1.0
+  },
+  "gods": [
+    {
+      "id": "lib_matter_atom",
+      "label": "Atom",
+      "degree": 8
+    },
+    {
+      "id": "lib_matter_molecule",
+      "label": "Molecule",
+      "degree": 6
+    },
+    {
+      "id": "lib_matter_subatomic",
+      "label": "Subatomic",
+      "degree": 5
+    },
+    {
+      "id": "lib_create_db_subatomiccomposition",
+      "label": "SubatomicComposition",
+      "degree": 2
+    },
+    {
+      "id": "lib_create_db_subatomicparticle",
+      "label": "SubatomicParticle",
+      "degree": 2
+    },
+    {
+      "id": "lib_create_db_interaction",
+      "label": "Interaction",
+      "degree": 2
+    },
+    {
+      "id": "lib_create_db_atomcomposition",
+      "label": "AtomComposition",
+      "degree": 2
+    },
+    {
+      "id": "lib_create_db_atom",
+      "label": "Atom",
+      "degree": 2
+    },
+    {
+      "id": "lib_create_db_moleculeatomposition",
+      "label": "MoleculeAtomPosition",
+      "degree": 2
+    },
+    {
+      "id": "lib_create_db_moleculebond",
+      "label": "MoleculeBond",
+      "degree": 2
+    }
+  ],
+  "surprises": [
+    {
+      "source": "AtomComposition",
+      "target": "Base",
+      "source_files": [
+        "lib/create_db.py",
+        ""
+      ],
+      "confidence": "EXTRACTED",
+      "relation": "inherits",
+      "note": "Bridges community 1 → community 2"
+    }
+  ],
+  "questions": [
+    {
+      "type": "bridge_node",
+      "question": "Why does `Atom` connect `Atom` to `Molecule`, `Subatomic`?",
+      "why": "High betweenness centrality (0.135) - this node is a cross-community bridge."
+    },
+    {
+      "type": "bridge_node",
+      "question": "Why does `Molecule` connect `Molecule` to `Subatomic`?",
+      "why": "High betweenness centrality (0.100) - this node is a cross-community bridge."
+    },
+    {
+      "type": "bridge_node",
+      "question": "Why does `Subatomic` connect `Subatomic` to `Atom`?",
+      "why": "High betweenness centrality (0.079) - this node is a cross-community bridge."
+    },
+    {
+      "type": "isolated_nodes",
+      "question": "What connects `quantum-project` to the rest of the system?",
+      "why": "1 weakly-connected nodes found - possible documentation gaps or missing edges."
+    }
+  ]
+}

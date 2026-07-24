@@ -1,0 +1,14 @@
+[project]
+name = "quantum-project"
+version = "0.1.0"
+description = "Add your description here"
+readme = "README.md"
+requires-python = ">=3.12"
+dependencies = [
+    "mendeleev>=1.1.0",
+    "networkx>=3.6.1",
+    "psycopg2-binary>=2.9.12",
+    "qiskit>=2.5.0",
+    "qiskit-nature>=0.8.0",
+    "sqlalchemy>=2.0.51",
+]
