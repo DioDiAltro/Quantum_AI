@@ -1,6 +1,48 @@
 {
   "communities": {
     "0": [
+      "main_readme_ch4_molecule",
+      "main_readme_demo_mode",
+      "main_readme_h2_molecule",
+      "main_readme_h2o_molecule",
+      "main_readme_interactive_mode",
+      "main_readme_main_py",
+      "main_readme_postgresql_integration",
+      "main_readme_pyg_format",
+      "main_readme_quantum_format",
+      "main_readme_quick_mode",
+      "main_readme_tensors_format",
+      "readme_ai_qml",
+      "readme_atom_class",
+      "readme_aufbau_principle",
+      "readme_generator",
+      "readme_graph_neural_networks",
+      "readme_molecule_class",
+      "readme_oracle",
+      "readme_pennylane",
+      "readme_physical_engine",
+      "readme_postgresql",
+      "readme_pytorch_geometric",
+      "readme_qiskit",
+      "readme_qml_chemical_discovery_engine",
+      "readme_reinforcement_learning",
+      "readme_standard_model",
+      "readme_subatomic_class",
+      "readme_translator",
+      "translator_readme_feature_vector",
+      "translator_readme_featureextractor",
+      "translator_readme_graphbuilder",
+      "translator_readme_hamiltonian",
+      "translator_readme_jordan_wigner",
+      "translator_readme_normalization",
+      "translator_readme_qaoa",
+      "translator_readme_quantumencoder",
+      "translator_readme_qubit_mapping",
+      "translator_readme_tensorconverter",
+      "translator_readme_translator_module",
+      "translator_readme_vqe"
+    ],
+    "1": [
       "lib_create_db_create_database",
       "main",
       "main_create_example_molecules",
@@ -25,81 +67,50 @@
       "main_save_molecules_to_db",
       "main_try_database_integration"
     ],
-    "1": [
-      "lib_translator_moleculargraph",
-      "lib_translator_moleculargraph_to_adjacency_matrix",
-      "lib_translator_moleculargraph_to_pyg_format",
-      "lib_translator_quantumencoder",
-      "lib_translator_quantumencoder_encode_hamiltonian",
-      "lib_translator_quantumencoder_map_to_qubits",
-      "lib_translator_rationale_102",
-      "lib_translator_rationale_110",
-      "lib_translator_rationale_119",
-      "lib_translator_rationale_194",
-      "lib_translator_rationale_198",
-      "lib_translator_rationale_215",
-      "lib_translator_rationale_231",
-      "lib_translator_rationale_235",
-      "lib_translator_rationale_273",
-      "lib_translator_rationale_302",
-      "lib_translator_rationale_322",
-      "lib_translator_tensorconverter",
-      "lib_translator_tensorconverter_graph_to_tensors",
-      "lib_translator_tensorconverter_normalize_features",
-      "lib_translator_translator_batch_translate",
-      "lib_translator_translator_init",
-      "lib_translator_translator_translate_molecule"
-    ],
     "2": [
-      "lib_translator_atomfeatures",
-      "lib_translator_atomfeatures_to_vector",
-      "lib_translator_featureextractor",
-      "lib_translator_featureextractor_calculate_valence_electrons",
-      "lib_translator_featureextractor_encode_configuration",
-      "lib_translator_featureextractor_extract_from_atom",
-      "lib_translator_featureextractor_init",
-      "lib_translator_graphbuilder",
-      "lib_translator_graphbuilder_build_from_molecule",
-      "lib_translator_graphbuilder_calculate_distance",
-      "lib_translator_graphbuilder_init",
-      "lib_translator_rationale_13",
-      "lib_translator_rationale_131",
-      "lib_translator_rationale_137",
-      "lib_translator_rationale_189",
-      "lib_translator_rationale_22",
-      "lib_translator_rationale_36",
-      "lib_translator_rationale_50",
-      "lib_translator_rationale_68",
-      "lib_translator_rationale_79",
-      "ndarray"
-    ],
-    "3": [
+      "base",
+      "lib_create_db",
+      "lib_create_db_atom",
+      "lib_create_db_atomcomposition",
+      "lib_create_db_interaction",
+      "lib_create_db_molecule",
+      "lib_create_db_moleculeatomposition",
+      "lib_create_db_moleculebond",
+      "lib_create_db_subatomiccomposition",
+      "lib_create_db_subatomicparticle",
+      "lib_create_db_vqesimulationresult",
       "lib_matter",
-      "lib_matter_atom",
-      "lib_matter_atom_get_configuration",
-      "lib_matter_atom_init",
-      "lib_matter_atom_ion_type",
-      "lib_matter_atom_is_ion",
-      "lib_matter_atom_show_configuration",
       "lib_matter_interaction",
       "lib_matter_interaction_init",
-      "lib_matter_molecule",
-      "lib_matter_molecule_add_atom",
-      "lib_matter_molecule_add_bond",
-      "lib_matter_molecule_init",
-      "lib_matter_molecule_molecular_mass",
-      "lib_matter_molecule_net_charge",
-      "lib_matter_rationale_113",
       "lib_matter_subatomic",
-      "lib_matter_subatomic_init",
-      "lib_matter_subatomic_show"
+      "lib_matter_subatomic_show",
+      "lib_populate_db",
+      "lib_populate_db_populate_fundamental_physics",
+      "lib_view_db",
+      "lib_view_db_view_contents"
+    ],
+    "3": [
+      "lib_matter_databaseloader",
+      "lib_matter_databaseloader_init",
+      "lib_matter_rationale_226",
+      "test_db_loader",
+      "test_db_loader_rationale_1",
+      "test_db_loader_rationale_137",
+      "test_db_loader_rationale_174",
+      "test_db_loader_rationale_19",
+      "test_db_loader_rationale_46",
+      "test_db_loader_rationale_70",
+      "test_db_loader_rationale_98",
+      "test_db_loader_run_all_tests",
+      "test_db_loader_test_atom_save",
+      "test_db_loader_test_complex_molecule",
+      "test_db_loader_test_integration",
+      "test_db_loader_test_molecule_load",
+      "test_db_loader_test_molecule_save",
+      "test_db_loader_test_subatomic_save"
     ],
     "4": [
-      "lib_translator",
-      "lib_translator_debug_translation",
-      "lib_translator_rationale_1",
       "lib_translator_rationale_293",
-      "lib_translator_rationale_328",
       "lib_translator_translator",
       "test_translator",
       "test_translator_rationale_1",
@@ -116,105 +127,166 @@
       "test_translator_test_quantum_translation"
     ],
     "5": [
-      "base",
-      "lib_create_db",
-      "lib_create_db_atom",
-      "lib_create_db_atomcomposition",
-      "lib_create_db_interaction",
-      "lib_create_db_molecule",
-      "lib_create_db_moleculeatomposition",
-      "lib_create_db_moleculebond",
-      "lib_create_db_subatomiccomposition",
-      "lib_create_db_subatomicparticle",
-      "lib_create_db_vqesimulationresult"
+      "lib_matter_atom",
+      "lib_matter_atom_get_configuration",
+      "lib_matter_atom_init",
+      "lib_matter_atom_ion_type",
+      "lib_matter_atom_is_ion",
+      "lib_matter_atom_show_configuration",
+      "lib_matter_databaseloader_save_atom",
+      "lib_matter_databaseloader_save_atom_composition",
+      "lib_matter_databaseloader_save_molecule",
+      "lib_matter_rationale_309",
+      "lib_matter_rationale_344",
+      "lib_matter_rationale_385"
     ],
     "6": [
-      "readme_ai_qml",
-      "readme_atom_class",
-      "readme_aufbau_principle",
-      "readme_generator",
-      "readme_oracle",
-      "readme_pennylane",
-      "readme_physical_engine",
-      "readme_qiskit",
-      "readme_reinforcement_learning",
-      "readme_standard_model",
-      "readme_subatomic_class"
+      "lib_translator_moleculargraph",
+      "lib_translator_moleculargraph_to_adjacency_matrix",
+      "lib_translator_moleculargraph_to_pyg_format",
+      "lib_translator_rationale_102",
+      "lib_translator_rationale_110",
+      "lib_translator_rationale_119",
+      "lib_translator_rationale_194",
+      "lib_translator_rationale_198",
+      "lib_translator_rationale_215",
+      "lib_translator_tensorconverter",
+      "lib_translator_tensorconverter_graph_to_tensors",
+      "lib_translator_tensorconverter_normalize_features"
     ],
     "7": [
-      "main_readme_ch4_molecule",
-      "main_readme_demo_mode",
-      "main_readme_h2_molecule",
-      "main_readme_h2o_molecule",
-      "readme_molecule_class",
-      "translator_readme_feature_vector",
-      "translator_readme_featureextractor",
-      "translator_readme_graphbuilder",
-      "translator_readme_translator_module"
+      "lib_translator_atomfeatures_to_vector",
+      "lib_translator_graphbuilder",
+      "lib_translator_graphbuilder_build_from_molecule",
+      "lib_translator_graphbuilder_calculate_distance",
+      "lib_translator_graphbuilder_init",
+      "lib_translator_rationale_131",
+      "lib_translator_rationale_137",
+      "lib_translator_rationale_189",
+      "lib_translator_rationale_22",
+      "ndarray"
     ],
     "8": [
-      "main_readme_pyg_format",
-      "main_readme_quantum_format",
-      "main_readme_quick_mode",
-      "main_readme_tensors_format",
-      "readme_graph_neural_networks",
-      "readme_pytorch_geometric",
-      "translator_readme_normalization",
-      "translator_readme_tensorconverter"
+      "lib_matter_databaseloader_load_molecule",
+      "lib_matter_molecule",
+      "lib_matter_molecule_add_atom",
+      "lib_matter_molecule_add_bond",
+      "lib_matter_molecule_init",
+      "lib_matter_molecule_molecular_mass",
+      "lib_matter_molecule_net_charge",
+      "lib_matter_rationale_150",
+      "lib_matter_rationale_447"
     ],
     "9": [
-      "main_readme_interactive_mode",
-      "main_readme_main_py",
-      "main_readme_postgresql_integration",
-      "readme_postgresql",
-      "readme_qml_chemical_discovery_engine",
-      "readme_translator"
+      "lib_translator_featureextractor",
+      "lib_translator_featureextractor_calculate_valence_electrons",
+      "lib_translator_featureextractor_encode_configuration",
+      "lib_translator_featureextractor_extract_from_atom",
+      "lib_translator_featureextractor_init",
+      "lib_translator_rationale_36",
+      "lib_translator_rationale_50",
+      "lib_translator_rationale_68",
+      "lib_translator_rationale_79"
     ],
     "10": [
-      "translator_readme_hamiltonian",
-      "translator_readme_jordan_wigner",
-      "translator_readme_qaoa",
-      "translator_readme_quantumencoder",
-      "translator_readme_qubit_mapping",
-      "translator_readme_vqe"
+      "lib_translator_quantumencoder",
+      "lib_translator_quantumencoder_encode_hamiltonian",
+      "lib_translator_quantumencoder_map_to_qubits",
+      "lib_translator_rationale_231",
+      "lib_translator_rationale_235",
+      "lib_translator_rationale_273",
+      "lib_translator_translator_init"
     ],
     "11": [
-      "lib_init"
+      "lib_matter_databaseloader_save_interaction",
+      "lib_matter_databaseloader_save_subatomic",
+      "lib_matter_databaseloader_save_subatomic_composition",
+      "lib_matter_rationale_232",
+      "lib_matter_rationale_264",
+      "lib_matter_rationale_280"
     ],
     "12": [
+      "lib_translator_debug_translation",
+      "lib_translator_rationale_302",
+      "lib_translator_rationale_322",
+      "lib_translator_rationale_328",
+      "lib_translator_translator_batch_translate",
+      "lib_translator_translator_translate_molecule"
+    ],
+    "13": [
+      "lib_matter_databaseloader_load_atom",
+      "lib_matter_databaseloader_load_subatomic",
+      "lib_matter_rationale_483",
+      "lib_matter_rationale_517"
+    ],
+    "14": [
+      "lib_translator",
+      "lib_translator_atomfeatures",
+      "lib_translator_rationale_1",
+      "lib_translator_rationale_13"
+    ],
+    "15": [
+      "lib_matter_rationale_21",
+      "lib_matter_subatomic_generate_symbol",
+      "lib_matter_subatomic_init"
+    ],
+    "16": [
+      "lib_init"
+    ],
+    "17": [
       "pkg_quantum_project"
     ]
   },
   "cohesion": {
-    "0": 0.15810276679841898,
-    "1": 0.11462450592885376,
-    "2": 0.12380952380952381,
-    "3": 0.13450292397660818,
-    "4": 0.17543859649122806,
-    "5": 0.32727272727272727,
-    "6": 0.2727272727272727,
-    "7": 0.3055555555555556,
-    "8": 0.2857142857142857,
-    "9": 0.4666666666666667,
-    "10": 0.3333333333333333,
-    "11": 1.0,
-    "12": 1.0
+    "0": 0.07948717948717948,
+    "1": 0.15810276679841898,
+    "2": 0.2894736842105263,
+    "3": 0.1895424836601307,
+    "4": 0.21904761904761905,
+    "5": 0.19696969696969696,
+    "6": 0.19696969696969696,
+    "7": 0.24444444444444444,
+    "8": 0.2777777777777778,
+    "9": 0.2777777777777778,
+    "10": 0.2857142857142857,
+    "11": 0.3333333333333333,
+    "12": 0.3333333333333333,
+    "13": 0.5,
+    "14": 0.5,
+    "15": 0.6666666666666666,
+    "16": 1.0,
+    "17": 1.0
   },
   "gods": [
+    {
+      "id": "lib_matter_databaseloader",
+      "label": "DatabaseLoader",
+      "degree": 27
+    },
+    {
+      "id": "lib_matter_atom",
+      "label": "Atom",
+      "degree": 26
+    },
+    {
+      "id": "lib_matter_molecule",
+      "label": "Molecule",
+      "degree": 24
+    },
+    {
+      "id": "lib_matter_subatomic",
+      "label": "Subatomic",
+      "degree": 21
+    },
     {
       "id": "lib_translator_translator",
       "label": "Translator",
       "degree": 14
     },
     {
-      "id": "lib_matter_atom",
-      "label": "Atom",
-      "degree": 12
-    },
-    {
-      "id": "lib_matter_molecule",
-      "label": "Molecule",
-      "degree": 10
+      "id": "lib_matter_interaction",
+      "label": "Interaction",
+      "degree": 13
     },
     {
       "id": "lib_translator_featureextractor",
@@ -222,34 +294,19 @@
       "degree": 10
     },
     {
+      "id": "lib_create_db_subatomicparticle",
+      "label": "SubatomicParticle",
+      "degree": 10
+    },
+    {
+      "id": "lib_create_db_molecule",
+      "label": "Molecule",
+      "degree": 10
+    },
+    {
       "id": "main_main",
       "label": "main()",
       "degree": 9
-    },
-    {
-      "id": "readme_physical_engine",
-      "label": "Physical Engine (Python OOP)",
-      "degree": 9
-    },
-    {
-      "id": "readme_ai_qml",
-      "label": "AI / QML",
-      "degree": 9
-    },
-    {
-      "id": "lib_matter_subatomic",
-      "label": "Subatomic",
-      "degree": 8
-    },
-    {
-      "id": "lib_translator_moleculargraph",
-      "label": "MolecularGraph",
-      "degree": 8
-    },
-    {
-      "id": "main_interactive_menu",
-      "label": "interactive_menu()",
-      "degree": 8
     }
   ],
   "surprises": [
@@ -287,17 +344,6 @@
       "why": "inferred connection - not explicitly stated in source; connects across different repos/directories; semantically similar concepts with no structural link; peripheral node `Methane (CH4)` unexpectedly reaches hub `Molecule Class`"
     },
     {
-      "source": "Quantum Format",
-      "target": "QuantumEncoder",
-      "source_files": [
-        "MAIN_README.md",
-        "TRANSLATOR_README.md"
-      ],
-      "confidence": "INFERRED",
-      "relation": "semantically_similar_to",
-      "why": "inferred connection - not explicitly stated in source; connects across different repos/directories; bridges separate communities; semantically similar concepts with no structural link"
-    },
-    {
       "source": "Tensors Format",
       "target": "TensorConverter",
       "source_files": [
@@ -307,43 +353,54 @@
       "confidence": "INFERRED",
       "relation": "semantically_similar_to",
       "why": "inferred connection - not explicitly stated in source; connects across different repos/directories; semantically similar concepts with no structural link"
+    },
+    {
+      "source": "PyTorch Geometric Format",
+      "target": "PyTorch Geometric",
+      "source_files": [
+        "MAIN_README.md",
+        "README.md"
+      ],
+      "confidence": "INFERRED",
+      "relation": "semantically_similar_to",
+      "why": "inferred connection - not explicitly stated in source; connects across different repos/directories; semantically similar concepts with no structural link"
     }
   ],
   "questions": [
     {
       "type": "bridge_node",
-      "question": "Why does `Translator` connect `test_translator.py` to `main.py`, `.translate_molecule`?",
-      "why": "High betweenness centrality (0.097) - this node is a cross-community bridge."
+      "question": "Why does `Atom` connect `Atom` to `main.py`, `Subatomic`, `DatabaseLoader`, `test_translator.py`, `Molecule`, `._load_atom`?",
+      "why": "High betweenness centrality (0.108) - this node is a cross-community bridge."
     },
     {
       "type": "bridge_node",
-      "question": "Why does `FeatureExtractor` connect `FeatureExtractor` to `.translate_molecule`, `test_translator.py`?",
-      "why": "High betweenness centrality (0.067) - this node is a cross-community bridge."
+      "question": "Why does `Molecule` connect `Molecule` to `main.py`, `Subatomic`, `DatabaseLoader`, `test_translator.py`, `Atom`?",
+      "why": "High betweenness centrality (0.095) - this node is a cross-community bridge."
     },
     {
       "type": "bridge_node",
-      "question": "Why does `Atom` connect `Atom` to `main.py`, `test_translator.py`?",
-      "why": "High betweenness centrality (0.058) - this node is a cross-community bridge."
+      "question": "Why does `Subatomic` connect `Subatomic` to `main.py`, `DatabaseLoader`, `test_translator.py`, `Atom`, `.save_subatomic`, `._load_atom`, `._generate_symbol`?",
+      "why": "High betweenness centrality (0.085) - this node is a cross-community bridge."
     },
     {
-      "type": "isolated_nodes",
-      "question": "What connects `quantum-project`, `Interactive Mode`, `PennyLane` to the rest of the system?",
-      "why": "10 weakly-connected nodes found - possible documentation gaps or missing edges."
+      "type": "verify_inferred",
+      "question": "Are the 8 inferred relationships involving `DatabaseLoader` (e.g. with `Atom` and `AtomComposition`) actually correct?",
+      "why": "`DatabaseLoader` has 8 INFERRED edges - model-reasoned connections that need verification."
     },
     {
-      "type": "low_cohesion",
-      "question": "Should `.translate_molecule` be split into smaller, more focused modules?",
-      "why": "Cohesion score 0.11462450592885376 - nodes in this community are weakly interconnected."
+      "type": "verify_inferred",
+      "question": "Are the 8 inferred relationships involving `Atom` (e.g. with `Atom` and `AtomComposition`) actually correct?",
+      "why": "`Atom` has 8 INFERRED edges - model-reasoned connections that need verification."
     },
     {
-      "type": "low_cohesion",
-      "question": "Should `FeatureExtractor` be split into smaller, more focused modules?",
-      "why": "Cohesion score 0.12380952380952381 - nodes in this community are weakly interconnected."
+      "type": "verify_inferred",
+      "question": "Are the 8 inferred relationships involving `Molecule` (e.g. with `Atom` and `AtomComposition`) actually correct?",
+      "why": "`Molecule` has 8 INFERRED edges - model-reasoned connections that need verification."
     },
     {
-      "type": "low_cohesion",
-      "question": "Should `Atom` be split into smaller, more focused modules?",
-      "why": "Cohesion score 0.13450292397660818 - nodes in this community are weakly interconnected."
+      "type": "verify_inferred",
+      "question": "Are the 8 inferred relationships involving `Subatomic` (e.g. with `Atom` and `AtomComposition`) actually correct?",
+      "why": "`Subatomic` has 8 INFERRED edges - model-reasoned connections that need verification."
     }
   ]
 }

@@ -4,7 +4,7 @@ from sqlalchemy import (
     String, Integer, Float, 
     ForeignKey, JSON, Table,
     CheckConstraint, UniqueConstraint)
-from sqlalchemy.orm import declarative_base, sessionmaker, relationship
+from sqlalchemy.orm import declarative_base, relationship
 
 # Struttura: "postgresql://UTENTE:PASSWORD@HOST/NOME_DATABASE"
 DATABASE_URL = "postgresql://quantum_admin:supersegreta@localhost/quantum_db"
@@ -27,7 +27,7 @@ class SubatomicParticle(Base):
 
     id = Column(Integer, primary_key=True, autoincrement=True)
     name = Column(String(30), unique=True, nullable=False)
-    symbol = Column(String(3), unique=True, nullable=False, index=True)
+    symbol = Column(String(102), unique=True, nullable=False, index=True)
     mass_MeV = Column(Float, nullable=False)
     spin = Column(Float, nullable=False)
     charge = Column(Float, nullable=False)
@@ -70,7 +70,7 @@ class Atom(Base):
 
     id = Column(Integer, primary_key=True, autoincrement=True)
     name = Column(String(50), nullable=False)
-    symbol = Column(String(3), nullable=False, index=True)
+    symbol = Column(String(102), nullable=False, index=True)
     atomic_number = Column(Integer, nullable=False)
     mass_number = Column(Integer, nullable=False)
     exact_mass = Column(Float, nullable=False)
