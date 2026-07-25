@@ -133,8 +133,17 @@ class Atom:
         return " ".join(formatted_parts)
     
 class Molecule:
+    """
+    Molecola come insieme ordinato di siti atomici.
+
+    I legami sono memorizzati come indici in `atoms_data`, non come riferimenti
+    a oggetti Atom: due idrogeni distinti di una stessa molecola possono essere
+    lo stesso oggetto Python, quindi l'identità dell'oggetto non basta a
+    identificare il sito da legare.
+    """
+
     def __init__(
-        self, 
+        self,
         name: str,
         spin_multiplicity: int = 1,
         distance_unit: str = "Angstrom"
@@ -144,25 +153,59 @@ class Molecule:
         self.distance_unit = distance_unit
         # Salviamo l'atomo accoppiato alle sue coordinate 3D: (Atom, (x, y, z))
         self.atoms_data: list[tuple[Atom, tuple[float, float, float]]] = []
-        self.bonds = []
+        # Legami come (indice_sito_1, indice_sito_2, tipo_legame)
+        self.bonds: list[tuple[int, int, int]] = []
 
-    def add_atom(self, atom: Atom, position: tuple[float, float, float] = (0.0, 0.0, 0.0)):
-        """Aggiunge un atomo specificando la sua posizione 3D nello spazio."""
+    def add_atom(self, atom: Atom, position: tuple[float, float, float] = (0.0, 0.0, 0.0)) -> int:
+        """Aggiunge un atomo con la sua posizione 3D e restituisce l'indice del sito."""
         self.atoms_data.append((atom, position))
+        return len(self.atoms_data) - 1
 
-    def add_bond(self, atom1: Atom, atom2: Atom, bond_type: int=1):
-        # Dobbiamo estrarre solo gli oggetti Atom per verificare se sono nella molecola
-        current_atoms = [data[0] for data in self.atoms_data]
-        
-        if atom1 in current_atoms and atom2 in current_atoms:
-            self.bonds.append((atom1, atom2, bond_type))
-        else:
+    def add_bond(self, atom1: "Atom | int", atom2: "Atom | int", bond_type: int = 1):
+        """
+        Crea un legame fra due siti della molecola.
+
+        Accetta indici di sito (modo raccomandato) oppure oggetti Atom, purché
+        questi compaiano una sola volta nella molecola.
+        """
+        idx1 = self._resolve_site(atom1)
+        idx2 = self._resolve_site(atom2)
+
+        if idx1 == idx2:
+            raise ValueError("Un atomo non può essere legato a se stesso.")
+
+        self.bonds.append((idx1, idx2, bond_type))
+
+    def _resolve_site(self, site: "Atom | int") -> int:
+        """Traduce un indice o un oggetto Atom nell'indice del sito corrispondente."""
+        if isinstance(site, int):
+            if not 0 <= site < len(self.atoms_data):
+                raise IndexError(
+                    f"Indice sito {site} fuori range: la molecola ha {len(self.atoms_data)} atomi."
+                )
+            return site
+
+        matches = [i for i, (atom, _) in enumerate(self.atoms_data) if atom is site]
+
+        if not matches:
             raise ValueError("Gli atomi devono far parte della molecola per essere legati.")
-        
+        if len(matches) > 1:
+            raise ValueError(
+                f"L'oggetto Atom '{site.symbol}' compare in {len(matches)} siti della molecola "
+                f"({matches}): il legame sarebbe ambiguo. Passa l'indice del sito, oppure usa "
+                f"un'istanza Atom distinta per ogni atomo (vedi make_atom())."
+            )
+        return matches[0]
+
+    @property
+    def atoms(self) -> list[Atom]:
+        """Elenco degli oggetti Atom, nell'ordine dei siti."""
+        return [atom for atom, _ in self.atoms_data]
+
     @property
     def molecular_mass(self) -> float:
         return sum(data[0].atomic_mass for data in self.atoms_data)
-    
+
     @property
     def net_charge(self) -> float:
         return sum(data[0].charge for data in self.atoms_data)
@@ -205,13 +248,77 @@ tp = Subatomic("Top", 173000, 1/2, 2/3, "t", ["red"])
 p = Subatomic("Proton", 938.28, 1/2, 1, "p", composite=[u, u, d])
 n = Subatomic("Neutron", 939.57, 1/2, 0, "n", composite=[u, d, d])
 
+# ===== CATALOGO PARTICELLE =====
+# Sorgente unica di verità per il popolamento del database.
+STANDARD_MODEL: list[Subatomic] = [
+    # Bosoni
+    H, g, f, W, Z,
+    # Leptoni
+    Ve, Vu, Vt, e, m, t,
+    # Quark
+    u, d, s, c, bm, tp,
+    # Adroni (composti)
+    p, n,
+]
+
+FUNDAMENTAL_INTERACTIONS: list[Interaction] = [ELECTROMAGNETIC, STRONG, WEAK]
+
+
+# ===== CATALOGO ISOTOPI =====
+# Chiave -> parametri per costruire l'Atom. `symbol` è UNIQUE per (symbol, mass_number)
+# lato database, quindi gli isotopi non prevalenti usano un simbolo esplicito.
+ISOTOPES: dict[str, dict] = {
+    "H-1":  {"name": "Hydrogen-1",   "symbol": "H",    "protons": 1, "neutrons": 0, "exact_mass": 1.007825,  "abundance": 99.9885},
+    "D":    {"name": "Deuterium",    "symbol": "D",    "protons": 1, "neutrons": 1, "exact_mass": 2.014101,  "abundance": 0.0115},
+    "C-12": {"name": "Carbon-12",    "symbol": "C",    "protons": 6, "neutrons": 6, "exact_mass": 12.000000, "abundance": 98.93},
+    "C-13": {"name": "Carbon-13",    "symbol": "C-13", "protons": 6, "neutrons": 7, "exact_mass": 13.003354, "abundance": 1.07},
+    "N-14": {"name": "Nitrogen-14",  "symbol": "N",    "protons": 7, "neutrons": 7, "exact_mass": 14.003074, "abundance": 99.636},
+    "O-16": {"name": "Oxygen-16",    "symbol": "O",    "protons": 8, "neutrons": 8, "exact_mass": 15.994915, "abundance": 99.757},
+}
+
+
+def make_atom(isotope: str, charge: int = 0) -> Atom:
+    """
+    Costruisce una NUOVA istanza Atom per l'isotopo richiesto.
+
+    Ogni chiamata restituisce un oggetto distinto: due atomi dello stesso
+    elemento nella stessa molecola devono essere istanze separate, altrimenti
+    non sono distinguibili come siti (vedi Molecule.add_bond).
+
+    `charge` > 0 rimuove elettroni (catione), < 0 li aggiunge (anione).
+    """
+    if isotope not in ISOTOPES:
+        raise KeyError(
+            f"Isotopo '{isotope}' sconosciuto. Disponibili: {sorted(ISOTOPES)}"
+        )
+
+    spec = ISOTOPES[isotope]
+    electron_count = spec["protons"] - charge
+
+    if electron_count < 0:
+        raise ValueError(
+            f"Carica {charge:+d} impossibile per {spec['name']}: "
+            f"servirebbero {-electron_count} elettroni in meno di zero."
+        )
+
+    return Atom(
+        name=spec["name"],
+        symbol=spec["symbol"],
+        protons=[p] * spec["protons"],
+        neutrons=[n] * spec["neutrons"],
+        electrons=[e] * electron_count,
+        exact_mass=spec["exact_mass"],
+        natural_abundance=spec["abundance"],
+    )
+
+
 # ===== ATOMI =====
 Hydrogen = Atom("Hydrogen", "H", [p], [], [e])
 
 # ===== MOLECOLE =====
-# Creiamo due istanze di idrogeno distinte per H2
-Hydrogen1 = Atom("Hydrogen", "H", [p], [], [e])
-Hydrogen2 = Atom("Hydrogen", "H", [p], [], [e])
+# Ogni sito atomico è un'istanza distinta, così i legami restano non ambigui.
+Hydrogen1 = make_atom("H-1")
+Hydrogen2 = make_atom("H-1")
 
 H2 = Molecule("Dihydrogen")
 
@@ -222,6 +329,14 @@ H2.add_bond(Hydrogen1, Hydrogen2)
 
 
 # ===== DATABASE LOADER =====
+# Ruoli delle particelle nella composizione atomica. Sono la forma canonica
+# persistita nella colonna `atom_composition.role`: scriverli in altro modo
+# (es. capitalizzati) rende gli atomi illeggibili in rilettura.
+ROLE_PROTON = "proton"
+ROLE_NEUTRON = "neutron"
+ROLE_ELECTRON = "electron"
+
+
 class DatabaseLoader:
     """Classe per convertire oggetti OOP in modelli database SQLAlchemy"""
     
@@ -298,7 +413,7 @@ class DatabaseLoader:
         # Salva mediatori
         for mediator in interaction.mediatori:
             mediator_id = self.save_subatomic(mediator)
-            db_mediator = self.session.query(DBSubatomic).get(mediator_id)
+            db_mediator = self.session.get(DBSubatomic, mediator_id)
             if db_mediator:
                 db_interaction.mediators.append(db_mediator)
         
@@ -307,8 +422,8 @@ class DatabaseLoader:
     
     def save_atom(self, atom: Atom) -> int:
         """Salva un atomo nel database e restituisce l'ID"""
-        from lib.create_db import Atom as DBAtom, AtomComposition as DBComposition
-        
+        from lib.create_db import Atom as DBAtom
+
         existing = self.session.query(DBAtom).filter_by(
             symbol=atom.symbol,
             mass_number=atom.atomic_mass
@@ -349,17 +464,17 @@ class DatabaseLoader:
         
         for proton in atom.protons:
             proton_id = self.save_subatomic(proton)
-            key = ("proton", proton_id)
+            key = (ROLE_PROTON, proton_id)
             particle_counts[key] = particle_counts.get(key, 0) + 1
-        
+
         for neutron in atom.neutrons:
             neutron_id = self.save_subatomic(neutron)
-            key = ("neutron", neutron_id)
+            key = (ROLE_NEUTRON, neutron_id)
             particle_counts[key] = particle_counts.get(key, 0) + 1
-        
+
         for electron in atom.electrons:
             electron_id = self.save_subatomic(electron)
-            key = ("electron", electron_id)
+            key = (ROLE_ELECTRON, electron_id)
             particle_counts[key] = particle_counts.get(key, 0) + 1
         
         # Salva con quantità raggruppate
@@ -403,11 +518,13 @@ class DatabaseLoader:
         self.session.add(db_molecule)
         self.session.commit()
         
-        # Salva atomi con posizioni
-        atom_position_ids = {}
+        # Salva atomi con posizioni: un record per sito, nell'ordine dei siti.
+        # La lista è indicizzata come molecule.atoms_data, così i legami (che sono
+        # indici di sito) si traducono direttamente in ID di posizione.
+        position_ids: list[int] = []
         for atom, position in molecule.atoms_data:
             atom_id = self.save_atom(atom)
-            
+
             db_position = DBPosition(
                 molecule_id=db_molecule.id,
                 atom_id=atom_id,
@@ -416,92 +533,87 @@ class DatabaseLoader:
                 z=position[2],
                 partial_charge=atom.charge / len(molecule.atoms_data)  # Distribuzione semplice
             )
-            
+
             self.session.add(db_position)
             self.session.commit()
-            
-            atom_position_ids[atom] = db_position.id
-        
+
+            position_ids.append(db_position.id)
+
         # Salva legami
-        for atom1, atom2, bond_type in molecule.bonds:
-            pos1_id = atom_position_ids[atom1]
-            pos2_id = atom_position_ids[atom2]
-            
-            # Evita self-bonds
-            if pos1_id == pos2_id:
-                continue
-            
+        for idx1, idx2, bond_type in molecule.bonds:
             db_bond = DBBond(
                 molecule_id=db_molecule.id,
-                position1_id=pos1_id,
-                position2_id=pos2_id,
+                position1_id=position_ids[idx1],
+                position2_id=position_ids[idx2],
                 bond_type=bond_type
             )
-            
+
             self.session.add(db_bond)
-        
+
         self.session.commit()
         return db_molecule.id
     
     def load_molecule(self, molecule_id: int) -> Molecule:
         """Carica una molecola dal database e crea oggetto OOP"""
-        from lib.create_db import Molecule as DBMolecule, MoleculeAtomPosition as DBPosition, MoleculeBond as DBBond, Atom as DBAtom
-        
-        db_molecule = self.session.query(DBMolecule).get(molecule_id)
+        from lib.create_db import Molecule as DBMolecule
+
+        db_molecule = self.session.get(DBMolecule, molecule_id)
         if not db_molecule:
             raise ValueError(f"Molecola con ID {molecule_id} non trovata")
-        
+
         # Crea oggetto Molecule
         molecule = Molecule(
             name=db_molecule.name,
             spin_multiplicity=db_molecule.spin_multiplicity,
             distance_unit=db_molecule.distance_unit
         )
-        
-        # Carica atomi con posizioni
-        atom_map = {}  # Mappa DB position ID -> Atom object
+
+        # Carica atomi con posizioni, tenendo traccia dell'indice di sito assegnato
+        site_by_position_id: dict[int, int] = {}
         for db_position in db_molecule.atoms_data:
             atom = self._load_atom(db_position.atom_id)
             position = (db_position.x, db_position.y, db_position.z)
-            molecule.add_atom(atom, position)
-            atom_map[db_position.id] = atom
-        
-        # Carica legami
+            site_by_position_id[db_position.id] = molecule.add_atom(atom, position)
+
+        # Carica legami usando gli indici di sito
         for db_bond in db_molecule.bonds:
-            atom1 = self.session.query(DBPosition).get(db_bond.position1_id)
-            atom2 = self.session.query(DBPosition).get(db_bond.position2_id)
-            
             molecule.add_bond(
-                atom_map[atom1.id],
-                atom_map[atom2.id],
+                site_by_position_id[db_bond.position1_id],
+                site_by_position_id[db_bond.position2_id],
                 db_bond.bond_type
             )
-        
+
         return molecule
     
     def _load_atom(self, atom_id: int) -> Atom:
         """Carica un atomo dal database e crea oggetto OOP"""
-        from lib.create_db import Atom as DBAtom, AtomComposition as DBComposition, SubatomicParticle as DBSubatomic
-        
-        db_atom = self.session.query(DBAtom).get(atom_id)
+        from lib.create_db import Atom as DBAtom
+
+        db_atom = self.session.get(DBAtom, atom_id)
         if not db_atom:
             raise ValueError(f"Atomo con ID {atom_id} non trovato")
-        
+
         # Carica composizione
         protons = []
         neutrons = []
         electrons = []
-        
+
         for comp in db_atom.composition:
-            db_particle = self.session.query(DBSubatomic).get(comp.particle_id)
-            particle = self._load_subatomic(db_particle.id)
-            
-            if comp.role == "proton":
+            particle = self._load_subatomic(comp.particle_id)
+
+            # Il ruolo è normalizzato in minuscolo alla scrittura (vedi ROLE_*)
+            role = (comp.role or "").lower()
+            if role == ROLE_PROTON:
                 protons.extend([particle] * comp.quantity)
-            elif comp.role == "neutron":
+            elif role == ROLE_NEUTRON:
                 neutrons.extend([particle] * comp.quantity)
-            elif comp.role == "electron":
+            elif role == ROLE_ELECTRON:
                 electrons.extend([particle] * comp.quantity)
+            else:
+                raise ValueError(
+                    f"Ruolo '{comp.role}' sconosciuto nella composizione dell'atomo {atom_id}. "
+                    f"Attesi: {ROLE_PROTON}, {ROLE_NEUTRON}, {ROLE_ELECTRON}."
+                )
         
         return Atom(
             name=db_atom.name,
@@ -515,9 +627,9 @@ class DatabaseLoader:
     
     def _load_subatomic(self, particle_id: int) -> Subatomic:
         """Carica una particella subatomica dal database"""
-        from lib.create_db import SubatomicParticle as DBSubatomic, SubatomicComposition as DBComposition
-        
-        db_particle = self.session.query(DBSubatomic).get(particle_id)
+        from lib.create_db import SubatomicParticle as DBSubatomic
+
+        db_particle = self.session.get(DBSubatomic, particle_id)
         if not db_particle:
             raise ValueError(f"Particella con ID {particle_id} non trovata")
         

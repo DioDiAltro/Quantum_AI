@@ -1,13 +1,17 @@
+import os
 
 from sqlalchemy import (
-    create_engine, Column, 
-    String, Integer, Float, 
+    create_engine, Column,
+    String, Integer, Float,
     ForeignKey, JSON, Table,
     CheckConstraint, UniqueConstraint)
 from sqlalchemy.orm import declarative_base, relationship
 
-# Struttura: "postgresql://UTENTE:PASSWORD@HOST/NOME_DATABASE"
-DATABASE_URL = "postgresql://quantum_admin:supersegreta@localhost/quantum_db"
+# La stringa di connessione arriva dall'ambiente: le credenziali non vanno
+# committate. Struttura: "postgresql://UTENTE:PASSWORD@HOST/NOME_DATABASE"
+# Configurala in un file .env locale (vedi .env.example) o esportala nella shell.
+DEFAULT_DATABASE_URL = "postgresql://quantum_admin@localhost/quantum_db"
+DATABASE_URL = os.getenv("QUANTUM_DATABASE_URL", DEFAULT_DATABASE_URL)
 
 engine = create_engine(DATABASE_URL, echo=False)
 Base = declarative_base()
@@ -77,7 +81,11 @@ class Atom(Base):
     natural_abundance = Column(Float, nullable=True)
     configuration = Column(JSON, nullable=True) 
 
-    composition = relationship("AtomComposition", backref="atom")
+    composition = relationship(
+        "AtomComposition",
+        backref="atom",
+        order_by="AtomComposition.particle_id",
+    )
     __table_args__ = (
         UniqueConstraint('symbol', 'mass_number', name='uix_symbol_mass_number'),
     )
@@ -118,8 +126,18 @@ class Molecule(Base):
     spin_multiplicity = Column(Integer, nullable=False, default=1)
     distance_unit = Column(String(10), nullable=False, default="Angstrom")
 
-    atoms_data = relationship("MoleculeAtomPosition", backref="molecule")
-    bonds = relationship("MoleculeBond", backref="molecule")
+    # L'ordine dei siti atomici è significativo: i legami sono indici in questa
+    # lista, quindi il caricamento deve restituirli sempre nello stesso ordine.
+    atoms_data = relationship(
+        "MoleculeAtomPosition",
+        backref="molecule",
+        order_by="MoleculeAtomPosition.id",
+    )
+    bonds = relationship(
+        "MoleculeBond",
+        backref="molecule",
+        order_by="MoleculeBond.id",
+    )
 
 class VqeSimulationResult(Base):
     __tablename__ = "vqe_simulation_results"
@@ -135,13 +153,51 @@ class VqeSimulationResult(Base):
 
 
 def create_database():
-    print("Distruzione delle vecchie tabelle in corso...")
-    Base.metadata.drop_all(engine) 
-    
-    print("Creazione delle nuove tabelle aggiornate...")
-    Base.metadata.create_all(engine) 
-    print("Database resettato con successo!")
+    """
+    Crea le tabelle mancanti. Operazione idempotente e NON distruttiva:
+    i dati esistenti restano intatti.
+    """
+    Base.metadata.create_all(engine)
+    print("✅ Schema del database allineato (nessun dato cancellato).")
+
+
+def reset_database(confirm: bool = False):
+    """
+    Elimina TUTTE le tabelle e le ricrea vuote. Operazione distruttiva:
+    cancella particelle, atomi, molecole e risultati VQE già calcolati.
+
+    Va invocata esplicitamente con confirm=True.
+    """
+    if not confirm:
+        raise RuntimeError(
+            "reset_database() cancella tutti i dati. "
+            "Richiamala con confirm=True se è davvero quello che vuoi."
+        )
+
+    print("⚠️  Distruzione delle vecchie tabelle in corso...")
+    Base.metadata.drop_all(engine)
+
+    print("Creazione delle nuove tabelle...")
+    Base.metadata.create_all(engine)
+    print("✅ Database resettato: tutti i dati precedenti sono stati eliminati.")
 
 
 if __name__ == "__main__":
-    create_database()
+    import argparse
+
+    parser = argparse.ArgumentParser(description="Gestione dello schema del database")
+    parser.add_argument(
+        "--reset",
+        action="store_true",
+        help="DISTRUTTIVO: elimina tutte le tabelle e i dati, poi le ricrea vuote",
+    )
+    args = parser.parse_args()
+
+    if args.reset:
+        risposta = input("⚠️  Questo cancellerà TUTTI i dati. Scrivi 'reset' per confermare: ")
+        if risposta.strip().lower() == "reset":
+            reset_database(confirm=True)
+        else:
+            print("Operazione annullata.")
+    else:
+        create_database()

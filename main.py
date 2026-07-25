@@ -3,56 +3,51 @@ Main entry point per QML Chemical Discovery Engine
 Integra il motore fisico, il traduttore e mostra le funzionalità del sistema
 """
 
-import sys
 import argparse
-from lib.matter import (
-    Subatomic, Atom, Molecule, Interaction,
-    # Particelle definite
-    p, n, e, Hydrogen
-)
+from lib.matter import Molecule, make_atom
 from lib.translator import Translator, debug_translation
 
 
 def create_example_molecules():
-    """Crea molecole di esempio per dimostrazione"""
+    """
+    Crea molecole di esempio per dimostrazione.
+
+    Ogni atomo è un'istanza distinta creata con make_atom(): due idrogeni della
+    stessa molecola sono siti diversi, e i legami li indirizzano per indice.
+    """
     print("🧪 Creazione molecole di esempio...")
-    
+
     molecules = []
-    
-    # 1. Idrogeno (H2) - già definito in matter.py
-    from lib.matter import H2
+
+    # 1. Diidrogeno (H2)
+    H2 = Molecule("Dihydrogen")
+    h_a = H2.add_atom(make_atom("H-1"), position=(0.0, 0.0, 0.0))
+    h_b = H2.add_atom(make_atom("H-1"), position=(0.0, 0.0, 0.735))
+    H2.add_bond(h_a, h_b, 1)
+
     molecules.append(("Dihydrogen (H2)", H2))
-    
+
     # 2. Acqua (H2O)
-    Oxygen = Atom("Oxygen", "O", [p]*8, [n]*8, [e]*8)
     H2O = Molecule("Water")
-    H2O.add_atom(Oxygen, position=(0.0, 0.0, 0.0))
-    H2O.add_atom(Hydrogen, position=(0.95, 0.0, -0.5))
-    H2O.add_atom(Hydrogen, position=(-0.95, 0.0, -0.5))
-    
-    atoms_h2o = [data[0] for data in H2O.atoms_data]
-    H2O.add_bond(atoms_h2o[0], atoms_h2o[1], 1)  # O-H
-    H2O.add_bond(atoms_h2o[0], atoms_h2o[2], 1)  # O-H
-    
+    o = H2O.add_atom(make_atom("O-16"), position=(0.0, 0.0, 0.0))
+    H2O.add_bond(o, H2O.add_atom(make_atom("H-1"), position=(0.95, 0.0, -0.5)), 1)   # O-H
+    H2O.add_bond(o, H2O.add_atom(make_atom("H-1"), position=(-0.95, 0.0, -0.5)), 1)  # O-H
+
     molecules.append(("Water (H2O)", H2O))
-    
-    # 3. Metano (CH4) - semplificato
-    Carbon = Atom("Carbon", "C", [p]*6, [n]*6, [e]*6)
+
+    # 3. Metano (CH4) - geometria tetraedrica semplificata
     CH4 = Molecule("Methane")
-    CH4.add_atom(Carbon, position=(0.0, 0.0, 0.0))
-    CH4.add_atom(Hydrogen, position=(0.63, 0.63, 0.63))
-    CH4.add_atom(Hydrogen, position=(-0.63, -0.63, 0.63))
-    CH4.add_atom(Hydrogen, position=(-0.63, 0.63, -0.63))
-    CH4.add_atom(Hydrogen, position=(0.63, -0.63, -0.63))
-    
-    atoms_ch4 = [data[0] for data in CH4.atoms_data]
-    CH4.add_bond(atoms_ch4[0], atoms_ch4[1], 1)  # C-H
-    CH4.add_bond(atoms_ch4[0], atoms_ch4[2], 1)  # C-H
-    CH4.add_bond(atoms_ch4[0], atoms_ch4[3], 1)  # C-H
-    CH4.add_bond(atoms_ch4[0], atoms_ch4[4], 1)  # C-H
-    
+    c = CH4.add_atom(make_atom("C-12"), position=(0.0, 0.0, 0.0))
+    for posizione in [
+        (0.63, 0.63, 0.63),
+        (-0.63, -0.63, 0.63),
+        (-0.63, 0.63, -0.63),
+        (0.63, -0.63, -0.63),
+    ]:
+        CH4.add_bond(c, CH4.add_atom(make_atom("H-1"), position=posizione), 1)  # C-H
+
     molecules.append(("Methane (CH4)", CH4))
-    
+
     return molecules
 
 
@@ -142,6 +137,47 @@ def run_batch_processing(molecules):
         print(f"   - Numero parametri totali: {result['node_features'].size}")
 
 
+def run_quantum_oracle(molecules, stability_threshold=None):
+    """
+    Esegue l'oracolo ibrido (screening classico + VQE) sulle molecole indicate.
+
+    Richiede il database: i risultati VQE vengono persistiti per il futuro
+    fine-tuning del modello classico.
+    """
+    print(f"\n" + "="*60)
+    print("⚛️  ORACOLO IBRIDO: SCREENING CLASSICO + VQE")
+    print("="*60)
+
+    try:
+        from lib.hybrid_pipeline import HybridOraclePipeline
+    except ImportError as e:
+        print(f"❌ Dipendenze quantistiche non disponibili: {e}")
+        return
+
+    pipeline = HybridOraclePipeline()
+    esiti = []
+
+    for name, mol in molecules:
+        try:
+            risultato = pipeline.evaluate_candidate(mol, stability_threshold=stability_threshold)
+            esiti.append((name, risultato))
+        except Exception as e:
+            print(f"   ❌ Errore su {name}: {e}")
+
+    print("\n" + "="*60)
+    print("📊 RIEPILOGO ORACOLO")
+    print("="*60)
+    for name, risultato in esiti:
+        if risultato["exact_energy"] is None:
+            print(f"🔹 {name}: scartato dallo screening classico")
+        else:
+            print(
+                f"🔹 {name}: E = {risultato['exact_energy']:.6f} Ha "
+                f"su {risultato['qubit_count']} qubit "
+                f"(errore vs esatto: {risultato['vqe_error']:.2e})"
+            )
+
+
 def interactive_menu(molecules=None):
     """Menu interattivo per esplorare il sistema"""
     print("\n" + "="*60)
@@ -160,10 +196,11 @@ def interactive_menu(molecules=None):
         print("5. Analisi dettagliata H2")
         print("6. Analisi dettagliata H2O")
         print("7. Batch processing")
-        print("8. Esci")
-        
-        choice = input("\nSeleziona un'opzione (1-8): ").strip()
-        
+        print("8. Oracolo ibrido VQE (richiede database)")
+        print("9. Esci")
+
+        choice = input("\nSeleziona un'opzione (1-9): ").strip()
+
         if choice == "1":
             demonstrate_basic_properties(molecules)
         elif choice == "2":
@@ -179,6 +216,8 @@ def interactive_menu(molecules=None):
         elif choice == "7":
             run_batch_processing(molecules)
         elif choice == "8":
+            run_quantum_oracle(molecules)
+        elif choice == "9":
             print("👋 Arrivederci!")
             break
         else:
@@ -214,23 +253,28 @@ def run_demo(molecules=None):
 
 
 def try_database_integration():
-    """Tenta l'integrazione con il database se disponibile"""
+    """
+    Apre una sessione sul database, creando le tabelle mancanti.
+
+    Operazione NON distruttiva: allinea solo lo schema. Per azzerare i dati
+    serve il comando esplicito `python -m lib.create_db --reset`.
+    """
     try:
         from lib.create_db import create_database, engine
         from sqlalchemy.orm import sessionmaker
-        
+
         print("🗄️  Integrazione Database PostgreSQL...")
-        
-        # Crea le tabelle del database
+
+        # Crea le tabelle mancanti senza toccare i dati esistenti
         create_database()
-        
+
         # Crea sessione
         Session = sessionmaker(bind=engine)
         session = Session()
-        
-        print("✅ Database inizializzato con successo")
+
+        print("✅ Database pronto")
         return session
-        
+
     except Exception as e:
         print(f"⚠️  Integrazione database non disponibile: {e}")
         print("   Il sistema continuerà a funzionare senza database")
@@ -238,32 +282,33 @@ def try_database_integration():
 
 
 def save_molecules_to_db(session, molecules):
-    """Salva le molecole nel database se la sessione è disponibile"""
+    """
+    Salva le molecole nel database usando DatabaseLoader.
+
+    Persiste l'intera struttura (atomi, posizioni 3D e legami), non solo la
+    riga di intestazione della molecola.
+    """
     if session is None:
         print("⚠️  Database non disponibile, skip salvataggio")
         return
-    
-    try:
-        from lib.create_db import Atom as DBAtom, Molecule as DBMolecule
-        
-        print(f"💾 Salvataggio di {len(molecules)} molecole nel database...")
-        
-        for name, mol in molecules:
-            # Crea molecola nel database
-            db_mol = DBMolecule(
-                name=mol.name,
-                molecular_mass=mol.molecular_mass,
-                net_charge=mol.net_charge
+
+    from lib.matter import DatabaseLoader
+
+    loader = DatabaseLoader(session)
+    print(f"💾 Salvataggio di {len(molecules)} molecole nel database...")
+
+    for name, mol in molecules:
+        try:
+            molecule_id = loader.save_molecule(mol)
+            print(
+                f"   ✅ Salvata: {name} (id={molecule_id}, "
+                f"{len(mol.atoms_data)} atomi, {len(mol.bonds)} legami)"
             )
-            session.add(db_mol)
-            session.commit()
-            
-            print(f"   ✅ Salvata: {name}")
-        
-        print("💾 Salvataggio completato")
-        
-    except Exception as e:
-        print(f"❌ Errore nel salvataggio: {e}")
+        except Exception as e:
+            session.rollback()
+            print(f"   ❌ Errore nel salvataggio di {name}: {e}")
+
+    print("💾 Salvataggio completato")
 
 
 def main():
@@ -273,10 +318,18 @@ def main():
     )
     
     parser.add_argument(
-        "--mode", 
-        choices=["demo", "interactive", "quick"],
+        "--mode",
+        choices=["demo", "interactive", "quick", "oracle"],
         default="demo",
-        help="Modalità di esecuzione: demo (completa), interactive (menu), quick (sommario)"
+        help="Modalità: demo (completa), interactive (menu), quick (sommario), oracle (screening + VQE)"
+    )
+
+    parser.add_argument(
+        "--threshold",
+        type=float,
+        default=None,
+        help="Soglia di screening classico in Hartree (modalità oracle). "
+             "Omessa, nessun candidato viene scartato e il VQE gira su tutti."
     )
     
     parser.add_argument(
@@ -296,19 +349,19 @@ def main():
     parser.add_argument(
         "--db",
         action="store_true",
-        help="Abilita integrazione con database PostgreSQL"
+        help="Abilita integrazione con database PostgreSQL (crea le tabelle mancanti, non cancella dati)"
     )
-    
+
     args = parser.parse_args()
-    
+
     print("🧪 QML CHEMICAL DISCOVERY ENGINE")
     print("="*60)
-    
+
     # Integrazione database opzionale
     db_session = None
     if args.db:
         db_session = try_database_integration()
-    
+
     if args.mode == "demo":
         molecules = create_example_molecules()
         
@@ -342,6 +395,18 @@ def main():
         
         demonstrate_basic_properties(molecules)
         demonstrate_translation(molecules, args.format)
+
+    elif args.mode == "oracle":
+        molecules = create_example_molecules()
+
+        if args.molecule != "all":
+            molecule_map = {"h2": 0, "h2o": 1, "ch4": 2}
+            molecules = [molecules[molecule_map[args.molecule]]]
+
+        run_quantum_oracle(molecules, stability_threshold=args.threshold)
+
+    if db_session is not None:
+        db_session.close()
 
 
 if __name__ == "__main__":

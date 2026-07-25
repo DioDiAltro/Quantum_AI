@@ -1,14 +1,26 @@
 [project]
 name = "quantum-project"
 version = "0.1.0"
-description = "Add your description here"
+description = "QML Chemical Discovery Engine - motore fisico OOP, traduttore ML/QML e oracolo ibrido VQE"
 readme = "README.md"
 requires-python = ">=3.12"
 dependencies = [
-    "mendeleev>=1.1.0",
-    "networkx>=3.6.1",
+    "numpy>=2.0.0",
     "psycopg2-binary>=2.9.12",
     "qiskit>=2.5.0",
+    "qiskit-algorithms>=0.4.0",
     "qiskit-nature>=0.8.0",
     "sqlalchemy>=2.0.51",
+]
+
+[dependency-groups]
+dev = [
+    "pytest>=8.0.0",
+]
+
+[tool.pytest.ini_options]
+pythonpath = ["."]
+testpaths = ["tests"]
+markers = [
+    "db: test che richiedono un database PostgreSQL raggiungibile",
 ]

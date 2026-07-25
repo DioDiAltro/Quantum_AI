@@ -1,10 +1,13 @@
-from create_db import (
+from sqlalchemy.orm import sessionmaker
+
+from lib.create_db import (
     Atom,
     Interaction,
+    Molecule,
     SubatomicParticle,
+    VqeSimulationResult,
     engine,
 )
-from sqlalchemy.orm import sessionmaker
 
 
 def view_contents():
@@ -46,6 +49,37 @@ def view_contents():
                 [f"{c.role}: {c.quantity}" for c in a.composition]
             )
             print(f"        └─ Composizione: {comp_str}\n")
+
+        print("=" * 50)
+        print("🧬 MOLECOLE")
+        print("=" * 50)
+        molecules = session.query(Molecule).all()
+        if not molecules:
+            print("(nessuna molecola salvata)")
+        for mol in molecules:
+            print(
+                f"• {mol.name:<16} | Massa: {mol.molecular_mass} | Carica: {mol.net_charge} "
+                f"| Atomi: {len(mol.atoms_data)} | Legami: {len(mol.bonds)}"
+            )
+            # I legami puntano a siti atomici: mostriamo i simboli coinvolti
+            site_symbols = {site.id: site.atom.symbol for site in mol.atoms_data}
+            for bond in mol.bonds:
+                print(
+                    f"        └─ {site_symbols.get(bond.position1_id, '?')}"
+                    f"—{site_symbols.get(bond.position2_id, '?')} (ordine {bond.bond_type})"
+                )
+
+        print("\n" + "=" * 50)
+        print("⚛️  RISULTATI VQE")
+        print("=" * 50)
+        results = session.query(VqeSimulationResult).all()
+        if not results:
+            print("(nessuna simulazione registrata)")
+        for r in results:
+            print(
+                f"• {r.molecule.name:<16} | E = {r.total_energy_hartree:.6f} Ha "
+                f"| {r.qubit_count} qubit | {r.optimizer_used}"
+            )
 
     finally:
         session.close()

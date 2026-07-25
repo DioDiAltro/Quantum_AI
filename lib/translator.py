@@ -104,7 +104,7 @@ class MolecularGraph:
     edge_index: np.ndarray  # Shape: (2, num_edges)
     edge_attrs: np.ndarray  # Shape: (num_edges, edge_feature_dim)
     positions: np.ndarray  # Shape: (num_atoms, 3)
-    atom_indices: Dict[int, int]  # Mapping ID atomo -> indice nodo
+    atom_symbols: List[str]  # Simbolo dell'atomo per ogni nodo, nell'ordine dei nodi
     
     def to_pyg_format(self):
         """Converte in formato PyTorch Geometric"""
@@ -134,55 +134,58 @@ class GraphBuilder:
         self.feature_extractor = feature_extractor
     
     def build_from_molecule(self, molecule) -> MolecularGraph:
-        """Costruisce grafo da oggetto Molecule"""
-        
+        """
+        Costruisce grafo da oggetto Molecule.
+
+        Un nodo per ogni sito di `atoms_data`: atomi chimicamente identici
+        (es. i quattro idrogeni del metano) restano nodi distinti anche se
+        condividono la stessa istanza Atom.
+        """
+
         # Estrai feature per ogni atomo
         node_features_list = []
         positions = []
-        atom_indices = {}
-        
-        for idx, (atom, position) in enumerate(molecule.atoms_data):
+        atom_symbols = []
+
+        for atom, position in molecule.atoms_data:
             features = self.feature_extractor.extract_from_atom(atom, position)
             node_features_list.append(features.to_vector())
             positions.append(position)
-            atom_indices[id(atom)] = idx
-        
+            atom_symbols.append(atom.symbol)
+
         node_features = np.array(node_features_list, dtype=np.float32)
         positions = np.array(positions, dtype=np.float32)
-        
-        # Costruisci archi (legami)
+
+        # Costruisci archi (legami). molecule.bonds contiene indici di sito.
         edge_list = []
         edge_attrs = []
-        
-        for atom1, atom2, bond_type in molecule.bonds:
-            idx1 = atom_indices[id(atom1)]
-            idx2 = atom_indices[id(atom2)]
-            
+
+        for idx1, idx2, bond_type in molecule.bonds:
             # Arco in entrambe le direzioni (grafo non orientato)
             edge_list.append([idx1, idx2])
             edge_list.append([idx2, idx1])
-            
+
             # Feature arco: [bond_type, distance]
             distance = self._calculate_distance(
-                positions[idx1], 
+                positions[idx1],
                 positions[idx2]
             )
             edge_attrs.append([bond_type, distance])
             edge_attrs.append([bond_type, distance])
-        
+
         if edge_list:
             edge_index = np.array(edge_list, dtype=np.int64).T
             edge_attrs = np.array(edge_attrs, dtype=np.float32)
         else:
             edge_index = np.zeros((2, 0), dtype=np.int64)
             edge_attrs = np.zeros((0, 2), dtype=np.float32)
-        
+
         return MolecularGraph(
             node_features=node_features,
             edge_index=edge_index,
             edge_attrs=edge_attrs,
             positions=positions,
-            atom_indices=atom_indices
+            atom_symbols=atom_symbols
         )
     
     def _calculate_distance(self, pos1: np.ndarray, pos2: np.ndarray) -> float:

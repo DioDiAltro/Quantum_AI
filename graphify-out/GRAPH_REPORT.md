@@ -1,134 +1,114 @@
-# Graph Report - .  (2026-07-24)
+# Graph Report - .  (2026-07-25)
 
 ## Corpus Check
 - cluster-only mode — file stats not available
 
 ## Summary
-- 214 nodes · 428 edges · 14 communities (13 shown, 1 thin omitted)
-- Extraction: 85% EXTRACTED · 15% INFERRED · 0% AMBIGUOUS · INFERRED: 65 edges (avg confidence: 0.57)
+- 259 nodes · 509 edges · 11 communities (10 shown, 1 thin omitted)
+- Extraction: 89% EXTRACTED · 11% INFERRED · 0% AMBIGUOUS · INFERRED: 55 edges (avg confidence: 0.56)
 - Token cost: 0 input · 0 output
 
 ## Graph Freshness
-- Built from commit: `9521b6be`
+- Built from commit: `351e6e0f`
 - Run `git rev-parse HEAD` and compare to check if the graph is stale.
 - Run `graphify update .` after code changes (no API cost).
 
 ## Community Hubs (Navigation)
+- Translator
 - DatabaseLoader
-- AI / QML
-- Atom
+- Molecule
 - main.py
+- test_db_loader.py
+- test_hybrid_pipeline.py
 - test_translator.py
 - HybridOraclePipeline
-- QuantumEncoder
-- .build_from_molecule
-- FeatureExtractor
-- MolecularGraph
-- translator.py
+- create_database
 - quantum-project
-- .translate_molecule
 
 ## God Nodes (most connected - your core abstractions)
-1. `DatabaseLoader` - 27 edges
-2. `Atom` - 26 edges
-3. `Molecule` - 24 edges
-4. `Subatomic` - 21 edges
-5. `Translator` - 14 edges
-6. `Interaction` - 13 edges
-7. `FeatureExtractor` - 10 edges
-8. `SubatomicParticle` - 10 edges
-9. `Molecule` - 10 edges
-10. `main()` - 9 edges
+1. `Molecule` - 39 edges
+2. `make_atom()` - 33 edges
+3. `DatabaseLoader` - 29 edges
+4. `Atom` - 20 edges
+5. `Subatomic` - 17 edges
+6. `HybridOraclePipeline` - 16 edges
+7. `Translator` - 16 edges
+8. `Interaction` - 11 edges
+9. `FeatureExtractor` - 11 edges
+10. `SubatomicParticle` - 10 edges
 
 ## Surprising Connections (you probably didn't know these)
-- `Dihydrogen (H2)` --semantically_similar_to--> `Molecule Class`  [INFERRED] [semantically similar]
-  MAIN_README.md → README.md
-- `Water (H2O)` --semantically_similar_to--> `Molecule Class`  [INFERRED] [semantically similar]
-  MAIN_README.md → README.md
-- `Methane (CH4)` --semantically_similar_to--> `Molecule Class`  [INFERRED] [semantically similar]
-  MAIN_README.md → README.md
-- `Tensors Format` --semantically_similar_to--> `TensorConverter`  [INFERRED] [semantically similar]
-  MAIN_README.md → TRANSLATOR_README.md
-- `PyTorch Geometric Format` --semantically_similar_to--> `PyTorch Geometric`  [INFERRED] [semantically similar]
-  MAIN_README.md → README.md
+- `test_atomo_ricaricato_conserva_la_composizione()` --calls--> `make_atom()`  [EXTRACTED]
+  tests/test_db_loader.py → lib/matter.py
+- `test_isotopi_dello_stesso_elemento_sono_righe_distinte()` --calls--> `make_atom()`  [EXTRACTED]
+  tests/test_db_loader.py → lib/matter.py
+- `test_salvataggio_atomo_e_idempotente()` --calls--> `make_atom()`  [EXTRACTED]
+  tests/test_db_loader.py → lib/matter.py
+- `try_database_integration()` --calls--> `create_database()`  [EXTRACTED]
+  main.py → lib/create_db.py
+- `run_quantum_oracle()` --calls--> `HybridOraclePipeline`  [EXTRACTED]
+  main.py → lib/hybrid_pipeline.py
 
 ## Import Cycles
 - None detected.
 
-## Hyperedges (group relationships)
-- **QML System Three-Layer Architecture** — readme_qml_chemical_discovery_engine, readme_physical_engine, readme_translator, readme_ai_qml [EXTRACTED 1.00]
-- **Translator Module Components** — translator_readme_translator_module, translator_readme_featureextractor, translator_readme_graphbuilder, translator_readme_tensorconverter, translator_readme_quantumencoder [EXTRACTED 1.00]
-- **main.py Execution Modes** — main_readme_main_py, main_readme_demo_mode, main_readme_quick_mode, main_readme_interactive_mode [EXTRACTED 1.00]
+## Communities (11 total, 1 thin omitted)
 
-## Communities (14 total, 1 thin omitted)
+### Community 0 - "Translator"
+Cohesion: 0.06
+Nodes (35): AtomFeatures, debug_translation(), FeatureExtractor, GraphBuilder, MolecularGraph, QuantumEncoder, Modulo Traduttore: Converte oggetti chimici in rappresentazioni ML/QML, Rappresentazione grafo di una molecola (+27 more)
 
-### Community 0 - "DatabaseLoader"
+### Community 1 - "DatabaseLoader"
+Cohesion: 0.10
+Nodes (29): Base, Atom, AtomComposition, Interaction, Molecule, MoleculeAtomPosition, MoleculeBond, Elimina TUTTE le tabelle e le ricrea vuote. Operazione distruttiva:     cancella (+21 more)
+
+### Community 2 - "Molecule"
 Cohesion: 0.07
-Nodes (28): create_database(), DatabaseLoader, Molecule, Aggiunge un atomo specificando la sua posizione 3D nello spazio., Classe per convertire oggetti OOP in modelli database SQLAlchemy, Salva una particella subatomica nel database e restituisce l'ID, Salva la composizione di particelle composite, Salva un'interazione nel database e restituisce l'ID (+20 more)
-
-### Community 1 - "AI / QML"
-Cohesion: 0.08
-Nodes (40): Methane (CH4), Demo Mode, Dihydrogen (H2), Water (H2O), Interactive Mode, main.py Entry Point, PostgreSQL Integration, PyTorch Geometric Format (+32 more)
-
-### Community 2 - "Atom"
-Cohesion: 0.18
-Nodes (16): Base, Atom, AtomComposition, Interaction, Molecule, MoleculeAtomPosition, MoleculeBond, SubatomicComposition (+8 more)
+Nodes (35): make_atom(), Molecule, Molecola come insieme ordinato di siti atomici.      I legami sono memorizzati c, Aggiunge un atomo con la sua posizione 3D e restituisce l'indice del sito., Crea un legame fra due siti della molecola.          Accetta indici di sito (mod, Traduce un indice o un oggetto Atom nell'indice del sito corrispondente., Costruisce una NUOVA istanza Atom per l'isotopo richiesto.      Ogni chiamata re, Carica una molecola dal database e crea oggetto OOP (+27 more)
 
 ### Community 3 - "main.py"
 Cohesion: 0.16
-Nodes (21): create_example_molecules(), demonstrate_basic_properties(), demonstrate_detailed_analysis(), demonstrate_translation(), interactive_menu(), main(), Main entry point per QML Chemical Discovery Engine Integra il motore fisico, il, Analisi dettagliata di una singola molecola (+13 more)
+Nodes (21): demonstrate_basic_properties(), demonstrate_detailed_analysis(), demonstrate_translation(), interactive_menu(), main(), Main entry point per QML Chemical Discovery Engine Integra il motore fisico, il, Analisi dettagliata di una singola molecola, Dimostra il batch processing (+13 more)
 
-### Community 4 - "test_translator.py"
-Cohesion: 0.22
-Nodes (14): Classe principale che orchesta tutte le conversioni, Translator, Test del modulo traduttore, Test con una molecola più complessa, Test base della traduzione della molecola H2, Test della traduzione per QML, Test del formato PyTorch Geometric, Test dell'estrazione delle feature (+6 more)
+### Community 4 - "test_db_loader.py"
+Cohesion: 0.14
+Nodes (16): Genera nomi univoci: `molecules.name` ha un vincolo UNIQUE., unique_name(), _acqua(), Molecule, Test del DatabaseLoader: conversione OOP → database e ritorno.  Richiedono un Po, Regressione: i legami erano indicizzati per oggetto Atom, quindi i due     idrog, Quattro idrogeni identici devono restare quattro siti distinti nel DB., test_atomo_ricaricato_conserva_la_composizione() (+8 more)
 
-### Community 5 - "HybridOraclePipeline"
-Cohesion: 0.21
-Nodes (8): HybridOraclePipeline, Motore VQE reale: costruisce l'Hamiltoniano, configura lo stato Hartree-Fock,, Salva il risultato quantistico nel database per il fine-tuning dell'AI., Orchestra la valutazione ibrida Classica/Quantistica per il QML Discovery Engine, Valuta una molecola passando prima per il filtro classico ML          e, se prom, Converte l'output del QuantumEncoder (dizionario con termini Pauli Z, ZZ), Molecule, SparsePauliOp
+### Community 5 - "test_hybrid_pipeline.py"
+Cohesion: 0.13
+Nodes (16): _hamiltonian(), Test dell'oracolo ibrido (lib/hybrid_pipeline.py).  La costruzione dell'operator, Regressione: con l'ansatz UCCSD il VQE si interrompeva con un errore di     mism, Nessuna stima variazionale può scendere sotto il vero stato fondamentale., Senza soglia esplicita il percorso quantistico non deve essere saltato., Qiskit indicizza i qubit da destra: il qubit 0 è l'ultimo carattere., Un atomo isolato non produce termini: serve comunque un operatore., test_hamiltoniano_vuoto_resta_valido() (+8 more)
 
-### Community 6 - "QuantumEncoder"
-Cohesion: 0.29
-Nodes (4): QuantumEncoder, Prepara dati per Quantum Machine Learning, Codifica Hamiltoniano molecolare semplificato, Mappa atomi a qubit per circuiti quantistici
+### Community 6 - "test_translator.py"
+Cohesion: 0.12
+Nodes (7): Test del modulo traduttore (lib/translator.py)., Colonne costanti (es. tutte le cariche a zero) non devono produrre NaN., Regressione: quando GraphBuilder indicizzava i nodi con id(atom), i due     idro, I quattro idrogeni sono chimicamente identici ma restano nodi distinti., test_acqua_conserva_entrambi_i_legami_oh(), test_metano_ha_quattro_legami_ch(), test_normalizzazione_non_divide_per_zero()
 
-### Community 7 - ".build_from_molecule"
+### Community 7 - "HybridOraclePipeline"
+Cohesion: 0.17
+Nodes (10): HybridOraclePipeline, Molecule, Converte l'output del QuantumEncoder (dizionario con termini Pauli Z, ZZ), Motore VQE: costruisce l'operatore di Pauli e ne cerca l'autovalore minimo., Orchestra la valutazione ibrida Classica/Quantistica per il QML Discovery Engine, Autovalore minimo per diagonalizzazione esatta (NumPy).          Riferimento di, Salva il risultato quantistico nel database per il fine-tuning dell'AI., Valuta una molecola: prima il filtro classico ML, poi — se il candidato (+2 more)
+
+### Community 8 - "create_database"
 Cohesion: 0.24
-Nodes (6): GraphBuilder, Costruisce grafi molecolari da oggetti Molecule, Costruisce grafo da oggetto Molecule, Calcola distanza euclidea tra due atomi, Converte in array numpy per ML, ndarray
-
-### Community 8 - "FeatureExtractor"
-Cohesion: 0.28
-Nodes (5): FeatureExtractor, Estrae feature vectors dagli oggetti Atom, Estrae feature vector da un oggetto Atom, Codifica la configurazione elettronica come vettore, Calcola elettroni di valenza (semplificato)
-
-### Community 9 - "MolecularGraph"
-Cohesion: 0.20
-Nodes (8): MolecularGraph, Rappresentazione grafo di una molecola, Converte in formato PyTorch Geometric, Genera matrice di adiacenza, Converte grafi in tensori per ML, Normalizza feature vectors, Converte grafo in dizionario di tensori, TensorConverter
-
-### Community 10 - "translator.py"
-Cohesion: 0.50
-Nodes (3): AtomFeatures, Modulo Traduttore: Converte oggetti chimici in rappresentazioni ML/QML, Vettore di caratteristiche per un atomo
-
-### Community 13 - ".translate_molecule"
-Cohesion: 0.33
-Nodes (4): debug_translation(), Converte molecola nel formato richiesto, Converte batch di molecole, Funzione di debug per visualizzare la traduzione
+Nodes (9): create_database(), Crea le tabelle mancanti. Operazione idempotente e NON distruttiva:     i dati e, populate_fundamental_physics(), Popola il database con le basi della fisica e della chimica.  Sorgente unica di, db_session(), db_session_factory(), Fixture condivise per la suite di test., Sessione isolata per singolo test, chiusa a fine test. (+1 more)
 
 ## Knowledge Gaps
-- **10 isolated node(s):** `quantum-project`, `Interactive Mode`, `PennyLane`, `Qiskit`, `Feature Vector (26 dimensions)` (+5 more)
+- **1 isolated node(s):** `quantum-project`
   These have ≤1 connection - possible missing edges or undocumented components.
 - **1 thin communities (<3 nodes) omitted from report** — run `graphify query` to explore isolated nodes.
 
 ## Suggested Questions
 _Questions this graph is uniquely positioned to answer:_
 
-- **Why does `Atom` connect `Atom` to `DatabaseLoader`, `main.py`, `test_translator.py`?**
-  _High betweenness centrality (0.099) - this node is a cross-community bridge._
-- **Why does `Molecule` connect `DatabaseLoader` to `Atom`, `main.py`, `test_translator.py`?**
-  _High betweenness centrality (0.088) - this node is a cross-community bridge._
-- **Why does `HybridOraclePipeline` connect `HybridOraclePipeline` to `Atom`?**
-  _High betweenness centrality (0.086) - this node is a cross-community bridge._
-- **Are the 8 inferred relationships involving `DatabaseLoader` (e.g. with `Atom` and `AtomComposition`) actually correct?**
-  _`DatabaseLoader` has 8 INFERRED edges - model-reasoned connections that need verification._
+- **Why does `Molecule` connect `Molecule` to `DatabaseLoader`, `main.py`, `test_db_loader.py`, `test_hybrid_pipeline.py`, `test_translator.py`, `HybridOraclePipeline`?**
+  _High betweenness centrality (0.230) - this node is a cross-community bridge._
+- **Why does `make_atom()` connect `Molecule` to `DatabaseLoader`, `main.py`, `test_db_loader.py`, `test_hybrid_pipeline.py`, `test_translator.py`, `create_database`?**
+  _High betweenness centrality (0.162) - this node is a cross-community bridge._
+- **Why does `DatabaseLoader` connect `DatabaseLoader` to `Molecule`, `main.py`, `test_db_loader.py`, `HybridOraclePipeline`, `create_database`?**
+  _High betweenness centrality (0.132) - this node is a cross-community bridge._
+- **Are the 9 inferred relationships involving `Molecule` (e.g. with `HybridOraclePipeline` and `Atom`) actually correct?**
+  _`Molecule` has 9 INFERRED edges - model-reasoned connections that need verification._
+- **Are the 9 inferred relationships involving `DatabaseLoader` (e.g. with `HybridOraclePipeline` and `Atom`) actually correct?**
+  _`DatabaseLoader` has 9 INFERRED edges - model-reasoned connections that need verification._
 - **Are the 8 inferred relationships involving `Atom` (e.g. with `Atom` and `AtomComposition`) actually correct?**
   _`Atom` has 8 INFERRED edges - model-reasoned connections that need verification._
-- **Are the 8 inferred relationships involving `Molecule` (e.g. with `Atom` and `AtomComposition`) actually correct?**
-  _`Molecule` has 8 INFERRED edges - model-reasoned connections that need verification._
 - **Are the 8 inferred relationships involving `Subatomic` (e.g. with `Atom` and `AtomComposition`) actually correct?**
   _`Subatomic` has 8 INFERRED edges - model-reasoned connections that need verification._
