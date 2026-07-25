@@ -27,11 +27,13 @@ def create_example_molecules():
 
     molecules.append(("Dihydrogen (H2)", H2))
 
-    # 2. Acqua (H2O)
+    # 2. Acqua (H2O) - geometria sperimentale: O-H = 0.958 Å, angolo H-O-H = 104.5°
+    # Le coordinate precedenti davano 1.074 Å e 124.5°: una molecola stirata, la cui
+    # energia Hartree-Fock risultava 0.038 Hartree sopra il valore di letteratura.
     H2O = Molecule("Water")
     o = H2O.add_atom(make_atom("O-16"), position=(0.0, 0.0, 0.0))
-    H2O.add_bond(o, H2O.add_atom(make_atom("H-1"), position=(0.95, 0.0, -0.5)), 1)   # O-H
-    H2O.add_bond(o, H2O.add_atom(make_atom("H-1"), position=(-0.95, 0.0, -0.5)), 1)  # O-H
+    H2O.add_bond(o, H2O.add_atom(make_atom("H-1"), position=(0.7575, 0.0, -0.5864)), 1)   # O-H
+    H2O.add_bond(o, H2O.add_atom(make_atom("H-1"), position=(-0.7575, 0.0, -0.5864)), 1)  # O-H
 
     molecules.append(("Water (H2O)", H2O))
 

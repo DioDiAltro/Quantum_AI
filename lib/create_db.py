@@ -3,7 +3,7 @@ import os
 from dotenv import load_dotenv
 from sqlalchemy import (
     create_engine, Column,
-    String, Integer, Float,
+    String, Integer, Float, Boolean,
     ForeignKey, JSON, Table,
     CheckConstraint, UniqueConstraint)
 from sqlalchemy.orm import declarative_base, relationship
@@ -143,6 +143,40 @@ class Molecule(Base):
         backref="molecule",
         order_by="MoleculeBond.id",
     )
+
+class ReferenceEnergyResult(Base):
+    """
+    Energia di stato fondamentale calcolata con un metodo classico (PySCF).
+
+    Sono le etichette del dataset di addestramento: veloci da produrre in massa,
+    a differenza del VQE che resta il validatore di precisione sui candidati
+    promettenti.
+
+    `atomization_energy` è il bersaglio consigliato per un modello: l'energia
+    totale è dominata dalla composizione (un carbonio in più vale ~37 Hartree),
+    quindi predirla significherebbe soprattutto contare gli atomi.
+    """
+
+    __tablename__ = "reference_energies"
+
+    id = Column(Integer, primary_key=True, autoincrement=True)
+    molecule_id = Column(Integer, ForeignKey("molecules.id"), nullable=False)
+    total_energy_hartree = Column(Float, nullable=False)
+    atomization_energy_hartree = Column(Float, nullable=True)
+    method = Column(String(10), nullable=False, default="HF")
+    basis = Column(String(20), nullable=False, default="sto-3g")
+    converged = Column(Boolean, nullable=False, default=True)
+    num_electrons = Column(Integer, nullable=True)
+    num_orbitals = Column(Integer, nullable=True)
+
+    molecule = relationship("Molecule", backref="reference_energies")
+
+    # Una sola energia per combinazione di molecola, metodo e base: rende la
+    # costruzione del dataset ripetibile senza duplicare i calcoli.
+    __table_args__ = (
+        UniqueConstraint("molecule_id", "method", "basis", name="uix_molecule_method_basis"),
+    )
+
 
 class VqeSimulationResult(Base):
     __tablename__ = "vqe_simulation_results"
