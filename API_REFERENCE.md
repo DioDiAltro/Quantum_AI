@@ -407,7 +407,9 @@ Qiskit Nature.
 | `create_database()` | Crea le tabelle mancanti. Idempotente e **non distruttiva** |
 | `reset_database(confirm=False)` | **Distruttiva**: elimina e ricrea tutte le tabelle. Richiede `confirm=True` |
 
-`DATABASE_URL` proviene dalla variabile d'ambiente `QUANTUM_DATABASE_URL`.
+`DATABASE_URL` proviene da `QUANTUM_DATABASE_URL`, letta all'import del modulo.
+`load_dotenv()` carica prima il file `.env` locale, se presente; le variabili già
+impostate nella shell hanno la precedenza sul file.
 
 ### Tabelle
 
@@ -481,7 +483,7 @@ stesso ordine.
 | `ValueError: Gli atomi devono far parte della molecola` | Atomo non aggiunto con `add_atom()` | Aggiungilo prima di legarlo |
 | `ValueError: Ruolo '...' sconosciuto` | `atom_composition.role` non normalizzato | Scrivi i ruoli con le costanti `ROLE_*` |
 | `IntegrityError: duplicate key ... symbol` | Due particelle con lo stesso simbolo | I simboli devono essere univoci in `STANDARD_MODEL` |
-| `OperationalError: no password supplied` | `QUANTUM_DATABASE_URL` non impostata | Esporta la variabile (vedi `.env.example`) |
+| `OperationalError: no password supplied` | `QUANTUM_DATABASE_URL` non risolta | Crea il file `.env` (`cp .env.example .env`) e inserisci la password |
 | `⚠️ Integrazione database non disponibile` | PostgreSQL non raggiungibile | Avvia il servizio; senza database il sistema continua a funzionare |
 
 ---

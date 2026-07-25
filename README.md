@@ -29,6 +29,7 @@ Converte gli oggetti classici (Atomi/Molecole) in tensori matematici, grafi dire
 - **Quantum**: Qiskit 2.5, Qiskit Nature, Qiskit Algorithms
 - **Calcolo numerico**: NumPy
 - **Database**: PostgreSQL via SQLAlchemy 2.0
+- **Configurazione**: python-dotenv (file `.env` locale)
 - **Test**: pytest
 
 **Modelli fisici implementati**: Modello Standard delle Particelle · Principio di Aufbau (configurazione elettronica)
@@ -73,12 +74,23 @@ sudo -u postgres psql
 
 ### 3. Credenziali
 
-Le credenziali **non sono nel codice**: arrivano dalla variabile d'ambiente `QUANTUM_DATABASE_URL`.
+Le credenziali **non sono nel codice**: vivono in un file `.env` locale, ignorato da git e caricato automaticamente all'avvio.
 
 ```bash
-cp .env.example .env    # poi modifica .env con la tua password
-export QUANTUM_DATABASE_URL="postgresql://quantum_admin:LA_TUA_PASSWORD@localhost/quantum_db"
+cp .env.example .env    # poi apri .env e inserisci la tua password
 ```
+
+```ini
+# .env
+QUANTUM_DATABASE_URL=postgresql://quantum_admin:LA_TUA_PASSWORD@localhost/quantum_db
+```
+
+Fatto questo non serve nessun `export`: comandi e test leggono il file da soli.
+
+> Se preferisci non usare il file, puoi sempre esportare la variabile nella shell — ha la precedenza sul `.env`, quindi è utile per puntare temporaneamente a un altro database:
+> ```bash
+> QUANTUM_DATABASE_URL="postgresql://utente:pwd@host/altro_db" python -m lib.view_db
+> ```
 
 ### 4. Creazione dello schema e popolamento
 
@@ -179,7 +191,9 @@ PostgreSQL non è raggiungibile. Verifica che il servizio sia avviato
 Senza database il sistema continua comunque a funzionare, saltando la persistenza.
 
 **`OperationalError: no password supplied`**
-Manca `QUANTUM_DATABASE_URL`. Le credenziali non sono nel codice: vedi `.env.example`.
+`QUANTUM_DATABASE_URL` non è stata risolta. Verifica che il file `.env` esista
+(`cp .env.example .env`) e che contenga la password. Attenzione: `.env.example`
+da solo non basta — è il modello, non viene letto.
 
 **Errori di import (`ModuleNotFoundError: No module named 'lib'`)**
 Esegui dalla directory del progetto. I moduli di `lib/` si lanciano come package:

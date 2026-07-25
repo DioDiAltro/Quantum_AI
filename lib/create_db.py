@@ -1,5 +1,6 @@
 import os
 
+from dotenv import load_dotenv
 from sqlalchemy import (
     create_engine, Column,
     String, Integer, Float,
@@ -7,9 +8,13 @@ from sqlalchemy import (
     CheckConstraint, UniqueConstraint)
 from sqlalchemy.orm import declarative_base, relationship
 
+# Carica il file .env locale, se presente. Le variabili già impostate nella shell
+# hanno la precedenza, così un `export` puntuale può sovrascrivere il file.
+load_dotenv()
+
 # La stringa di connessione arriva dall'ambiente: le credenziali non vanno
 # committate. Struttura: "postgresql://UTENTE:PASSWORD@HOST/NOME_DATABASE"
-# Configurala in un file .env locale (vedi .env.example) o esportala nella shell.
+# Configurala in un file .env locale (copia .env.example) o esportala nella shell.
 DEFAULT_DATABASE_URL = "postgresql://quantum_admin@localhost/quantum_db"
 DATABASE_URL = os.getenv("QUANTUM_DATABASE_URL", DEFAULT_DATABASE_URL)
 
