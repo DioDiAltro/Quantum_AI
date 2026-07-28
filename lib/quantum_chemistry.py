@@ -270,3 +270,308 @@ def atomization_energy(
         for atomo, _ in molecule.atoms_data
     )
     return float(total_energy - somma_atomi)
+
+
+# =============================================================================
+# Ponte fermionico verso Qiskit Nature
+# =============================================================================
+#
+# Tutto ciò che segue costruisce l'Hamiltoniano di *seconda quantizzazione*
+# vero — quello in cui 1 qubit = 1 spin-orbitale — e lo riduce a una dimensione
+# simulabile. È il pezzo che rende legittimi UCCSD e HartreeFock, che
+# sull'Hamiltoniano di tipo Ising di `QuantumEncoder` non si applicano.
+
+
+# Budget di qubit predefinito per la validazione quantistica.
+#
+# Scelto sui tempi misurati con StatevectorEstimator + UCCSD + SLSQP:
+#
+#   H2  full space   4 qubit,   3 parametri  ->   0.2 s
+#   H2O AS(4e,4o)    8 qubit,  26 parametri  -> 289.3 s
+#
+# Il costo esplode ben prima della memoria: a 8 qubit il vettore di stato è
+# ancora minuscolo, ma il numero di valutazioni dell'ottimizzatore e di termini
+# di Pauli no. Oltre questa soglia la pipeline preferisce dichiarare il
+# candidato fuori budget piuttosto che restare appesa.
+DEFAULT_MAX_QUBITS = 8
+
+# Etichette delle strategie di riduzione, persistite insieme al risultato.
+REDUCTION_NONE = "none"
+REDUCTION_FROZEN_CORE = "frozen-core"
+
+
+@dataclass
+class FermionicProblem:
+    """
+    Un problema di struttura elettronica pronto per il VQE.
+
+    Tiene insieme il problema di Qiskit Nature e l'operatore di qubit che ne
+    deriva: servono entrambi, perché l'energia totale si ottiene solo
+    reinterpretando il risultato attraverso il problema (vedi
+    `total_energy_from_result`).
+    """
+
+    problem: object              # ElectronicStructureProblem
+    qubit_operator: object       # SparsePauliOp
+    mapper: object               # QubitMapper (JordanWignerMapper di default)
+    num_qubits: int
+    num_particles: tuple[int, int]
+    num_spatial_orbitals: int
+    basis: str
+    reduction: str               # "none", "frozen-core", "frozen-core+active-space(4e,4o)"
+
+    @property
+    def is_reduced(self) -> bool:
+        return self.reduction != REDUCTION_NONE
+
+
+def build_electronic_structure_problem(
+    molecule: "Molecule",
+    basis: str = "sto-3g",
+):
+    """
+    Costruisce l'`ElectronicStructureProblem` di Qiskit Nature per la molecola.
+
+    La geometria passa da `molecule_to_pyscf_geometry`, quindi eredita la regola
+    dei siti atomici: l'ordine degli atomi è l'ordine di `atoms_data`, lo stesso
+    che indicizza i legami. Gli spin-orbitali — e quindi i qubit — ereditano
+    quell'ordine, per cui il sito `i` resta il sito `i` fino al circuito.
+    """
+    try:
+        from qiskit_nature.second_q.drivers import PySCFDriver
+        from qiskit_nature.units import DistanceUnit
+    except ImportError as exc:  # pragma: no cover - dipende dall'ambiente
+        raise QuantumChemistryError(
+            "Qiskit Nature non è installato. Aggiungilo con: uv add qiskit-nature"
+        ) from exc
+
+    geometria = molecule_to_pyscf_geometry(molecule)
+    atom_spec = "; ".join(
+        f"{simbolo} {x} {y} {z}" for simbolo, (x, y, z) in geometria
+    )
+
+    try:
+        driver = PySCFDriver(
+            atom=atom_spec,
+            basis=basis,
+            charge=int(round(molecule.net_charge)),
+            spin=molecule.spin_multiplicity - 1,
+            unit=DistanceUnit.ANGSTROM,
+        )
+        return driver.run()
+    except Exception as exc:
+        raise QuantumChemistryError(
+            f"Driver PySCF fallito su '{molecule.name}': {exc}"
+        ) from exc
+
+
+def jordan_wigner_qubit_count(problem) -> int:
+    """
+    Qubit richiesti dal mapping Jordan-Wigner: uno per spin-orbitale.
+
+    Jordan-Wigner non comprime nulla, quindi il conto è esattamente il doppio
+    degli orbitali spaziali. È il numero su cui si decide se il candidato entra
+    nel budget.
+    """
+    return 2 * problem.num_spatial_orbitals
+
+
+def _active_space_size(problem, max_qubits: int) -> tuple[int | tuple[int, int], int]:
+    """
+    Dimensiona uno spazio attivo che stia nel budget di qubit.
+
+    Restituisce `(elettroni_attivi, orbitali_attivi)`. Gli elettroni inattivi
+    riempiono gusci chiusi, quindi devono restare in numero pari; gli elettroni
+    spaiati vanno tenuti nello spazio attivo, altrimenti si cambierebbe stato di
+    spin del sistema.
+    """
+    orbitali = max_qubits // 2
+    if orbitali < 2:
+        raise QuantumChemistryError(
+            f"Budget di {max_qubits} qubit troppo stretto: per ritagliare uno "
+            f"spazio attivo servono almeno 4 qubit (2 orbitali spaziali)."
+        )
+
+    alpha, beta = problem.num_particles
+    totale = alpha + beta
+    spaiati = alpha - beta
+
+    # Lo spazio attivo deve lasciare almeno un orbitale spaziale *virtuale*.
+    # UCCSD costruisce eccitazioni da orbitali occupati a orbitali vuoti: in uno
+    # spazio completamente pieno non ne esiste nessuna, l'ansatz resta senza
+    # parametri e Qiskit Nature rifiuta di costruirlo. Riempire lo spazio attivo
+    # fino alla capienza massima è quindi sbagliato, non solo inefficiente.
+    massimo = 2 * orbitali - 2
+    candidato = min(totale, massimo)
+
+    # Scendi finché gli inattivi restano pari (riempiono gusci chiusi) e gli
+    # elettroni spaiati restano collocabili nello spazio attivo.
+    while candidato > 0 and (
+        (totale - candidato) % 2 != 0
+        or candidato < abs(spaiati)
+        or (candidato - abs(spaiati)) % 2 != 0
+    ):
+        candidato -= 1
+
+    if candidato <= 0:
+        raise QuantumChemistryError(
+            f"Impossibile ritagliare uno spazio attivo di {orbitali} orbitali "
+            f"per {totale} elettroni (spaiati: {spaiati})."
+        )
+
+    attivi: int | tuple[int, int] = candidato
+    if spaiati:
+        attivi = ((candidato + spaiati) // 2, (candidato - spaiati) // 2)
+
+    return attivi, orbitali
+
+
+def reduce_to_qubit_budget(
+    problem,
+    max_qubits: int = DEFAULT_MAX_QUBITS,
+) -> tuple[object, str]:
+    """
+    Riduce il problema finché non entra in `max_qubits` qubit.
+
+    Strategia, nell'ordine — la prima che basta vince:
+
+    1. **Nessuna riduzione**, se il sistema ci sta già.
+    2. **Frozen core** (`FreezeCoreTransformer`): congela gli orbitali di core,
+       che sono doppiamente occupati e chimicamente inerti. Su H2O in sto-3g
+       porta 14 qubit a 12 al costo di 8·10⁻⁵ Hartree — praticamente gratis.
+    3. **Spazio attivo** (`ActiveSpaceTransformer`), dimensionato sul budget.
+       Costa molto di più: su H2O uno spazio (4e,4o) porta a 8 qubit ma sposta
+       l'energia di 0.042 Hartree, ~26 volte l'accuratezza chimica.
+
+    Restituisce `(problema_ridotto, etichetta_della_riduzione)`. L'etichetta
+    viaggia insieme al risultato: un'energia calcolata in uno spazio attivo non
+    è confrontabile con una calcolata nello spazio completo, e va detto.
+    """
+    try:
+        from qiskit_nature.second_q.transformers import (
+            ActiveSpaceTransformer,
+            FreezeCoreTransformer,
+        )
+    except ImportError as exc:  # pragma: no cover
+        raise QuantumChemistryError("Qiskit Nature non è installato.") from exc
+
+    if jordan_wigner_qubit_count(problem) <= max_qubits:
+        return problem, REDUCTION_NONE
+
+    # 1. Frozen core: quasi esatto, si prova sempre per primo.
+    base, etichetta = problem, REDUCTION_NONE
+    try:
+        congelato = FreezeCoreTransformer().transform(problem)
+    except Exception:
+        # Su sistemi senza core (H2) il trasformatore può non applicarsi:
+        # non è un errore, semplicemente non c'è nulla da congelare.
+        congelato = None
+
+    if congelato is not None:
+        base, etichetta = congelato, REDUCTION_FROZEN_CORE
+        if jordan_wigner_qubit_count(base) <= max_qubits:
+            return base, etichetta
+
+    # 2. Spazio attivo sul residuo.
+    elettroni, orbitali = _active_space_size(base, max_qubits)
+    try:
+        ridotto = ActiveSpaceTransformer(elettroni, orbitali).transform(base)
+    except Exception as exc:
+        raise QuantumChemistryError(
+            f"Riduzione a spazio attivo ({elettroni}e, {orbitali}o) fallita: {exc}"
+        ) from exc
+
+    n_elettroni = elettroni if isinstance(elettroni, int) else sum(elettroni)
+    suffisso = f"active-space({n_elettroni}e,{orbitali}o)"
+    etichetta = suffisso if etichetta == REDUCTION_NONE else f"{etichetta}+{suffisso}"
+
+    if jordan_wigner_qubit_count(ridotto) > max_qubits:
+        raise QuantumChemistryError(
+            f"Riduzione insufficiente: {jordan_wigner_qubit_count(ridotto)} qubit "
+            f"contro un budget di {max_qubits}."
+        )
+
+    return ridotto, etichetta
+
+
+def build_fermionic_problem(
+    molecule: "Molecule",
+    basis: str = "sto-3g",
+    max_qubits: int = DEFAULT_MAX_QUBITS,
+    mapper=None,
+) -> FermionicProblem:
+    """
+    Da `Molecule` a operatore di qubit, in un passo solo.
+
+    È il punto d'ingresso normale del modulo per il percorso quantistico:
+    costruisce il problema di struttura elettronica, lo riduce al budget e lo
+    mappa su qubit con Jordan-Wigner.
+    """
+    try:
+        from qiskit_nature.second_q.mappers import JordanWignerMapper
+    except ImportError as exc:  # pragma: no cover
+        raise QuantumChemistryError("Qiskit Nature non è installato.") from exc
+
+    mapper = mapper or JordanWignerMapper()
+
+    problema = build_electronic_structure_problem(molecule, basis=basis)
+    problema, riduzione = reduce_to_qubit_budget(problema, max_qubits=max_qubits)
+
+    operatore = mapper.map(problema.hamiltonian.second_q_op())
+
+    return FermionicProblem(
+        problem=problema,
+        qubit_operator=operatore,
+        mapper=mapper,
+        num_qubits=operatore.num_qubits,
+        num_particles=tuple(problema.num_particles),
+        num_spatial_orbitals=int(problema.num_spatial_orbitals),
+        basis=basis,
+        reduction=riduzione,
+    )
+
+
+def total_energy_from_result(problem, result) -> float:
+    """
+    Energia totale in Hartree a partire da un risultato di autovalore minimo.
+
+    ⚠️ **Non sommare a mano la repulsione nucleare.** È il modo naturale di
+    scrivere questo calcolo ed è sbagliato non appena entra in gioco una
+    riduzione: i trasformatori depositano in `hamiltonian.constants` un secondo
+    termine — l'energia degli orbitali inattivi — che la somma manuale perde.
+
+    Misurato su H2O in sto-3g, `autovalore + nuclear_repulsion_energy` contro
+    l'energia vera:
+
+    | riduzione            | qubit | somma manuale | corretta   | errore     |
+    |----------------------|-------|---------------|------------|------------|
+    | nessuna              |  14   |  −75.012611   | −75.012611 |  0.000000  |
+    | frozen core          |  12   |  −14.352236   | −75.012533 | 60.660297  |
+    | spazio attivo (4e,4o)|   8   |   +3.025705   | −74.970472 | 77.996177  |
+
+    La trappola è che senza riduzione i due valori coincidono: la versione
+    manuale passa qualunque test scritto su H2 e sbaglia solo dove nessuno ha a
+    mente il valore di riferimento. `interpret()` somma invece *tutte* le
+    costanti registrate, e resta corretto a ogni livello di riduzione.
+    """
+    interpretato = problem.interpret(result)
+    return float(interpretato.total_energies[0].real)
+
+
+def exact_ground_state_energy(fermionic: FermionicProblem) -> float:
+    """
+    Energia esatta dello stato fondamentale per diagonalizzazione.
+
+    Riferimento di controllo per il VQE: nello spazio (eventualmente ridotto) in
+    cui il problema è definito, questo è il valore che l'ottimizzatore variazionale
+    non può battere. Non scala oltre poche decine di qubit.
+    """
+    try:
+        from qiskit_algorithms import NumPyMinimumEigensolver
+    except ImportError as exc:  # pragma: no cover
+        raise QuantumChemistryError("qiskit-algorithms non è installato.") from exc
+
+    risultato = NumPyMinimumEigensolver().compute_minimum_eigenvalue(
+        fermionic.qubit_operator
+    )
+    return total_energy_from_result(fermionic.problem, risultato)

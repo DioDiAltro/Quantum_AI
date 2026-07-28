@@ -139,7 +139,14 @@ def run_batch_processing(molecules):
         print(f"   - Numero parametri totali: {result['node_features'].size}")
 
 
-def run_quantum_oracle(molecules, stability_threshold=None):
+def run_quantum_oracle(
+    molecules,
+    stability_threshold=None,
+    mode="fermionic",
+    max_qubits=8,
+    uncertainty_threshold=1e-3,
+    basis="sto-3g",
+):
     """
     Esegue l'oracolo ibrido (screening classico + VQE) sulle molecole indicate.
 
@@ -156,7 +163,23 @@ def run_quantum_oracle(molecules, stability_threshold=None):
         print(f"❌ Dipendenze quantistiche non disponibili: {e}")
         return
 
-    pipeline = HybridOraclePipeline()
+    pipeline = HybridOraclePipeline(
+        mode=mode,
+        basis=basis,
+        max_qubits=max_qubits,
+        uncertainty_threshold=uncertainty_threshold,
+    )
+
+    if pipeline.screen(molecules[0][1]).source == "gnn":
+        meta = pipeline.classical_model.metadata
+        print(
+            f"🧠 Screening: GNN addestrata ({meta.get('ensemble_size', 1)} reti, "
+            f"val MAE {meta.get('val_mae_hartree', float('nan')):.4f} Ha)"
+        )
+    else:
+        print("🧠 Screening: euristica sui legami (nessun modello addestrato)")
+    print(f"⚛️  Hamiltoniano: {mode} · base {basis} · budget {max_qubits} qubit")
+
     esiti = []
 
     for name, mol in molecules:
@@ -170,13 +193,21 @@ def run_quantum_oracle(molecules, stability_threshold=None):
     print("📊 RIEPILOGO ORACOLO")
     print("="*60)
     for name, risultato in esiti:
-        if risultato["exact_energy"] is None:
-            print(f"🔹 {name}: scartato dallo screening classico")
+        stato = risultato["status"]
+
+        if stato == "rejected_by_classical_ml":
+            print(f"🔹 {name}: scartato dallo screening classico "
+                  f"(ΔE stimata {risultato['approx_energy']:.4f} Ha, modello sicuro)")
+        elif stato == "exceeds_quantum_budget":
+            print(f"🔹 {name}: fuori dal budget quantistico — {risultato['reason']}")
         else:
+            riduzione = risultato.get("reduction", "none")
+            dettaglio = "" if riduzione == "none" else f", {riduzione}"
             print(
                 f"🔹 {name}: E = {risultato['exact_energy']:.6f} Ha "
                 f"su {risultato['qubit_count']} qubit "
-                f"(errore vs esatto: {risultato['vqe_error']:.2e})"
+                f"({risultato.get('ansatz', '?')}{dettaglio}) "
+                f"— errore vs esatto: {risultato['vqe_error']:.2e}"
             )
 
 
@@ -335,6 +366,36 @@ def main():
     )
     
     parser.add_argument(
+        "--hamiltonian",
+        choices=["fermionic", "ising"],
+        default="fermionic",
+        help="Hamiltoniano per il VQE (modalità oracle): fermionic (struttura "
+             "elettronica vera, UCCSD) oppure ising (storico, 1 qubit = 1 atomo)"
+    )
+
+    parser.add_argument(
+        "--max-qubits",
+        type=int,
+        default=8,
+        help="Budget di qubit per il VQE fermionico (default: 8). Oltre questa "
+             "soglia il sistema viene ridotto (frozen core, poi spazio attivo)"
+    )
+
+    parser.add_argument(
+        "--uncertainty-threshold",
+        type=float,
+        default=1e-3,
+        help="Incertezza epistemica oltre la quale un candidato sopra soglia "
+             "viene comunque promosso al VQE invece di essere scartato"
+    )
+
+    parser.add_argument(
+        "--basis",
+        default="sto-3g",
+        help="Set di base per il calcolo di struttura elettronica (default: sto-3g)"
+    )
+
+    parser.add_argument(
         "--molecule",
         choices=["h2", "h2o", "ch4", "all"],
         default="all",
@@ -405,7 +466,14 @@ def main():
             molecule_map = {"h2": 0, "h2o": 1, "ch4": 2}
             molecules = [molecules[molecule_map[args.molecule]]]
 
-        run_quantum_oracle(molecules, stability_threshold=args.threshold)
+        run_quantum_oracle(
+            molecules,
+            stability_threshold=args.threshold,
+            mode=args.hamiltonian,
+            max_qubits=args.max_qubits,
+            uncertainty_threshold=args.uncertainty_threshold,
+            basis=args.basis,
+        )
 
     if db_session is not None:
         db_session.close()

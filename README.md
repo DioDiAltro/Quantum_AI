@@ -26,7 +26,9 @@ Converte gli oggetti classici (Atomi/Molecole) in tensori matematici, grafi dire
 
 - **Linguaggio**: Python 3.12+
 - **Paradigma**: Object-Oriented Programming (OOP)
-- **Quantum**: Qiskit 2.5, Qiskit Nature, Qiskit Algorithms
+- **Quantum**: Qiskit 2.5, Qiskit Nature 0.8, Qiskit Algorithms 0.4
+- **Chimica classica**: PySCF (Hartree-Fock, MP2, CCSD)
+- **Machine Learning**: PyTorch + PyTorch Geometric *(gruppo opzionale `ml`)*
 - **Calcolo numerico**: NumPy
 - **Database**: PostgreSQL via SQLAlchemy 2.0
 - **Configurazione**: python-dotenv (file `.env` locale)
@@ -41,11 +43,17 @@ Quantum Project/
 ├── lib/
 │   ├── matter.py            # Motore fisico: Subatomic, Atom, Molecule, DatabaseLoader
 │   ├── translator.py        # Traduttore: feature, grafi, tensori, encoding quantistico
+│   ├── generator.py         # Generatore di molecole: scheletri + geometrie VSEPR
+│   ├── quantum_chemistry.py # PySCF + Hamiltoniano fermionico di Qiskit Nature
+│   ├── dataset.py           # Costruzione del dataset etichettato (ripetibile)
+│   ├── gnn.py               # GNN a doppia teste: ΔE + incertezza
 │   ├── create_db.py         # Schema SQLAlchemy e gestione del database
 │   ├── populate_db.py       # Popolamento delle basi di fisica e chimica
 │   ├── view_db.py           # Ispezione del contenuto del database
 │   └── hybrid_pipeline.py   # Oracolo ibrido: screening classico + VQE
-├── tests/                   # Suite pytest (60 test)
+├── models/
+│   └── gnn_energy.pt        # Insieme addestrato (5 reti), pronto all'uso
+├── tests/                   # Suite pytest (179 test)
 ├── main.py                  # Entry point CLI multi-modalità
 ├── .env.example             # Modello di configurazione delle credenziali
 ├── pyproject.toml           # Dipendenze e configurazione pytest
@@ -57,8 +65,14 @@ Quantum Project/
 ### 1. Dipendenze
 
 ```bash
-uv sync
+uv sync                 # motore fisico, traduttore, chimica quantistica, VQE
+uv sync --group ml      # aggiunge PyTorch + PyTorch Geometric per la GNN
 ```
+
+Il gruppo `ml` è separato di proposito: il percorso quantistico e la
+costruzione del dataset non dipendono da PyTorch, e chi vuole solo quelli non
+deve scaricare centinaia di MB. Senza il gruppo l'oracolo continua a funzionare
+ricadendo sull'euristica sui legami.
 
 ### 2. Database PostgreSQL
 
@@ -139,18 +153,24 @@ python main.py --mode interactive
 | `--molecule` | `h2`, `h2o`, `ch4`, `all` | `all` | Molecola da analizzare |
 | `--format` | `tensors`, `pyg`, `quantum` | `tensors` | Formato di traduzione |
 | `--threshold` | float | *nessuna* | Soglia di screening classico (modalità `oracle`). Omessa, nessun candidato viene scartato |
+| `--hamiltonian` | `fermionic`, `ising` | `fermionic` | Hamiltoniano per il VQE. `ising` è il percorso storico, non chimico |
+| `--max-qubits` | int | `8` | Budget di qubit. Oltre la soglia il sistema viene ridotto (frozen core, poi spazio attivo) |
+| `--uncertainty-threshold` | float | `1e-3` | Incertezza epistemica oltre la quale un candidato sopra soglia viene comunque promosso al VQE |
+| `--basis` | str | `sto-3g` | Set di base per la struttura elettronica |
 | `--db` | flag | disattivo | Salva le molecole su PostgreSQL |
 
 ### Molecole di Esempio
 
 Il sistema costruisce automaticamente tre molecole, ciascuna con siti atomici
-distinti e geometria 3D:
+distinti e geometria 3D. I qubit sono quelli del percorso fermionico con il
+budget predefinito (8): H₂ ci sta per intero, le altre due passano per una
+riduzione dello spazio attivo.
 
-| Molecola | Composizione | Legami | Massa | Qubit |
-|---|---|---|---|---|
-| Dihydrogen (H₂) | 2 H | 1 H–H | 2 u | 2 |
-| Water (H₂O) | 1 O + 2 H | 2 O–H | 18 u | 3 |
-| Methane (CH₄) | 1 C + 4 H | 4 C–H | 16 u | 5 |
+| Molecola | Composizione | Legami | Massa | Qubit | Riduzione |
+|---|---|---|---|---|---|
+| Dihydrogen (H₂) | 2 H | 1 H–H | 2 u | 4 | nessuna |
+| Water (H₂O) | 1 O + 2 H | 2 O–H | 18 u | 8 | frozen core + spazio attivo (6e,4o) |
+| Methane (CH₄) | 1 C + 4 H | 4 C–H | 16 u | 8 | frozen core + spazio attivo (6e,4o) |
 
 ### Esempi di Output
 
@@ -176,10 +196,17 @@ distinti e geometria 3D:
 
 **Modalità `oracle`**
 ```
-🔹 Water (H2O)
-   ✓ Energia stimata (ML): -1.0000 Hartree
-   ⚛️  Energia fondamentale (VQE): -1.764237 Hartree
-   📐 Riferimento esatto (NumPy): -1.764237 Hartree | errore: 6.21e-08
+🧠 Screening: GNN addestrata (5 reti, val MAE 0.0541 Ha)
+⚛️  Hamiltoniano: fermionic · base sto-3g · budget 8 qubit
+
+🔍 [Fase 1] Valutazione Classica (ML) per: Water...
+   ✓ Energia stimata (GNN): -0.3125 Hartree ± 0.0857 (epistemica: 0.00195)
+   ✨ Candidato superato! Avvio validazione di precisione QML (VQE)...
+   ✓ Hamiltoniano fermionico: 105 termini di Pauli su 8 qubit
+     (riduzione: frozen-core+active-space(6e,4o)).
+   🚀 Ottimizzazione UCCSD: 15 parametri, 8 qubit (SLSQP)...
+   ⚛️  Energia fondamentale (VQE): -74.970404 Hartree
+   📐 Riferimento esatto (NumPy): -74.970404 Hartree | errore: 1.19e-07
    💾 Risultato VQE salvato su DB
 ```
 
@@ -238,39 +265,144 @@ result = translator.translate_molecule(water, "quantum")
 
 Per le firme complete vedi [API_REFERENCE.md](API_REFERENCE.md#libtranslatorpy--traduttore-mlqml).
 
-## ⚛️ Oracolo Ibrido (VQE)
+## ⚛️ Oracolo Ibrido (GNN + VQE)
 
-`lib/hybrid_pipeline.py` valuta un candidato in due fasi:
+`lib/hybrid_pipeline.py` valuta un candidato in due fasi. Il principio è
+economico prima che scientifico: un VQE su 8 qubit costa minuti, una previsione
+della GNN costa millisecondi. La domanda che governa la pipeline non è "quanto
+vale l'energia" ma **"posso fidarmi della risposta classica?"**.
 
-1. **Screening classico** — stima rapida dell'energia. Finché la GNN non è addestrata, usa un'euristica provvisoria sui legami. Il filtro è **opt-in**: senza `stability_threshold` nessun candidato viene scartato.
-2. **Validazione quantistica (VQE)** — costruisce l'operatore di Pauli, esegue l'ottimizzazione variazionale e confronta il risultato con la diagonalizzazione esatta.
+1. **Screening classico (GNN)** — un insieme di 5 reti prevede l'energia di
+   atomizzazione ΔE *e* la propria incertezza. Il filtro è **opt-in**: senza
+   `stability_threshold` nessun candidato viene scartato.
+2. **Validazione quantistica (VQE)** — Hamiltoniano fermionico da PySCF,
+   mapping Jordan-Wigner, ansatz UCCSD con stato iniziale di Hartree-Fock, e
+   confronto con la diagonalizzazione esatta.
+
+Il punto non ovvio è **come** si decide di scartare. Un candidato viene
+respinto solo se l'energia prevista è alta *e il modello è sicuro di sé*.
+Un'incertezza epistemica alta annulla lo scarto: significa "non ho mai visto
+niente del genere", e quello è un motivo per guardare meglio, non per buttare
+via il candidato.
+
+```
+                    energia prevista alta?
+                     /                  \
+                   sì                   no
+                   /                      \
+        modello sicuro?                  VQE
+          /        \
+        sì         no (incerto)
+        /            \
+   SCARTATO          VQE
+```
 
 ```python
 from lib.matter import H2
 from lib.hybrid_pipeline import HybridOraclePipeline
 
-pipeline = HybridOraclePipeline()
+pipeline = HybridOraclePipeline()          # fermionic, budget 8 qubit
 risultato = pipeline.evaluate_candidate(H2)
-# {'status': 'validated_by_quantum_vqe', 'exact_energy': -1.197605,
-#  'reference_energy': -1.197605, 'vqe_error': 4.8e-09, 'qubit_count': 2}
+# {'status': 'validated_by_quantum_vqe', 'exact_energy': -1.137306,
+#  'reference_energy': -1.137306, 'vqe_error': 5.7e-11, 'qubit_count': 4,
+#  'ansatz': 'UCCSD', 'mapper': 'JordanWigner', 'reduction': 'none',
+#  'approx_energy': -0.2605, 'epistemic_uncertainty': 0.01628}
 ```
 
-Risultati attuali sulle molecole di esempio (errore rispetto alla diagonalizzazione esatta):
+Tre esiti possibili: `validated_by_quantum_vqe`, `rejected_by_classical_ml`,
+`exceeds_quantum_budget`.
 
-| Molecola | Qubit | Energia VQE (Ha) | Errore |
+### Accuratezza
+
+H₂ in sto-3g raggiunge il valore FCI di letteratura:
+
+| Molecola | Qubit | Riduzione | Energia VQE (Ha) | Errore vs esatto |
+|---|---|---|---|---|
+| H₂ | 4 | nessuna | −1.137306 | 5.8·10⁻¹¹ |
+| H₂O | 8 | frozen core + (6e,4o) | −74.970404 | 1.2·10⁻⁷ |
+| CH₄ | 8 | frozen core + (6e,4o) | −39.734773 | 6.7·10⁻⁸ |
+
+⚠️ L'errore in tabella è quello del VQE **rispetto alla diagonalizzazione
+esatta nello stesso spazio**. Per H₂O e CH₄ lo spazio è troncato, quindi
+l'energia non è confrontabile con il valore a spazio completo: la riduzione
+sposta l'acqua di ~0.04 Ha. È il motivo per cui l'etichetta della riduzione
+viene salvata insieme al risultato.
+
+### Il costo dei qubit
+
+Misurato su questa macchina con `StatevectorEstimator`:
+
+| Sistema | Qubit | Parametri UCCSD | Tempo |
 |---|---|---|---|
-| H₂ | 2 | −1.197605 | ~10⁻⁸ |
-| H₂O | 3 | −1.764237 | ~10⁻⁸ |
-| CH₄ | 5 | −3.377980 | ~10⁻⁷ |
+| H₂ spazio completo | 4 | 3 | ~0.2 s |
+| H₂O spazio attivo | 8 | 15 | minuti |
+
+Il costo esplode ben prima della memoria: a 8 qubit il vettore di stato è
+ancora minuscolo, ma il numero di valutazioni dell'ottimizzatore e di termini di
+Pauli no. Da qui il budget predefinito di 8 qubit.
+
+## 🧠 La GNN di Screening
+
+`lib/gnn.py` — rete a passaggio di messaggi (PyTorch Geometric) con due teste:
+energia di atomizzazione e log σ².
+
+```bash
+python -m lib.dataset --conformers 40 --method MP2   # costruisce le etichette
+python -m lib.gnn --train --epochs 400               # addestra l'insieme
+```
+
+Scelte che dipendono dalla fisica, non dalla moda:
+
+- **`NNConv`** — il messaggio fra due atomi è modulato da `[tipo_legame,
+  distanza]`. Un legame a 1.1 Å e uno a 1.5 Å non propagano la stessa cosa.
+- **Pooling additivo** — l'energia è estensiva. Mediare sui nodi cancellerebbe
+  proprio la dipendenza dalla dimensione che si vuole predire.
+- **Bersaglio: energia di atomizzazione**, non energia totale. La seconda è
+  dominata dalla composizione (un carbonio vale ~37 Ha), quindi predirla
+  significherebbe soprattutto contare gli atomi.
+- **Divisione train/validation per specie chimica**, non per grafo. I
+  conformeri della stessa molecola differiscono di centesimi di Ångström:
+  dividerli a caso misurerebbe la memoria, non la generalizzazione.
+
+### Perché un insieme e non il MC Dropout
+
+Il MC Dropout era la prima scelta ed è stato scartato **sui dati**. Misurato sul
+dataset reale non funzionava: l'incertezza epistemica risultava *più bassa*
+sulle specie mai viste che su quelle di addestramento — l'opposto di ciò che
+serve per instradare.
+
+| | MC Dropout | Insieme di 5 reti |
+|---|---|---|
+| Epistemica su specie mai viste / su specie viste | 0.55× ❌ | **5.63×** ✅ |
+| Correlazione \|errore\| vs epistemica | −0.041 | **+0.201** |
+| Correlazione \|errore\| vs σ | −0.004 | **+0.234** |
+
+Su 15 specie (451 grafi di addestramento, 164 di validazione) il MAE
+dell'insieme è **0.0541 Ha**, contro 0.0248–0.0975 dei singoli membri.
 
 ## ⚠️ Limitazioni Attuali
 
 Da tenere presente prima di interpretare i numeri come grandezze chimiche reali:
 
-- **L'Hamiltoniano è semplificato.** `QuantumEncoder` produce un modello di tipo Ising in cui **1 qubit = 1 atomo**, con termini locali Z e accoppiamenti ZZ sui legami. Non è un Hamiltoniano fermionico di struttura elettronica: le energie in Hartree non sono confrontabili con valori sperimentali o con calcoli *ab initio*.
-- **Ansatz hardware-efficient.** Di conseguenza il VQE usa `efficient_su2`, non UCCSD/HartreeFock — che presuppongono 1 qubit = 1 spin-orbitale e un numero di particelle definito. UCCSD tornerà appropriato quando il progetto costruirà un vero Hamiltoniano fermionico tramite i driver di Qiskit Nature.
-- **Nessuna GNN addestrata.** Lo screening classico è un'euristica segnaposto, non un modello predittivo.
-- **Ottimizzatore locale.** SLSQP può fermarsi in minimi locali; la pipeline compensa con 5 restart deterministici e verifica il risultato contro la diagonalizzazione esatta (praticabile solo su sistemi piccoli).
+- **Lo spazio attivo è un'approssimazione vera.** Oltre gli 8 qubit di budget il
+  sistema viene troncato, e l'energia che ne esce non è quella a spazio
+  completo: sull'acqua la differenza è ~0.04 Ha, ~26 volte l'accuratezza
+  chimica. L'etichetta della riduzione viaggia con il risultato proprio perché
+  energie ottenute in spazi diversi non sono confrontabili fra loro.
+- **La GNN non è chimicamente accurata.** Un MAE di 0.054 Ha è ~34 kcal/mol:
+  utile per *instradare*, non per sostituire un calcolo. È il limite di un
+  dataset di 15 specie, non un difetto dell'architettura.
+- **L'incertezza è direzionale, non calibrata.** Correlazione +0.20 fra errore e
+  incertezza: sufficiente a separare il noto dall'ignoto, insufficiente a essere
+  letta come una barra d'errore.
+- **Ottimizzatore locale.** SLSQP può fermarsi in minimi locali. Sul percorso
+  fermionico si parte dallo stato di Hartree-Fock, che è già una buona
+  approssimazione; il risultato è comunque verificato contro la
+  diagonalizzazione esatta (praticabile solo su sistemi piccoli).
+- **Il percorso `ising` resta un modello giocattolo.** `QuantumEncoder` produce
+  un Hamiltoniano con 1 qubit = 1 atomo, le cui energie non hanno significato
+  chimico. È mantenuto perché è veloce e collauda la meccanica della pipeline,
+  ma non va usato per numeri da citare.
 
 ## 🧪 Test
 
@@ -278,7 +410,7 @@ Da tenere presente prima di interpretare i numeri come grandezze chimiche reali:
 python -m pytest tests/ -q
 ```
 
-60 test. Quelli che richiedono PostgreSQL sono marcati `db` e vengono **saltati** automaticamente se il database non è raggiungibile:
+181 test. Quelli che richiedono PostgreSQL sono marcati `db` e vengono **saltati** automaticamente se il database non è raggiungibile; quelli sulla GNN si saltano da soli senza il gruppo `ml`:
 
 ```bash
 python -m pytest tests/ -m "not db"    # solo test senza database
@@ -304,15 +436,19 @@ python -m pytest tests/ -m "not db"    # solo test senza database
 - [x] Persistenza completa su PostgreSQL (atomi, posizioni, legami)
 - [x] Suite di test pytest
 
-### 🔄 Fase 3: L'Oracolo della Stabilità (AI/QML) (IN CORSO)
+### ✅ Fase 3: L'Oracolo della Stabilità (AI/QML) (COMPLETATA)
 
 - [x] Scelta del framework quantistico (Qiskit + Qiskit Nature)
 - [x] Pipeline ibrida classico/quantistica con persistenza dei risultati VQE
 - [x] Motore VQE funzionante e validato contro diagonalizzazione esatta
-- [ ] Hamiltoniano fermionico realistico (driver Qiskit Nature, base sto-3g)
-- [ ] Costruzione del dataset di addestramento usando il Motore Fisico
-- [ ] Addestramento della GNN per prevedere l'energia di formazione (ΔE)
-- [ ] Sostituzione dell'euristica classica con il modello addestrato
+- [x] Hamiltoniano fermionico realistico (driver Qiskit Nature, base sto-3g)
+- [x] Ansatz UCCSD con stato iniziale di Hartree-Fock e mapping Jordan-Wigner
+- [x] Riduzione a scala verso il budget di qubit (frozen core, spazio attivo)
+- [x] Generatore di molecole con geometrie VSEPR
+- [x] Costruzione del dataset di addestramento usando il Motore Fisico
+- [x] Addestramento della GNN per prevedere l'energia di atomizzazione (ΔE)
+- [x] Stima dell'incertezza e instradamento verso il quantistico
+- [x] Sostituzione dell'euristica classica con il modello addestrato
 
 ### 🔮 Fase 4: Il Generatore di Composti (PIANIFICATA)
 

@@ -16,8 +16,19 @@ from lib.translator import Translator
 
 @pytest.fixture(scope="module")
 def pipeline():
+    """
+    Percorso storico: Hamiltoniano di tipo Ising, 1 qubit = 1 atomo.
+
+    Non è più il default della pipeline — lo è quello fermionico, coperto da
+    `test_hybrid_fermionic.py` — ma resta supportato e testato: è veloce e
+    verifica la meccanica dell'orchestrazione senza il costo di un calcolo di
+    struttura elettronica.
+
+    `use_gnn=False` tiene lo screening sull'euristica sui legami, che non
+    dichiara incertezza: è il comportamento su cui questi test sono scritti.
+    """
     # Pochi restart: i test devono restare rapidi
-    return HybridOraclePipeline(vqe_restarts=3)
+    return HybridOraclePipeline(mode="ising", vqe_restarts=3, use_gnn=False)
 
 
 @pytest.fixture
