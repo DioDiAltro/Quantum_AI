@@ -386,38 +386,42 @@ def _active_space_size(problem, max_qubits: int) -> tuple[int | tuple[int, int],
     spin del sistema.
     """
     orbitali = max_qubits // 2
-    if orbitali < 1:
+    if orbitali < 2:
         raise QuantumChemistryError(
-            f"Budget di {max_qubits} qubit troppo stretto: ne servono almeno 2."
+            f"Budget di {max_qubits} qubit troppo stretto: per ritagliare uno "
+            f"spazio attivo servono almeno 4 qubit (2 orbitali spaziali)."
         )
 
     alpha, beta = problem.num_particles
     totale = alpha + beta
     spaiati = alpha - beta
-    capienza = 2 * orbitali
 
-    if totale <= capienza:
-        attivi: int | tuple[int, int] = totale
-    else:
-        candidato = capienza
-        # Scendi finché gli inattivi sono pari e gli spaiati restano collocabili
-        while candidato > 0 and (
-            (totale - candidato) % 2 != 0
-            or candidato < abs(spaiati)
-            or (candidato - abs(spaiati)) % 2 != 0
-        ):
-            candidato -= 1
+    # Lo spazio attivo deve lasciare almeno un orbitale spaziale *virtuale*.
+    # UCCSD costruisce eccitazioni da orbitali occupati a orbitali vuoti: in uno
+    # spazio completamente pieno non ne esiste nessuna, l'ansatz resta senza
+    # parametri e Qiskit Nature rifiuta di costruirlo. Riempire lo spazio attivo
+    # fino alla capienza massima è quindi sbagliato, non solo inefficiente.
+    massimo = 2 * orbitali - 2
+    candidato = min(totale, massimo)
 
-        if candidato <= 0:
-            raise QuantumChemistryError(
-                f"Impossibile ritagliare uno spazio attivo di {orbitali} orbitali "
-                f"per {totale} elettroni (spaiati: {spaiati})."
-            )
-        attivi = candidato
+    # Scendi finché gli inattivi restano pari (riempiono gusci chiusi) e gli
+    # elettroni spaiati restano collocabili nello spazio attivo.
+    while candidato > 0 and (
+        (totale - candidato) % 2 != 0
+        or candidato < abs(spaiati)
+        or (candidato - abs(spaiati)) % 2 != 0
+    ):
+        candidato -= 1
 
+    if candidato <= 0:
+        raise QuantumChemistryError(
+            f"Impossibile ritagliare uno spazio attivo di {orbitali} orbitali "
+            f"per {totale} elettroni (spaiati: {spaiati})."
+        )
+
+    attivi: int | tuple[int, int] = candidato
     if spaiati:
-        n = attivi if isinstance(attivi, int) else sum(attivi)
-        attivi = ((n + spaiati) // 2, (n - spaiati) // 2)
+        attivi = ((candidato + spaiati) // 2, (candidato - spaiati) // 2)
 
     return attivi, orbitali
 

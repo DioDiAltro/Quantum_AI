@@ -56,6 +56,19 @@ def water():
     return mol
 
 
+@pytest.fixture
+def methane():
+    """CH4 tetraedrico con C-H ≈ 1.09 Å."""
+    mol = Molecule("Methane")
+    c = mol.add_atom(make_atom("C-12"), position=(0.0, 0.0, 0.0))
+    for posizione in [
+        (0.63, 0.63, 0.63), (-0.63, -0.63, 0.63),
+        (-0.63, 0.63, -0.63), (0.63, -0.63, -0.63),
+    ]:
+        mol.add_bond(c, mol.add_atom(make_atom("H-1"), position=posizione), 1)
+    return mol
+
+
 # ===== Costruzione del problema =====
 
 def test_h2_non_richiede_riduzione(dihydrogen):
@@ -150,8 +163,38 @@ def test_spazio_attivo_costa_piu_del_frozen_core(water):
 
 
 def test_budget_impossibile_viene_rifiutato(water):
-    with pytest.raises(QuantumChemistryError, match="almeno 2"):
+    with pytest.raises(QuantumChemistryError, match="almeno 4"):
         build_fermionic_problem(water, max_qubits=1)
+
+
+@pytest.mark.parametrize("nome_fixture", ["water", "methane"])
+def test_lo_spazio_attivo_lascia_orbitali_virtuali(nome_fixture, request):
+    """
+    Regressione: uno spazio attivo riempito fino alla capienza massima è
+    inutilizzabile.
+
+    UCCSD costruisce eccitazioni da orbitali occupati a orbitali vuoti. Con
+    (4α, 4β) elettroni in 4 orbitali ogni orbitale è doppiamente occupato, non
+    esiste alcuna eccitazione, e Qiskit Nature rifiuta di costruire l'ansatz —
+    "UCC calculations for fully occupied alpha and beta orbitals is still not
+    implemented". Il sintomo osservato era un ansatz che dichiarava 0 qubit.
+    """
+    from qiskit_nature.second_q.circuit.library import HartreeFock, UCCSD
+
+    molecola = request.getfixturevalue(nome_fixture)
+    fp = build_fermionic_problem(molecola, max_qubits=8)
+
+    alpha, beta = fp.num_particles
+    assert alpha < fp.num_spatial_orbitals, "nessun orbitale virtuale per gli alfa"
+    assert beta < fp.num_spatial_orbitals, "nessun orbitale virtuale per i beta"
+
+    stato = HartreeFock(fp.num_spatial_orbitals, fp.num_particles, fp.mapper)
+    ansatz = UCCSD(
+        fp.num_spatial_orbitals, fp.num_particles, fp.mapper, initial_state=stato
+    )
+
+    assert ansatz.num_parameters > 0, "un ansatz senza parametri non ottimizza nulla"
+    assert ansatz.num_qubits == fp.qubit_operator.num_qubits
 
 
 # ===== Il campo minato: le costanti dell'Hamiltoniano =====
