@@ -19,6 +19,19 @@ dependencies = [
 dev = [
     "pytest>=8.0.0",
 ]
+# Modello classico (screening della pipeline ibrida). Gruppo separato: il
+# percorso quantistico e la costruzione del dataset non dipendono da PyTorch,
+# e chi vuole solo quelli non deve scaricare centinaia di MB.
+#
+#     uv sync --group ml
+#
+# Senza questo gruppo `lib/gnn.py` non è importabile, ma tutto il resto —
+# motore fisico, traduttore, chimica quantistica, VQE — continua a funzionare:
+# la pipeline ricade sull'euristica sui legami.
+ml = [
+    "torch>=2.5.0",
+    "torch-geometric>=2.6.0",
+]
 
 [tool.pytest.ini_options]
 pythonpath = ["."]
