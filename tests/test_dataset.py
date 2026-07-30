@@ -19,26 +19,37 @@ pytestmark = pytest.mark.db
 BASE_DI_TEST = "sto-6g"
 
 
-@pytest.fixture(scope="module")
-def dataset_costruito(db_session_factory):
+def _rimuovi_etichette_di_test(session_factory):
     """
-    Costruisce un dataset minimo una sola volta per l'intero modulo.
+    Cancella le energie prodotte con `BASE_DI_TEST`, mai quelle reali.
 
-    Rimuove prima le etichette lasciate da esecuzioni precedenti: senza questo
-    la costruzione troverebbe tutto già presente e `computed` sarebbe zero, con
-    il test che passa in isolamento ma fallisce alla seconda esecuzione.
-    Tocca solo la base di test, mai il dataset reale.
+    Le molecole non si toccano: `build_dataset` riusa quelle già presenti nel
+    dataset vero, quindi qui l'unico residuo sono le righe di
+    `reference_energies` con la base di test.
     """
     from lib.create_db import ReferenceEnergyResult
 
-    sessione = db_session_factory()
+    sessione = session_factory()
     try:
         sessione.query(ReferenceEnergyResult).filter_by(basis=BASE_DI_TEST).delete()
         sessione.commit()
     finally:
         sessione.close()
 
-    return build_dataset(
+
+@pytest.fixture(scope="module")
+def dataset_costruito(db_session_factory):
+    """
+    Costruisce un dataset minimo una sola volta per l'intero modulo.
+
+    Rimuove le etichette della base di test **prima**, perché altrimenti la
+    costruzione troverebbe tutto già presente e `computed` sarebbe zero — il
+    test passerebbe in isolamento e fallirebbe alla seconda esecuzione — e
+    **dopo**, per non lasciare residui sul database permanente.
+    """
+    _rimuovi_etichette_di_test(db_session_factory)
+
+    yield build_dataset(
         conformers_per_scaffold=1,
         max_atoms=3,
         basis=BASE_DI_TEST,
@@ -46,6 +57,8 @@ def dataset_costruito(db_session_factory):
         seed=99,
         verbose=False,
     )
+
+    _rimuovi_etichette_di_test(db_session_factory)
 
 
 # ===== Statistiche =====

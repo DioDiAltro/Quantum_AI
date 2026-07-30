@@ -163,7 +163,15 @@ def test_soglia_esplicita_scarta_il_candidato(pipeline):
 
 
 @pytest.mark.db
-def test_evaluate_candidate_persiste_il_risultato(pipeline, water, unique_name):
+def test_evaluate_candidate_persiste_il_risultato(pipeline, water, unique_name, db_session):
+    """
+    Regressione: il nome prometteva la persistenza e nessuna asserzione la
+    guardava. `_save_vqe_to_db` cattura ogni eccezione e si limita a stampare
+    un avviso, quindi con il database irraggiungibile questo test passava lo
+    stesso — verde su una scrittura che non era mai avvenuta.
+    """
+    from lib.create_db import Molecule as DBMolecule, VqeSimulationResult
+
     water.name = unique_name("Water")
 
     esito = pipeline.evaluate_candidate(water)
@@ -171,3 +179,12 @@ def test_evaluate_candidate_persiste_il_risultato(pipeline, water, unique_name):
     assert esito["status"] == "validated_by_quantum_vqe"
     assert esito["qubit_count"] == 3
     assert esito["vqe_error"] < 1e-4
+
+    riga = db_session.query(DBMolecule).filter_by(name=water.name).one()
+    salvato = (
+        db_session.query(VqeSimulationResult).filter_by(molecule_id=riga.id).one()
+    )
+
+    assert salvato.qubit_count == 3
+    assert salvato.optimizer_used == "SLSQP + EfficientSU2"
+    assert salvato.total_energy_hartree == pytest.approx(esito["exact_energy"])
