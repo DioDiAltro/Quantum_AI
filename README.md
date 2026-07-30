@@ -20,7 +20,7 @@ Converte gli oggetti classici (Atomi/Molecole) in tensori matematici, grafi dire
 
 **L'Oracolo**: valuta la stabilità di un composto con una pipeline ibrida — uno screening classico veloce seguito, per i candidati promettenti, da un calcolo variazionale VQE su simulatore quantistico.
 
-**Il Generatore**: un modello di Reinforcement Learning che usa il motore fisico per assemblare iterativamente nuovi composti stabili (ancora da implementare).
+**Il Generatore**: un agente di Reinforcement Learning che usa il motore fisico per assemblare iterativamente nuovi composti stabili. Propone una mossa alla volta — cresci, muta, cambia legame, pota — e impara dalle energie che l'Oracolo gli restituisce.
 
 ## 🛠️ Stack Tecnologico Attuale
 
@@ -50,10 +50,12 @@ Quantum Project/
 │   ├── create_db.py         # Schema SQLAlchemy e gestione del database
 │   ├── populate_db.py       # Popolamento delle basi di fisica e chimica
 │   ├── view_db.py           # Ispezione del contenuto del database
-│   └── hybrid_pipeline.py   # Oracolo ibrido: screening classico + VQE
+│   ├── hybrid_pipeline.py   # Oracolo ibrido: screening classico + VQE
+│   ├── rl_generator.py      # Ambiente del generatore: stati, azioni, ricompensa
+│   └── rl_agent.py          # Agente RL: politica sui grafi e addestramento
 ├── models/
 │   └── gnn_energy.pt        # Insieme addestrato (5 reti), pronto all'uso
-├── tests/                   # Suite pytest (179 test)
+├── tests/                   # Suite pytest (239 test)
 ├── main.py                  # Entry point CLI multi-modalità
 ├── .env.example             # Modello di configurazione delle credenziali
 ├── pyproject.toml           # Dipendenze e configurazione pytest
@@ -380,6 +382,72 @@ serve per instradare.
 Su 15 specie (451 grafi di addestramento, 164 di validazione) il MAE
 dell'insieme è **0.0541 Ha**, contro 0.0248–0.0975 dei singoli membri.
 
+## 🧬 Il Generatore di Composti
+
+`lib/rl_generator.py` è l'ambiente, `lib/rl_agent.py` è chi lo percorre.
+
+```bash
+python -m lib.rl_agent --addestra --episodi 200
+python -m lib.rl_agent --addestra --episodi 500 --valida-con-vqe 3
+```
+
+**Lo stato è topologia, non geometria.** Solo gli atomi pesanti, in un dataclass
+immutabile e hashabile; gli idrogeni li impone la valenza, quindi ogni stato è
+per costruzione una molecola valida e le mosse impossibili **non esistono**
+invece di essere penalizzate. Un agente che riceve ricompensa negativa per mosse
+impossibili spende la propria capacità a imparare la tavola delle valenze.
+
+**La politica valuta gli stati risultanti.** Lo spazio delle azioni cambia
+dimensione a ogni passo — 11 mosse da un metano, 29 da un etanolo — quindi una
+testa softmax di larghezza fissa non è nemmeno definibile. La rete non vede
+azioni: vede le molecole in cui quelle azioni portano, e il softmax sta sui loro
+punteggi.
+
+**La ricompensa è per atomo.** L'energia di atomizzazione è estensiva: premiarla
+grezza insegnerebbe una cosa sola, aggiungere atomi fino al limite del codice.
+
+### L'oracolo a tre stadi
+
+| stadio | costo | quando |
+|---|---|---|
+| GNN | millisecondi | sempre |
+| PySCF | ~0.4 s | candidato promettente **oppure** GNN incerta |
+| VQE | minuti | solo su richiesta, a fine corsa |
+
+La soglia di promozione (0.12 Ha/atomo) è la mediana misurata sulle 15 specie
+del dataset, non un valore scelto a occhio. Quando PySCF gira, l'energia vera
+**entra nel dataset**: l'agente che esplora dove il modello è ignorante sta
+costruendo il proprio insieme di addestramento.
+
+### Impara?
+
+Su 1200 episodi con ricompensa dalla sola GNN (seed 11, lr 3e-4):
+
+| episodi | ricompensa media | entropia |
+|---|---|---|
+| 0–200 | 0.1031 | 2.07 |
+| 200–400 | 0.1382 | 0.75 |
+| 400–600 | 0.1436 | 0.42 |
+| 1000–1200 | 0.1350 | 0.56 |
+
+Il controllo a `lr = 0` resta piatto (+0.0016): il guadagno è apprendimento, non
+deriva. Learning rate più alti collassano l'esplorazione — su 400 episodi, a
+3e-4 l'agente incontra 163 strutture distinte, a 3e-3 solo 42.
+
+Con la verifica PySCF attiva la classifica cambia natura: in testa non ci sono
+più le specie della libreria ma strutture costruite dall'agente, con energie
+vere e non stimate.
+
+```
+formula     ricompensa    ΔE (Ha)   stadio
+C4H5N           0.1562    -1.5625    pyscf
+C4H6O           0.1535    -1.6881    pyscf
+C2H2O           0.1528    -0.7642    pyscf
+```
+
+⚠️ Con le impostazioni predefinite la corsa **scrive** le etichette PySCF nel
+database. Con `--senza-database` non tocca nulla.
+
 ## ⚠️ Limitazioni Attuali
 
 Da tenere presente prima di interpretare i numeri come grandezze chimiche reali:
@@ -403,6 +471,16 @@ Da tenere presente prima di interpretare i numeri come grandezze chimiche reali:
   un Hamiltoniano con 1 qubit = 1 atomo, le cui energie non hanno significato
   chimico. È mantenuto perché è veloce e collauda la meccanica della pipeline,
   ma non va usato per numeri da citare.
+- **Il generatore costruisce solo singoletti di shell chiusa.** Il modello di
+  valenza satura ogni legame libero con idrogeni e non lascia elettroni
+  spaiati. Per le molecole organiche sature è l'assunzione giusta; per O₂, il
+  cui stato fondamentale è di tripletto, no — e l'agente O₂ lo raggiunge. Il
+  monossido di carbonio è invece escluso, perché il modello di valenza lo
+  rifiuta apertamente: la differenza è fra un limite che si dichiara e uno che
+  si nasconde.
+- **Il generatore non produce anelli.** La geometria nasce da una costruzione
+  ad albero, e un ciclo verrebbe posizionato come tale — con l'anello non
+  chiuso. Lo spazio di ricerca è quindi limitato alle strutture acicliche.
 
 ## 🧪 Test
 
@@ -410,7 +488,7 @@ Da tenere presente prima di interpretare i numeri come grandezze chimiche reali:
 python -m pytest tests/ -q
 ```
 
-181 test. Quelli che richiedono PostgreSQL sono marcati `db` e vengono **saltati** automaticamente se il database non è raggiungibile; quelli sulla GNN si saltano da soli senza il gruppo `ml`:
+239 test. Quelli che richiedono PostgreSQL sono marcati `db` e vengono **saltati** automaticamente se il database non è raggiungibile; quelli sulla GNN si saltano da soli senza il gruppo `ml`:
 
 ```bash
 python -m pytest tests/ -m "not db"    # solo test senza database
@@ -450,11 +528,24 @@ python -m pytest tests/ -m "not db"    # solo test senza database
 - [x] Stima dell'incertezza e instradamento verso il quantistico
 - [x] Sostituzione dell'euristica classica con il modello addestrato
 
-### 🔮 Fase 4: Il Generatore di Composti (PIANIFICATA)
+### ✅ Fase 4: Il Generatore di Composti (COMPLETATA)
 
-- [ ] Implementazione dell'agente di Reinforcement Learning
-- [ ] Definizione delle azioni (aggiungi atomo, rimuovi atomo, cambia legame)
-- [ ] Ciclo di feedback: il Generatore propone → l'Oracolo valuta → il Generatore impara
+- [x] Ambiente di generazione: stati immutabili, saturazione automatica a idrogeni
+- [x] Definizione delle azioni (cresci, muta elemento, cambia legame, pota, ferma)
+- [x] Mascheramento di validità: le mosse impossibili non esistono, non si penalizzano
+- [x] Forma canonica delle strutture (Aho-Hopcroft-Ullman per alberi)
+- [x] Politica sugli stati risultanti, per uno spazio di azioni di dimensione variabile
+- [x] Addestramento REINFORCE con linea di base standardizzata
+- [x] Ciclo di feedback: il Generatore propone → l'Oracolo valuta → l'energia vera entra nel dataset
+
+### 🔮 Fase 5: Oltre il primo giro (PIANIFICATA)
+
+Quattro limiti misurati, in ordine di quanto pesano:
+
+- [ ] **Allargare il dataset.** È il vincolo che lega tutto: con 15 specie il MAE della GNN (0.054 Ha) è confrontabile con la distanza fra una specie e l'altra, e l'agente naviga un segnale rumoroso.
+- [ ] **Identità sul database per struttura, non per nome.** `save_molecule` riconosce le molecole dal nome e `atoms` non ha una colonna per la carica: gli ioni si ri-leggono come neutri. La Fase 4 lo aggira con nomi a impronta canonica, ma è un aggiramento.
+- [ ] **Molteplicità di spin.** Tutto è costruito come singoletto di shell chiusa; per O₂ e in generale per i diradicali è sbagliato.
+- [ ] **Strutture cicliche.** `_embed_3d` posiziona alberi: niente anelli, quindi niente chimica aromatica.
 
 ## 📚 Documentazione
 
