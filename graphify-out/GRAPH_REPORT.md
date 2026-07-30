@@ -1,272 +1,242 @@
-# Graph Report - Quantum_AI  (2026-07-28)
+# Graph Report - .  (2026-07-31)
 
 ## Corpus Check
-- 26 files · ~29,428 words
-- Verdict: corpus is large enough that graph structure adds value.
+- Corpus is ~38,541 words - fits in a single context window. You may not need a graph.
 
 ## Summary
-- 720 nodes · 1443 edges · 44 communities (41 shown, 3 thin omitted)
-- Extraction: 93% EXTRACTED · 7% INFERRED · 0% AMBIGUOUS · INFERRED: 94 edges (avg confidence: 0.56)
+- 863 nodes · 2114 edges · 39 communities (35 shown, 4 thin omitted)
+- Extraction: 88% EXTRACTED · 12% INFERRED · 0% AMBIGUOUS · INFERRED: 263 edges (avg confidence: 0.57)
 - Token cost: 0 input · 0 output
 
-## Graph Freshness
-- Built from commit: `e79e4028`
-- Run `git rev-parse HEAD` and compare to check if the graph is stale.
-- Run `graphify update .` after code changes (no API cost).
-
 ## Community Hubs (Navigation)
-- main.py
-- test_generator.py
-- make_atom
-- DatabaseLoader
-- test_quantum_chemistry.py
-- dataset.py
-- test_translator.py
-- ValueError
-- test_hybrid_pipeline.py
-- test_db_loader.py
-- quantum-project
-- `lib/matter.py` — Motore fisico
-- 🧪 QML Chemical Discovery Engine
-- HybridOraclePipeline
-- test_fermionic_chemistry.py
-- test_gnn.py
-- EnergyPredictor
-- gnn.py
-- Molecule
-- matter.py
-- Translator
-- translator.py
-- `lib/translator.py` — Traduttore ML/QML
-- MolecularGraph
-- GNNError
-- quantum_chemistry.py
-- QuantumChemistryError
-- FeatureExtractor
-- Atom
-- Normalization
-- Prediction
-- exact_ground_state_energy
-- 📚 API Reference
-- Strato fermionico (Qiskit Nature)
-- `class HybridOraclePipeline`
-- gaussian_nll
-- hybrid_pipeline.py
-- methane
-- methane
-- `lib/gnn.py` — Modello classico di screening
-- Corrispondenza OOP ↔ Database
-- ._generate_symbol
-- reset_database
+- Schema del database e reference
+- Generatore di geometrie VSEPR
+- Oracolo ibrido e VQE
+- Costruzione del dataset etichettato
+- Addestramento dell'agente RL
+- Ricompensa e stati del generatore
+- Politica sugli stati risultanti
+- Azioni e scheletri molecolari
+- Molecola e siti atomici
+- Strato fermionico Qiskit Nature
+- Energie di riferimento PySCF
+- Entry point e demo CLI
+- Catalogo isotopi e motore fisico
+- CLI e cronologia dell'agente
+- Test dell'oracolo ibrido
+- Predittore di energia a insieme
+- Test della GNN di screening
+- Test del DatabaseLoader
+- Addestramento della GNN
+- Riduzione allo spazio attivo
+- Test del traduttore
+- Grafo molecolare ed encoding quantistico
+- Divisione per specie chimica
+- Normalizzazione del bersaglio
+- Energie atomiche di riferimento
+- Estrazione delle feature atomiche
+- Incertezza dello screening
+- Costruzione del grafo molecolare
+- Orchestratore delle conversioni
+- Forma canonica delle strutture
+- Punti di partenza e validità
+- Conversione in tensori
+- Perdita con incertezza appresa
+- Modulo traduttore ML/QML
+- Problema fermionico
+- Ricompensa per atomo
+- Fixture del metano
+- Progetto quantum-project
 
 ## God Nodes (most connected - your core abstractions)
-1. `Molecule` - 72 edges
+1. `Molecule` - 84 edges
 2. `make_atom()` - 56 edges
-3. `HybridOraclePipeline` - 41 edges
-4. `DatabaseLoader` - 35 edges
-5. `build_molecule()` - 24 edges
-6. `build_fermionic_problem()` - 24 edges
-7. `Translator` - 24 edges
-8. `EnergyPredictor` - 22 edges
-9. `QuantumChemistryError` - 22 edges
-10. `Atom` - 20 edges
+3. `HybridOraclePipeline` - 55 edges
+4. `Stato` - 53 edges
+5. `DatabaseLoader` - 48 edges
+6. `OracoloReward` - 43 edges
+7. `QuantumChemistryError` - 37 edges
+8. `EnergyPredictor` - 34 edges
+9. `Valutazione` - 31 edges
+10. `Skeleton` - 30 edges
 
 ## Surprising Connections (you probably didn't know these)
-- `_ModelloFinto` --uses--> `Molecule`  [INFERRED]
-  tests/test_hybrid_fermionic.py → lib/create_db.py
-- `_ModelloFinto` --uses--> `Molecule`  [INFERRED]
-  tests/test_hybrid_fermionic.py → lib/matter.py
-- `test_atomo_ricaricato_conserva_la_composizione()` --calls--> `make_atom()`  [EXTRACTED]
-  tests/test_db_loader.py → lib/matter.py
-- `test_isotopi_dello_stesso_elemento_sono_righe_distinte()` --calls--> `make_atom()`  [EXTRACTED]
-  tests/test_db_loader.py → lib/matter.py
-- `test_salvataggio_atomo_e_idempotente()` --calls--> `make_atom()`  [EXTRACTED]
-  tests/test_db_loader.py → lib/matter.py
+- `La politica valuta gli stati risultanti` --semantically_similar_to--> `DualHeadGNN`  [INFERRED] [semantically similar]
+  README.md → lib/gnn.py
+- `Il modello dei siti atomici` --semantically_similar_to--> `Stato`  [INFERRED] [semantically similar]
+  API_REFERENCE.md → lib/rl_generator.py
+- `Limite: lo spazio attivo e' un'approssimazione vera` --conceptually_related_to--> `total_energy_from_result()`  [INFERRED]
+  README.md → lib/quantum_chemistry.py
+- `Ciclo di retroazione del generatore` --conceptually_related_to--> `load_dataset()`  [INFERRED]
+  README.md → lib/dataset.py
+- `Limite: la GNN non e' chimicamente accurata` --rationale_for--> `train()`  [EXTRACTED]
+  README.md → lib/gnn.py
 
 ## Import Cycles
 - None detected.
 
-## Communities (44 total, 3 thin omitted)
+## Hyperedges (group relationships)
+- **I tre stadi dell'oracolo** — lib_gnn_energypredictor, lib_quantum_chemistry_compute_reference_energy, lib_hybrid_pipeline_hybridoraclepipeline, lib_rl_generator_oracoloreward [EXTRACTED 1.00]
+- **Ciclo: il Generatore propone, l'Oracolo valuta, il dataset cresce** — lib_rl_agent_addestra, lib_rl_generator_oracoloreward_valuta, lib_rl_generator_oracoloreward_salva_etichetta, lib_dataset_load_dataset, lib_gnn_train [EXTRACTED 1.00]
+- **Il modello dei siti atomici attraversa tutto il sistema** — lib_matter_molecule_add_atom, lib_matter_molecule_add_bond, lib_translator_graphbuilder, lib_matter_databaseloader_save_molecule, lib_quantum_chemistry_molecule_to_pyscf_geometry [EXTRACTED 1.00]
 
-### Community 0 - "main.py"
-Cohesion: 0.15
-Nodes (23): create_example_molecules(), demonstrate_basic_properties(), demonstrate_detailed_analysis(), demonstrate_translation(), interactive_menu(), main(), Main entry point per QML Chemical Discovery Engine Integra il motore fisico, il…, Analisi dettagliata di una singola molecola (+15 more)
+## Communities (39 total, 4 thin omitted)
 
-### Community 1 - "test_generator.py"
+### Community 0 - "Schema del database e reference"
+Cohesion: 0.05
+Nodes (59): API Reference, Cataloghi (STANDARD_MODEL, ISOTOPES), Corrispondenza OOP ↔ Database, Errori comuni, Etichette classiche (PySCF), Ruoli della composizione atomica, Tabelle dello schema, Base (+51 more)
+
+### Community 1 - "Generatore di geometrie VSEPR"
 Cohesion: 0.07
-Nodes (64): bond_length(), build_molecule(), _embed_3d(), generate_conformers(), generate_dataset(), generate_scaffolds(), GeneratorError, _isotope_key() (+56 more)
+Nodes (67): bond_length(), build_molecule(), _embed_3d(), generate_conformers(), generate_dataset(), generate_scaffolds(), GeneratorError, _isotope_key() (+59 more)
 
-### Community 2 - "make_atom"
-Cohesion: 0.13
-Nodes (22): make_atom(), Costruisce una NUOVA istanza Atom per l'isotopo richiesto. Ogni chiamata…, Test del motore fisico (lib/matter.py): atomi, molecole e catalogo., `subatomic_particles.symbol` ha un vincolo UNIQUE nel database., Vincolo UNIQUE (symbol, mass_number) sulla tabella atoms., Regressione: riusare la stessa istanza Atom per due siti rendeva il legame…, test_add_atom_restituisce_indice_progressivo(), test_atomo_neutro_ha_carica_zero() (+14 more)
+### Community 2 - "Oracolo ibrido e VQE"
+Cohesion: 0.05
+Nodes (48): Scelta dell'ansatz, HybridOraclePipeline, Molecule, Oracolo ibrido: screening classico veloce, validazione quantistica esatta.  Il p, Carica il modello addestrato, una volta sola.          Se PyTorch non è installa, Stima classica dell'energia e della propria attendibilità.          Con il model, Valuta una molecola: prima il filtro classico, poi — se il candidato         sup, Hamiltoniano di struttura elettronica vero, ansatz UCCSD. (+40 more)
 
-### Community 3 - "DatabaseLoader"
-Cohesion: 0.13
-Nodes (12): DatabaseLoader, Classe per convertire oggetti OOP in modelli database SQLAlchemy, Salva una particella subatomica nel database e restituisce l'ID, Salva la composizione di particelle composite, Salva un'interazione nel database e restituisce l'ID, Salva un atomo nel database e restituisce l'ID, Salva la composizione dell'atomo, Salva una molecola nel database e restituisce l'ID (+4 more)
-
-### Community 4 - "test_quantum_chemistry.py"
-Cohesion: 0.15
-Nodes (19): build_pyscf_molecule(), compute_reference_energy(), molecule_to_pyscf_geometry(), Calcola l'energia di stato fondamentale con un metodo classico. | metodo |…, Converte una `Molecule` nella geometria attesa da PySCF. Restituisce una lista…, Costruisce l'oggetto `pyscf.gto.Mole` corrispondente. Carica e molteplicità di…, parametrize, Test del ponte verso PySCF (lib/quantum_chemistry.py). Le energie attese sono… (+11 more)
-
-### Community 5 - "dataset.py"
+### Community 3 - "Costruzione del dataset etichettato"
 Cohesion: 0.06
-Nodes (45): create_database(), Energia di stato fondamentale calcolata con un metodo classico (PySCF). Sono le…, Crea le tabelle mancanti. Operazione idempotente e NON distruttiva: i dati…, ReferenceEnergyResult, build_dataset(), BuildStats, dataset_size(), _existing_energy() (+37 more)
+Nodes (45): Energia di stato fondamentale calcolata con un metodo classico (PySCF).      Son, ReferenceEnergyResult, build_dataset(), BuildStats, dataset_size(), _existing_energy(), LabeledMolecule, load_dataset() (+37 more)
 
-### Community 6 - "test_translator.py"
-Cohesion: 0.12
-Nodes (7): Test del modulo traduttore (lib/translator.py)., Colonne costanti (es. tutte le cariche a zero) non devono produrre NaN., Regressione: quando GraphBuilder indicizzava i nodi con id(atom), i due…, I quattro idrogeni sono chimicamente identici ma restano nodi distinti., test_acqua_conserva_entrambi_i_legami_oh(), test_metano_ha_quattro_legami_ch(), test_normalizzazione_non_divide_per_zero()
+### Community 4 - "Addestramento dell'agente RL"
+Cohesion: 0.10
+Nodes (40): addestra(), Agente, Episodio, esegui_episodio(), LineaDiBase, PoliticaGNN, Sceglie la mossa successiva campionando dalla politica.      Tiene una cache dei, Una traiettoria completa e il giudizio finale dell'oracolo. (+32 more)
 
-### Community 7 - "ValueError"
-Cohesion: 0.25
-Nodes (6): Crea un legame fra due siti della molecola. Accetta indici di sito (modo…, Traduce un indice o un oggetto Atom nell'indice del sito corrispondente., Carica una molecola dal database e crea oggetto OOP, Carica un atomo dal database e crea oggetto OOP, Carica una particella subatomica dal database, ValueError
+### Community 5 - "Ricompensa e stati del generatore"
+Cohesion: 0.09
+Nodes (40): nome_canonico(), OracoloReward, Pota, Stato iniziale minimo: un solo atomo pesante, saturato a idrogeni., Rimuove un atomo pesante terminale., Nome derivato dal *contenuto* della struttura, non da un contatore.      Due mot, Traduce una struttura in una ricompensa, spendendo il minimo necessario.      Tr, _con_pipeline() (+32 more)
 
-### Community 8 - "test_hybrid_pipeline.py"
+### Community 6 - "Politica sugli stati risultanti"
+Cohesion: 0.08
+Nodes (23): Azione, Tensor, Un punteggio per grafo del lotto., Azioni possibili e probabilità che l'agente vi assegna.          Gli stati risul, Campiona una mossa; restituisce anche log-probabilità ed entropia., azioni_valide(), Topologia dei soli atomi pesanti: immutabile e hashabile.      `elementi` sono c, Somma degli ordini dei legami pesante–pesante su questo sito. (+15 more)
+
+### Community 7 - "Azioni e scheletri molecolari"
 Cohesion: 0.11
-Nodes (20): _hamiltonian(), pipeline(), fixture, parametrize, Test dell'oracolo ibrido (lib/hybrid_pipeline.py). La costruzione…, Regressione: con l'ansatz UCCSD il VQE si interrompeva con un errore di…, Nessuna stima variazionale può scendere sotto il vero stato fondamentale., Senza soglia esplicita il percorso quantistico non deve essere saltato. (+12 more)
+Nodes (27): Scheletro molecolare: composizione e connettività, senza coordinate.      `atoms, Skeleton, applica(), CambiaLegame, _capacita(), Cresci, GeneratoreRLError, Muta (+19 more)
 
-### Community 9 - "test_db_loader.py"
+### Community 8 - "Molecola e siti atomici"
+Cohesion: 0.08
+Nodes (23): Il modello dei siti atomici, Molecule, Molecola come insieme ordinato di siti atomici.      I legami sono memorizzati c, Aggiunge un atomo con la sua posizione 3D e restituisce l'indice del sito., Crea un legame fra due siti della molecola.          Accetta indici di sito (mod, Traduce un indice o un oggetto Atom nell'indice del sito corrispondente., Carica una molecola dal database e crea oggetto OOP, dihydrogen() (+15 more)
+
+### Community 9 - "Strato fermionico Qiskit Nature"
 Cohesion: 0.12
-Nodes (19): Genera nomi univoci: `molecules.name` ha un vincolo UNIQUE., unique_name(), _acqua(), Molecule, parametrize, Test del DatabaseLoader: conversione OOP → database e ritorno. Richiedono un…, Regressione: i legami erano indicizzati per oggetto Atom, quindi i due idrogeni…, Quattro idrogeni identici devono restare quattro siti distinti nel DB. (+11 more)
+Nodes (27): Strato fermionico (Qiskit Nature), build_fermionic_problem(), exact_ground_state_energy(), Da `Molecule` a operatore di qubit, in un passo solo.      È il punto d'ingresso, Energia totale in Hartree a partire da un risultato di autovalore minimo.      ⚠, Energia esatta dello stato fondamentale per diagonalizzazione.      Riferimento, total_energy_from_result(), Test dello strato fermionico (lib/quantum_chemistry.py, sezione Qiskit Nature). (+19 more)
 
-### Community 12 - "`lib/matter.py` — Motore fisico"
-Cohesion: 0.15
-Nodes (13): `.add_atom(atom, position=(0.0, 0.0, 0.0)) -> int`, `.add_bond(atom1, atom2, bond_type=1)`, Cataloghi, `class Atom`, `class DatabaseLoader`, `class Interaction`, `class Molecule`, `class Subatomic` (+5 more)
+### Community 10 - "Energie di riferimento PySCF"
+Cohesion: 0.11
+Nodes (25): compute_reference_energy(), element_symbol(), Calcola l'energia di stato fondamentale con un metodo classico.      | metodo |, Esito di un calcolo di struttura elettronica., Qubit necessari a un VQE su questo sistema (mapping Jordan-Wigner)., Simbolo chimico dell'elemento, indipendente dall'isotopo., ReferenceEnergy, Test del ponte verso PySCF (lib/quantum_chemistry.py).  Le energie attese sono v (+17 more)
 
-### Community 13 - "🧪 QML Chemical Discovery Engine"
-Cohesion: 0.05
-Nodes (37): 1. Dipendenze, 2. Database PostgreSQL, 3. Credenziali, 4. Creazione dello schema e popolamento, Accuratezza, 🏗️ Architettura di Sistema, 🗄️ Avvio e Setup, 📚 Documentazione (+29 more)
+### Community 11 - "Entry point e demo CLI"
+Cohesion: 0.14
+Nodes (25): debug_translation(), Funzione di debug per visualizzare la traduzione, create_example_molecules(), demonstrate_basic_properties(), demonstrate_detailed_analysis(), demonstrate_translation(), interactive_menu(), main() (+17 more)
 
-### Community 14 - "HybridOraclePipeline"
-Cohesion: 0.05
-Nodes (48): VqeSimulationResult, HybridOraclePipeline, Molecule, Carica il modello addestrato, una volta sola. Se PyTorch non è installato o non…, Stima classica dell'energia e della propria attendibilità. Con il modello…, Valuta una molecola: prima il filtro classico, poi — se il candidato supera lo…, Hamiltoniano di struttura elettronica vero, ansatz UCCSD., VQE con ansatz UCCSD e stato iniziale di Hartree-Fock. Nessun restart casuale,… (+40 more)
-
-### Community 15 - "test_fermionic_chemistry.py"
-Cohesion: 0.12
-Nodes (26): build_electronic_structure_problem(), build_fermionic_problem(), jordan_wigner_qubit_count(), Costruisce l'`ElectronicStructureProblem` di Qiskit Nature per la molecola. La…, Qubit richiesti dal mapping Jordan-Wigner: uno per spin-orbitale. Jordan-Wigner…, Riduce il problema finché non entra in `max_qubits` qubit. Strategia,…, Da `Molecule` a operatore di qubit, in un passo solo. È il punto d'ingresso…, reduce_to_qubit_budget() (+18 more)
-
-### Community 16 - "test_gnn.py"
+### Community 12 - "Catalogo isotopi e motore fisico"
 Cohesion: 0.13
-Nodes (24): molecule_to_data(), Da `Molecule` a `torch_geometric.data.Data`. Passa dal traduttore, quindi…, model(), _predittore(), Test del modello classico di screening (lib/gnn.py). Non richiedono database né…, `Data` espone sempre `y`: senza etichetta deve restare None, non zero., Un atomo isolato non ha archi: il grafo deve restare valido., Con più campioni la dispersione fra previsioni diventa misurabile. (+16 more)
+Nodes (22): make_atom(), Costruisce una NUOVA istanza Atom per l'isotopo richiesto.      Ogni chiamata re, Test del motore fisico (lib/matter.py): atomi, molecole e catalogo., `subatomic_particles.symbol` ha un vincolo UNIQUE nel database., Vincolo UNIQUE (symbol, mass_number) sulla tabella atoms., Regressione: riusare la stessa istanza Atom per due siti rendeva il legame     a, test_add_atom_restituisce_indice_progressivo(), test_atomo_neutro_ha_carica_zero() (+14 more)
 
-### Community 17 - "EnergyPredictor"
+### Community 13 - "CLI e cronologia dell'agente"
+Cohesion: 0.10
+Nodes (18): AgenteError, Cronologia, main(), RuntimeError, Fase 4 — l'agente che impara a proporre.  L'ambiente (`lib/rl_generator.py`) sa, Andamento della corsa, per capire se l'agente sta imparando o vagando., L'agente non è utilizzabile., _stampa_classifica() (+10 more)
+
+### Community 14 - "Test dell'oracolo ibrido"
+Cohesion: 0.11
+Nodes (20): _hamiltonian(), pipeline(), Test dell'oracolo ibrido (lib/hybrid_pipeline.py).  La costruzione dell'operator, Regressione: con l'ansatz UCCSD il VQE si interrompeva con un errore di     mism, Nessuna stima variazionale può scendere sotto il vero stato fondamentale., Senza soglia esplicita il percorso quantistico non deve essere saltato., Regressione: il nome prometteva la persistenza e nessuna asserzione la     guard, Percorso storico: Hamiltoniano di tipo Ising, 1 qubit = 1 atomo.      Non è più (+12 more)
+
+### Community 15 - "Predittore di energia a insieme"
 Cohesion: 0.13
-Nodes (17): DualHeadGNN, EnergyPredictor, Il modello addestrato, pronto all'uso sulla pipeline. Tiene insieme pesi e…, Riattiva il solo dropout, lasciando tutto il resto in valutazione. Chiamare…, Rete a passaggio di messaggi con teste separate per valore e incertezza. La…, Path, _normalizzazione_neutra(), Il meccanismo che ha sostituito il MC Dropout: reti diverse addestrate da… (+9 more)
+Nodes (18): DualHeadGNN, EnergyPredictor, Il modello addestrato, pronto all'uso sulla pipeline.      Tiene insieme pesi e, Riattiva il solo dropout, lasciando tutto il resto in valutazione.          Chia, Prevede ΔE e la sua incertezza per una molecola.          L'incertezza epistemic, Rete a passaggio di messaggi con teste separate per valore e incertezza.      La, Path, Perche' un insieme e non il MC Dropout (+10 more)
 
-### Community 18 - "gnn.py"
+### Community 16 - "Test della GNN di screening"
 Cohesion: 0.15
-Nodes (17): Data, DataLoader, _ensemble_validation_mae(), load_training_graphs(), main(), Modello classico di screening: GNN a doppia testa. È il primo stadio…, Primo membro dell'insieme: comodo per ispezionare l'architettura., Prevede ΔE e la sua incertezza per una molecola. L'incertezza epistemica viene… (+9 more)
+Nodes (22): molecule_to_data(), Da `Molecule` a `torch_geometric.data.Data`.      Passa dal traduttore, quindi e, model(), _predittore(), Test del modello classico di screening (lib/gnn.py).  Non richiedono database né, `Data` espone sempre `y`: senza etichetta deve restare None, non zero., Con più campioni la dispersione fra previsioni diventa misurabile., Senza campionamento resta solo il rumore dichiarato dalla seconda testa. (+14 more)
 
-### Community 19 - "Molecule"
-Cohesion: 0.12
-Nodes (16): Molecule, Molecola come insieme ordinato di siti atomici. I legami sono memorizzati come…, methane(), fixture, water(), fixture, water(), water() (+8 more)
+### Community 17 - "Test del DatabaseLoader"
+Cohesion: 0.14
+Nodes (16): Genera nomi univoci e, a fine test, rimuove le molecole che li portano.      I n, unique_name(), _acqua(), loader(), Molecule, Test del DatabaseLoader: conversione OOP → database e ritorno.  Richiedono un Po, Regressione: i legami erano indicizzati per oggetto Atom, quindi i due     idrog, Quattro idrogeni identici devono restare quattro siti distinti nel DB. (+8 more)
 
-### Community 20 - "matter.py"
-Cohesion: 0.38
-Nodes (11): Base, Atom, AtomComposition, Interaction, Molecule, MoleculeAtomPosition, MoleculeBond, SubatomicComposition (+3 more)
-
-### Community 21 - "Translator"
-Cohesion: 0.15
-Nodes (11): debug_translation(), QuantumEncoder, Prepara dati per Quantum Machine Learning, Codifica Hamiltoniano molecolare semplificato, Mappa atomi a qubit per circuiti quantistici, Classe principale che orchesta tutte le conversioni, Converte molecola nel formato richiesto, Converte batch di molecole (+3 more)
-
-### Community 22 - "translator.py"
-Cohesion: 0.18
-Nodes (9): AtomFeatures, GraphBuilder, ndarray, Modulo Traduttore: Converte oggetti chimici in rappresentazioni ML/QML, Vettore di caratteristiche per un atomo, Costruisce grafi molecolari da oggetti Molecule, Costruisce grafo da oggetto Molecule. Un nodo per ogni sito di `atoms_data`:…, Calcola distanza euclidea tra due atomi (+1 more)
-
-### Community 23 - "`lib/translator.py` — Traduttore ML/QML"
+### Community 18 - "Addestramento della GNN"
 Cohesion: 0.17
-Nodes (12): `.batch_translate(molecules, output_format="tensors", normalize=True) -> List[Dict]`, `class FeatureExtractor`, `class GraphBuilder`, `class MolecularGraph`, `class QuantumEncoder`, `class TensorConverter`, `class Translator`, `debug_translation(molecule)` (+4 more)
+Nodes (15): Data, DataLoader, _ensemble_validation_mae(), load_training_graphs(), main(), Modello classico di screening: GNN a doppia testa.  È il primo stadio dell'oraco, Primo membro dell'insieme: comodo per ispezionare l'architettura., Rilegge il dataset etichettato dal database e lo converte in grafi.      Il bers (+7 more)
 
-### Community 24 - "MolecularGraph"
+### Community 19 - "Riduzione allo spazio attivo"
+Cohesion: 0.15
+Nodes (16): _active_space_size(), build_electronic_structure_problem(), jordan_wigner_qubit_count(), Ponte verso la chimica quantistica classica (PySCF).  Traduce gli oggetti `Molec, Costruisce l'`ElectronicStructureProblem` di Qiskit Nature per la molecola., Qubit richiesti dal mapping Jordan-Wigner: uno per spin-orbitale.      Jordan-Wi, Dimensiona uno spazio attivo che stia nel budget di qubit.      Restituisce `(el, Riduce il problema finché non entra in `max_qubits` qubit.      Strategia, nell' (+8 more)
+
+### Community 20 - "Test del traduttore"
+Cohesion: 0.12
+Nodes (7): Test del modulo traduttore (lib/translator.py)., Colonne costanti (es. tutte le cariche a zero) non devono produrre NaN., Regressione: quando GraphBuilder indicizzava i nodi con id(atom), i due     idro, I quattro idrogeni sono chimicamente identici ma restano nodi distinti., test_acqua_conserva_entrambi_i_legami_oh(), test_metano_ha_quattro_legami_ch(), test_normalizzazione_non_divide_per_zero()
+
+### Community 21 - "Grafo molecolare ed encoding quantistico"
+Cohesion: 0.17
+Nodes (9): MolecularGraph, QuantumEncoder, Rappresentazione grafo di una molecola, Converte in formato PyTorch Geometric, Genera matrice di adiacenza, Prepara dati per Quantum Machine Learning, Codifica Hamiltoniano molecolare semplificato, Mappa atomi a qubit per circuiti quantistici (+1 more)
+
+### Community 22 - "Divisione per specie chimica"
 Cohesion: 0.20
-Nodes (8): MolecularGraph, Rappresentazione grafo di una molecola, Converte in formato PyTorch Geometric, Genera matrice di adiacenza, Converte grafi in tensori per ML, Normalizza feature vectors, Converte grafo in dizionario di tensori, TensorConverter
+Nodes (12): GNNError, RuntimeError, Specie chimica di appartenenza, spogliata del suffisso del conformero.      "Wat, Divide train e validation **per specie chimica**, non per singolo grafo.      I, Il modello classico non è utilizzabile., _scaffold_key(), split_by_scaffold(), Il test che conta: nessuna specie chimica può comparire in entrambi gli     insi (+4 more)
 
-### Community 25 - "GNNError"
+### Community 23 - "Normalizzazione del bersaglio"
 Cohesion: 0.20
-Nodes (11): GNNError, RuntimeError, Specie chimica di appartenenza, spogliata del suffisso del conformero. "Water-…, Divide train e validation **per specie chimica**, non per singolo grafo. I…, Il modello classico non è utilizzabile., _scaffold_key(), split_by_scaffold(), Il test che conta: nessuna specie chimica può comparire in entrambi gli… (+3 more)
+Nodes (6): Normalization, Tensor, Statistiche di standardizzazione, salvate insieme ai pesi., La varianza scala con il quadrato del fattore di standardizzazione., test_codifica_e_decodifica_del_bersaglio_sono_inverse(), test_la_varianza_scala_col_quadrato()
 
-### Community 26 - "quantum_chemistry.py"
-Cohesion: 0.18
-Nodes (8): _active_space_size(), FermionicProblem, Ponte verso la chimica quantistica classica (PySCF). Traduce gli oggetti…, Un problema di struttura elettronica pronto per il VQE. Tiene insieme il…, Dimensiona uno spazio attivo che stia nel budget di qubit. Restituisce…, Esito di un calcolo di struttura elettronica., Qubit necessari a un VQE su questo sistema (mapping Jordan-Wigner)., ReferenceEnergy
+### Community 24 - "Energie atomiche di riferimento"
+Cohesion: 0.24
+Nodes (11): atomic_reference_energy(), build_pyscf_molecule(), molecule_to_pyscf_geometry(), RuntimeError, QuantumChemistryError, Energia dell'atomo isolato nel suo stato fondamentale, in Hartree.      Calcolat, Il calcolo di struttura elettronica non è riuscito., Converte una `Molecule` nella geometria attesa da PySCF.      Restituisce una li (+3 more)
 
-### Community 27 - "QuantumChemistryError"
-Cohesion: 0.20
-Nodes (11): atomic_reference_energy(), element_symbol(), RuntimeError, QuantumChemistryError, Energia dell'atomo isolato nel suo stato fondamentale, in Hartree. Calcolata…, Il calcolo di struttura elettronica non è riuscito., Simbolo chimico dell'elemento, indipendente dall'isotopo., Il motore usa simboli propri per gli isotopi ("D", "C-13"), che PySCF non… (+3 more)
-
-### Community 28 - "FeatureExtractor"
+### Community 25 - "Estrazione delle feature atomiche"
 Cohesion: 0.22
 Nodes (7): FeatureExtractor, Estrae feature vectors dagli oggetti Atom, Estrae feature vector da un oggetto Atom, Codifica la configurazione elettronica come vettore, Calcola elettroni di valenza (semplificato), test_feature_dim_coerente_con_il_vettore(), test_feature_extraction_idrogeno()
 
-### Community 29 - "Atom"
-Cohesion: 0.22
-Nodes (3): Atom, Aggiunge un atomo con la sua posizione 3D e restituisce l'indice del sito., Elenco degli oggetti Atom, nell'ordine dei siti.
+### Community 26 - "Incertezza dello screening"
+Cohesion: 0.20
+Nodes (7): Prediction, Esito dello screening classico su un candidato., Limite: l'incertezza e' direzionale, non calibrata, Molte delle 26 feature sono orbitali mai occupati: colonne di zeri. Una     devi, test_colonne_costanti_non_producono_nan(), test_deviazione_standard_e_radice_della_varianza(), test_normalizzazione_standardizza_le_feature()
 
-### Community 30 - "Normalization"
-Cohesion: 0.25
-Nodes (6): Normalization, Statistiche di standardizzazione, salvate insieme ai pesi., La varianza scala con il quadrato del fattore di standardizzazione., Tensor, test_codifica_e_decodifica_del_bersaglio_sono_inverse(), test_la_varianza_scala_col_quadrato()
+### Community 27 - "Costruzione del grafo molecolare"
+Cohesion: 0.24
+Nodes (6): GraphBuilder, ndarray, Costruisce grafi molecolari da oggetti Molecule, Costruisce grafo da oggetto Molecule.          Un nodo per ogni sito di `atoms_d, Calcola distanza euclidea tra due atomi, Converte in array numpy per ML
 
-### Community 31 - "Prediction"
-Cohesion: 0.25
-Nodes (6): Prediction, Esito dello screening classico su un candidato., Molte delle 26 feature sono orbitali mai occupati: colonne di zeri. Una…, test_colonne_costanti_non_producono_nan(), test_deviazione_standard_e_radice_della_varianza(), test_normalizzazione_standardizza_le_feature()
-
-### Community 32 - "exact_ground_state_energy"
-Cohesion: 0.25
-Nodes (8): exact_ground_state_energy(), Energia esatta dello stato fondamentale per diagonalizzazione. Riferimento di…, Congelare il core toglie due qubit e sposta l'energia di ~10⁻⁵ Hartree: è la…, Troncare gli orbitali di valenza è un'approssimazione vera, e si vede., L'ancoraggio principale: H2 in sto-3g ha un valore FCI noto., test_energia_h2_corrisponde_alla_soluzione_esatta(), test_frozen_core_e_quasi_gratuito(), test_spazio_attivo_costa_piu_del_frozen_core()
-
-### Community 33 - "📚 API Reference"
+### Community 28 - "Orchestratore delle conversioni"
 Cohesion: 0.29
-Nodes (5): 📚 API Reference, Errori comuni, `lib/create_db.py` — Schema del database, Tabelle, Vedi anche
+Nodes (5): Classe principale che orchesta tutte le conversioni, Converte molecola nel formato richiesto, Converte batch di molecole, Translator, translator()
 
-### Community 34 - "Strato fermionico (Qiskit Nature)"
+### Community 29 - "Forma canonica delle strutture"
 Cohesion: 0.29
-Nodes (7): `build_fermionic_problem(molecule, basis="sto-3g", max_qubits=8, mapper=None) -> FermionicProblem`, Etichette classiche (PySCF), `exact_ground_state_energy(fermionic) -> float`, `lib/quantum_chemistry.py` — Chimica quantistica, `reduce_to_qubit_budget(problem, max_qubits=8) -> (problem, etichetta)`, Strato fermionico (Qiskit Nature), `total_energy_from_result(problem, result) -> float`
+Nodes (7): forma_canonica(), Impronta della struttura invariante per come i siti sono numerati.      Serve pe, Fase 4: Il Generatore di Composti, Isomeri: stessa formula grezza, topologia diversa. Con soli tre atomi     pesant, Il caso che ha smentito la prima versione di questo test., test_con_tre_nodi_ogni_albero_e_la_stessa_catena(), test_strutture_diverse_hanno_forme_diverse()
 
-### Community 35 - "`class HybridOraclePipeline`"
+### Community 30 - "Punti di partenza e validità"
+Cohesion: 0.29
+Nodes (7): Punti di partenza per la modalità "scaffold + crescita".      Rende gli scheletr, stati_iniziali(), Metano e carbonio singolo danno lo stesso stato: deve comparire una volta., La proprietà che regge tutto: se una mossa è nell'elenco, applicarla dà una, test_azioni_valide_producono_sempre_stati_costruibili(), test_il_monossido_di_carbonio_resta_fuori_dai_punti_di_partenza(), test_nessun_punto_di_partenza_duplicato()
+
+### Community 31 - "Conversione in tensori"
 Cohesion: 0.33
-Nodes (6): Ansatz, `class HybridOraclePipeline`, `.evaluate_candidate(molecule, stability_threshold=None) -> Dict`, `lib/hybrid_pipeline.py` — Oracolo ibrido, `.screen(molecule) -> ScreeningResult`, `.solve_exactly(hamiltonian_info) -> float`
+Nodes (4): Converte grafi in tensori per ML, Normalizza feature vectors, Converte grafo in dizionario di tensori, TensorConverter
 
-### Community 36 - "gaussian_nll"
+### Community 32 - "Perdita con incertezza appresa"
 Cohesion: 0.33
-Nodes (6): gaussian_nll(), Log-verosimiglianza negativa gaussiana con varianza predetta. L = ½ · […, A parità di errore, dichiarare più incertezza deve costare meno che sbagliare…, Ma alzare σ² dove si indovina non deve convenire, o σ² esploderebbe., test_nll_preferisce_ammettere_l_errore(), test_nll_punisce_l_incertezza_gratuita()
+Nodes (6): gaussian_nll(), Log-verosimiglianza negativa gaussiana con varianza predetta.          L = ½ · [, A parità di errore, dichiarare più incertezza deve costare meno che     sbagliar, Ma alzare σ² dove si indovina non deve convenire, o σ² esploderebbe., test_nll_preferisce_ammettere_l_errore(), test_nll_punisce_l_incertezza_gratuita()
 
-### Community 37 - "hybrid_pipeline.py"
-Cohesion: 0.33
-Nodes (5): Oracolo ibrido: screening classico veloce, validazione quantistica esatta. Il…, Energia totale in Hartree a partire da un risultato di autovalore minimo. ⚠️…, total_energy_from_result(), Senza riduzione `autovalore + repulsione_nucleare` è corretto — ed è…, test_interpret_e_la_somma_manuale_coincidono_senza_riduzione()
-
-### Community 38 - "methane"
-Cohesion: 0.33
-Nodes (6): dihydrogen(), methane(), fixture, O-H = 0.958 Å, angolo H-O-H = 104.5°., CH4 tetraedrico con C-H ≈ 1.09 Å., water()
-
-### Community 39 - "methane"
+### Community 33 - "Modulo traduttore ML/QML"
 Cohesion: 0.40
-Nodes (5): methane(), fixture, Acqua con tre siti atomici distinti e due legami O-H., Metano: un carbonio e quattro idrogeni chimicamente identici., water()
-
-### Community 40 - "`lib/gnn.py` — Modello classico di screening"
-Cohesion: 0.50
-Nodes (4): Addestramento, `class DualHeadGNN`, `class EnergyPredictor`, `lib/gnn.py` — Modello classico di screening
-
-### Community 41 - "Corrispondenza OOP ↔ Database"
-Cohesion: 0.50
-Nodes (4): Atom → `atoms`, Corrispondenza OOP ↔ Database, Molecule → `molecules`, Subatomic → `subatomic_particles`
+Nodes (4): AtomFeatures, Modulo Traduttore: Converte oggetti chimici in rappresentazioni ML/QML, Vettore di caratteristiche per un atomo, Il Traduttore (Data Pipeline)
 
 ## Knowledge Gaps
-- **67 isolated node(s):** `quantum-project`, `Il modello dei siti atomici`, ``make_atom(isotope: str, charge: int = 0) -> Atom``, ``class Subatomic``, ``class Interaction`` (+62 more)
+- **2 isolated node(s):** `quantum-project`, `Errori comuni`
   These have ≤1 connection - possible missing edges or undocumented components.
-- **3 thin communities (<3 nodes) omitted from report** — run `graphify query` to explore isolated nodes.
+- **4 thin communities (<3 nodes) omitted from report** — run `graphify query` to explore isolated nodes.
 
 ## Suggested Questions
 _Questions this graph is uniquely positioned to answer:_
 
-- **Why does `Molecule` connect `Molecule` to `main.py`, `test_generator.py`, `make_atom`, `DatabaseLoader`, `test_quantum_chemistry.py`, `dataset.py`, `test_translator.py`, `ValueError`, `test_hybrid_pipeline.py`, `test_db_loader.py`, `HybridOraclePipeline`, `test_fermionic_chemistry.py`, `test_gnn.py`, `matter.py`, `quantum_chemistry.py`, `QuantumChemistryError`, `Atom`, `hybrid_pipeline.py`, `methane`, `methane`?**
-  _High betweenness centrality (0.236) - this node is a cross-community bridge._
-- **Why does `make_atom()` connect `make_atom` to `main.py`, `test_generator.py`, `DatabaseLoader`, `test_quantum_chemistry.py`, `methane`, `ValueError`, `test_hybrid_pipeline.py`, `test_db_loader.py`, `test_translator.py`, `methane`, `HybridOraclePipeline`, `test_fermionic_chemistry.py`, `test_gnn.py`, `Molecule`, `matter.py`, `QuantumChemistryError`, `Atom`?**
-  _High betweenness centrality (0.121) - this node is a cross-community bridge._
-- **Why does `HybridOraclePipeline` connect `HybridOraclePipeline` to `main.py`, `DatabaseLoader`, `hybrid_pipeline.py`, `test_hybrid_pipeline.py`, `EnergyPredictor`, `Molecule`, `Translator`, `QuantumChemistryError`?**
-  _High betweenness centrality (0.093) - this node is a cross-community bridge._
-- **Are the 18 inferred relationships involving `Molecule` (e.g. with `BuildStats` and `LabeledMolecule`) actually correct?**
-  _`Molecule` has 18 INFERRED edges - model-reasoned connections that need verification._
-- **Are the 7 inferred relationships involving `HybridOraclePipeline` (e.g. with `VqeSimulationResult` and `EnergyPredictor`) actually correct?**
-  _`HybridOraclePipeline` has 7 INFERRED edges - model-reasoned connections that need verification._
-- **Are the 12 inferred relationships involving `DatabaseLoader` (e.g. with `BuildStats` and `LabeledMolecule`) actually correct?**
-  _`DatabaseLoader` has 12 INFERRED edges - model-reasoned connections that need verification._
-- **What connects `quantum-project`, `Il modello dei siti atomici`, ``make_atom(isotope: str, charge: int = 0) -> Atom`` to the rest of the system?**
-  _67 weakly-connected nodes found - possible documentation gaps or missing edges._
+- **Why does `Molecule` connect `Molecola e siti atomici` to `Schema del database e reference`, `Generatore di geometrie VSEPR`, `Oracolo ibrido e VQE`, `Costruzione del dataset etichettato`, `Addestramento dell'agente RL`, `Ricompensa e stati del generatore`, `Politica sugli stati risultanti`, `Azioni e scheletri molecolari`, `Strato fermionico Qiskit Nature`, `Energie di riferimento PySCF`, `Entry point e demo CLI`, `Catalogo isotopi e motore fisico`, `CLI e cronologia dell'agente`, `Test dell'oracolo ibrido`, `Test della GNN di screening`, `Test del DatabaseLoader`, `Riduzione allo spazio attivo`, `Test del traduttore`, `Energie atomiche di riferimento`, `Problema fermionico`, `Fixture del metano`?**
+  _High betweenness centrality (0.249) - this node is a cross-community bridge._
+- **Why does `HybridOraclePipeline` connect `Oracolo ibrido e VQE` to `Schema del database e reference`, `Addestramento dell'agente RL`, `Ricompensa e stati del generatore`, `Politica sugli stati risultanti`, `Azioni e scheletri molecolari`, `Molecola e siti atomici`, `Entry point e demo CLI`, `CLI e cronologia dell'agente`, `Test dell'oracolo ibrido`, `Predittore di energia a insieme`, `Energie atomiche di riferimento`, `Orchestratore delle conversioni`?**
+  _High betweenness centrality (0.123) - this node is a cross-community bridge._
+- **Why does `Stato` connect `Politica sugli stati risultanti` to `Schema del database e reference`, `Oracolo ibrido e VQE`, `Costruzione del dataset etichettato`, `Addestramento dell'agente RL`, `Ricompensa e stati del generatore`, `Azioni e scheletri molecolari`, `Molecola e siti atomici`, `CLI e cronologia dell'agente`, `Predittore di energia a insieme`, `Energie atomiche di riferimento`, `Forma canonica delle strutture`, `Punti di partenza e validità`?**
+  _High betweenness centrality (0.096) - this node is a cross-community bridge._
+- **Are the 27 inferred relationships involving `Molecule` (e.g. with `BuildStats` and `LabeledMolecule`) actually correct?**
+  _`Molecule` has 27 INFERRED edges - model-reasoned connections that need verification._
+- **Are the 16 inferred relationships involving `HybridOraclePipeline` (e.g. with `VqeSimulationResult` and `EnergyPredictor`) actually correct?**
+  _`HybridOraclePipeline` has 16 INFERRED edges - model-reasoned connections that need verification._
+- **Are the 18 inferred relationships involving `Stato` (e.g. with `Il modello dei siti atomici` and `Agente`) actually correct?**
+  _`Stato` has 18 INFERRED edges - model-reasoned connections that need verification._
+- **Are the 21 inferred relationships involving `DatabaseLoader` (e.g. with `BuildStats` and `LabeledMolecule`) actually correct?**
+  _`DatabaseLoader` has 21 INFERRED edges - model-reasoned connections that need verification._
