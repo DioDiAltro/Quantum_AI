@@ -26,6 +26,18 @@ quella, l'agente non può proporre anelli. Crescita e potatura agiscono sulle
 foglie, quindi la proprietà si mantiene da sola: non serve controllarla a ogni
 passo.
 
+**Limiti noti.** Ogni struttura viene costruita come singoletto di shell chiusa
+(`spin_multiplicity=1`): è la conseguenza del modello di valenza, che satura
+tutti i legami liberi con idrogeni e non lascia elettroni spaiati. Per le
+molecole organiche sature è l'assunzione giusta, ma non lo è per i sistemi il
+cui stato fondamentale è di tripletto — O₂ in primo luogo, che l'agente può
+raggiungere e che qui viene trattato come singoletto. L'energia che ne esce non
+è quella dello stato fondamentale, e va letta sapendolo. Il monossido di
+carbonio è escluso perché il modello di valenza lo rifiuta apertamente; O₂ no,
+perché il modello lo accetta senza accorgersi di sbagliare. È la differenza fra
+un limite che si dichiara e uno che si nasconde, ed è il motivo per cui questo
+paragrafo esiste.
+
 Uso tipico:
 
     stato = Stato.da_elemento("C-12")            # CH4
@@ -636,10 +648,12 @@ class OracoloReward:
         self.metodo = metodo.upper()
         self.base = base
         self.usa_pyscf = usa_pyscf
-        # Con `persisti` attivo il database fa anche da cache: un candidato già
-        # calcolato in una corsa precedente non ripaga il costo di PySCF.
+        # Con `persisti` attivo il database fa anche da cache fra una corsa e
+        # l'altra: un candidato già calcolato non ripaga il costo di PySCF.
         self.persisti = persisti
         self._sessioni = None
+        # Memoria della corsa in corso, indicizzata sulla forma canonica.
+        self._cache: dict[str, Valutazione] = {}
 
     # ----- stadio 1 -----
 
@@ -661,7 +675,23 @@ class OracoloReward:
         return self._predittore_caricato
 
     def valuta(self, stato: Stato) -> Valutazione:
-        """Screening classico, e promozione a PySCF quando ne vale la pena."""
+        """
+        Screening classico, e promozione a PySCF quando ne vale la pena.
+
+        Il risultato è memoizzato sulla forma canonica. Non è un'ottimizzazione
+        marginale: un agente che esplora torna sulle stesse strutture di
+        continuo — sono lo stato risultante di mosse diverse e il punto di
+        partenza del passo successivo — e senza memoria una corsa passerebbe la
+        maggior parte del tempo a ricalcolare energie già note.
+
+        L'oggetto restituito è condiviso, non copiato: annotarlo con
+        `valida_con_vqe` arricchisce anche ciò che vedranno le chiamate
+        successive, che è il comportamento voluto.
+        """
+        chiave = forma_canonica(stato)
+        if chiave in self._cache:
+            return self._cache[chiave]
+
         molecola = a_molecola(stato)
         previsione = self._predittore().predict(molecola)
 
@@ -673,21 +703,22 @@ class OracoloReward:
             epistemica=float(previsione.epistemic),
         )
 
-        if not self.usa_pyscf:
-            return esito
+        if self.usa_pyscf:
+            if esito.reward >= self.soglia_promessa:
+                esito.motivo_promozione = (
+                    f"promettente ({esito.reward:.4f} ≥ "
+                    f"{self.soglia_promessa:.4f} Ha/atomo)"
+                )
+            elif esito.epistemica > self.soglia_incertezza:
+                esito.motivo_promozione = (
+                    f"incerto ({esito.epistemica:.5f} > {self.soglia_incertezza:.5f})"
+                )
 
-        if esito.reward >= self.soglia_promessa:
-            esito.motivo_promozione = (
-                f"promettente ({esito.reward:.4f} ≥ {self.soglia_promessa:.4f} Ha/atomo)"
-            )
-        elif esito.epistemica > self.soglia_incertezza:
-            esito.motivo_promozione = (
-                f"incerto ({esito.epistemica:.5f} > {self.soglia_incertezza:.5f})"
-            )
-        else:
-            return esito
+            if esito.motivo_promozione is not None:
+                esito = self._verifica_con_pyscf(esito, molecola)
 
-        return self._verifica_con_pyscf(esito, molecola)
+        self._cache[chiave] = esito
+        return esito
 
     # ----- stadio 2 -----
 

@@ -352,3 +352,107 @@ def test_l_energia_di_pyscf_e_vicina_a_quella_della_gnn_sul_metano():
 
     assert esito.stadio == "pyscf"
     assert esito.energia_pyscf == pytest.approx(-0.70, abs=0.05)
+
+
+# ===== Stadio 3: l'adattatore verso il VQE =====
+
+class _PipelineFinta:
+    """
+    Sostituisce `HybridOraclePipeline`: il VQE vero è già coperto da
+    `test_hybrid_fermionic.py`, qui si collauda solo il raccordo.
+    """
+
+    def __init__(self, risultato):
+        self._risultato = risultato
+
+    def __call__(self, *args, **kwargs):
+        return self
+
+    def evaluate_candidate(self, molecola):
+        return self._risultato
+
+
+def _con_pipeline(monkeypatch, risultato):
+    import lib.hybrid_pipeline
+
+    monkeypatch.setattr(
+        lib.hybrid_pipeline, "HybridOraclePipeline", _PipelineFinta(risultato)
+    )
+
+
+def test_la_validazione_vqe_riporta_energia_e_riduzione(monkeypatch):
+    _con_pipeline(monkeypatch, {
+        "status": "validated_by_quantum_vqe",
+        "exact_energy": -39.736585,
+        "reduction": "frozen-core+active-space(6e,4o)",
+    })
+    oracolo = OracoloReward(predittore=_PredittoreFinto(-0.70), persisti=False)
+    esito = oracolo.valuta(Stato.da_elemento("C-12"))
+
+    esito = oracolo.valida_con_vqe(esito)
+
+    assert esito.energia_vqe == pytest.approx(-39.736585)
+    assert esito.riduzione_vqe == "frozen-core+active-space(6e,4o)"
+    assert esito.stadio == "vqe"
+
+
+def test_la_validazione_vqe_non_altera_la_ricompensa(monkeypatch):
+    """
+    Un'energia totale in spazio attivo ridotto non è un ΔE: se finisse nella
+    ricompensa, il segnale dell'agente salterebbe di decine di Hartree.
+    """
+    _con_pipeline(monkeypatch, {
+        "status": "validated_by_quantum_vqe",
+        "exact_energy": -39.736585,
+        "reduction": "none",
+    })
+    oracolo = OracoloReward(predittore=_PredittoreFinto(-0.70), persisti=False)
+    esito = oracolo.valuta(Stato.da_elemento("C-12"))
+    prima = esito.reward
+
+    oracolo.valida_con_vqe(esito)
+
+    assert esito.reward == pytest.approx(prima)
+
+
+def test_un_candidato_fuori_budget_lascia_detto_il_perche(monkeypatch):
+    _con_pipeline(monkeypatch, {
+        "status": "exceeds_quantum_budget",
+        "reason": "18 qubit contro un budget di 8",
+    })
+    oracolo = OracoloReward(predittore=_PredittoreFinto(-0.70), persisti=False)
+    esito = oracolo.valuta(Stato.da_elemento("C-12"))
+
+    esito = oracolo.valida_con_vqe(esito)
+
+    assert esito.energia_vqe is None
+    assert "18 qubit" in esito.nota
+
+
+# ===== La memoria della corsa =====
+
+def test_la_stessa_struttura_non_si_valuta_due_volte():
+    """
+    Regressione: senza memoria una corsa passava la maggior parte del tempo a
+    ricalcolare energie già note, perché l'agente torna di continuo sulle
+    stesse strutture.
+    """
+    class _PredittoreCheConta(_PredittoreFinto):
+        def __init__(self):
+            super().__init__(-0.70)
+            self.chiamate = 0
+
+        def predict(self, molecola):
+            self.chiamate += 1
+            return super().predict(molecola)
+
+    predittore = _PredittoreCheConta()
+    oracolo = OracoloReward(predittore=predittore, usa_pyscf=False, persisti=False)
+
+    stato = Stato.da_elemento("C-12")
+    oracolo.valuta(stato)
+    oracolo.valuta(stato)
+    # Stessa struttura raggiunta per un'altra strada: numerazione diversa.
+    oracolo.valuta(Stato(("C-12",), ()))
+
+    assert predittore.chiamate == 1
