@@ -273,3 +273,53 @@ def test_perturbazioni_ampie_alzano_l_energia():
     ]
 
     assert all(e > e_equilibrio for e in energie)
+
+
+# ===== Rotazioni =====
+
+@pytest.mark.parametrize("epsilon", [0.0, 1e-12, 1e-9, 1e-8, 1e-6])
+def test_rotazione_fra_versori_quasi_opposti(epsilon):
+    """
+    Regressione: `_rotation_between` divide per (1 + a·b) e la guardia sui casi
+    degeneri controllava |a × b|, che è la grandezza sbagliata. Fra due versori
+    separati da π − ε si ha |a × b| ≈ ε ma 1 + a·b ≈ ε²/2: per ε intorno a 1e-9
+    la guardia lasciava passare una divisione per zero.
+
+    Gli scheletri scritti a mano non producono quelle direzioni; le strutture
+    generate dall'agente sì, e la costruzione della geometria si interrompeva.
+    """
+    from lib.generator import _rotation_between
+
+    a = np.array([0.0, 0.0, 1.0])
+    b = np.array([epsilon, 0.0, -1.0])
+    b = b / np.linalg.norm(b)
+
+    R = _rotation_between(a, b)
+
+    assert np.all(np.isfinite(R)), "la matrice non deve contenere inf o nan"
+    assert R @ a == pytest.approx(b, abs=1e-5), "deve comunque portare a su b"
+
+
+def test_rotazione_fra_versori_paralleli_e_l_identita():
+    from lib.generator import _rotation_between
+
+    a = np.array([0.0, 1.0, 0.0])
+
+    assert _rotation_between(a, a) == pytest.approx(np.eye(3), abs=1e-12)
+
+
+def test_rotazione_generica_resta_una_rotazione():
+    """Ortogonale e con determinante +1: altrimenti deformerebbe la molecola."""
+    from lib.generator import _rotation_between
+
+    rng = np.random.default_rng(3)
+    for _ in range(20):
+        a = rng.normal(size=3)
+        b = rng.normal(size=3)
+        a, b = a / np.linalg.norm(a), b / np.linalg.norm(b)
+
+        R = _rotation_between(a, b)
+
+        assert R.T @ R == pytest.approx(np.eye(3), abs=1e-9)
+        assert float(np.linalg.det(R)) == pytest.approx(1.0, abs=1e-9)
+        assert R @ a == pytest.approx(b, abs=1e-9)

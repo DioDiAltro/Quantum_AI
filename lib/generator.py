@@ -133,10 +133,18 @@ def _rotation_between(a: np.ndarray, b: np.ndarray) -> np.ndarray:
     v = np.cross(a, b)
     c = float(np.dot(a, b))
 
-    if np.linalg.norm(v) < 1e-10:
-        # Vettori paralleli o antiparalleli
-        if c > 0:
-            return np.eye(3)
+    # I casi degeneri si riconoscono da `c`, non da `|v|.
+    #
+    # Regressione: la guardia era `|v| < 1e-10`, ed è la grandezza sbagliata.
+    # Fra due versori separati da un angolo π − ε si ha |v| ≈ ε ma
+    # 1 + c ≈ ε²/2: il denominatore di Rodrigues va a zero col *quadrato* di
+    # ciò che la guardia misurava. Per ε intorno a 1e-9 il controllo passava
+    # e la divisione trovava (1 + c) esattamente zero. Gli scheletri scritti a
+    # mano non producevano quelle direzioni; le strutture generate sì.
+    if c >= 1.0 - 1e-12:
+        return np.eye(3)
+
+    if c <= -1.0 + 1e-8:
         # Antiparalleli: ruota di 180° attorno a un asse ortogonale qualsiasi
         ortogonale = np.array([1.0, 0.0, 0.0])
         if abs(a[0]) > 0.9:
