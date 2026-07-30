@@ -9,6 +9,8 @@ installazione, CLI e roadmap vedi il [README](README.md).
 - [`lib/quantum_chemistry.py` — Chimica quantistica](#libquantum_chemistrypy--chimica-quantistica)
 - [`lib/gnn.py` — Modello classico di screening](#libgnnpy--modello-classico-di-screening)
 - [`lib/hybrid_pipeline.py` — Oracolo ibrido](#libhybrid_pipelinepy--oracolo-ibrido)
+- [`lib/rl_generator.py` — Ambiente del generatore](#librl_generatorpy--ambiente-del-generatore)
+- [`lib/rl_agent.py` — Agente RL](#librl_agentpy--agente-rl)
 - [`lib/create_db.py` — Schema del database](#libcreate_dbpy--schema-del-database)
 - [Corrispondenza OOP ↔ Database](#corrispondenza-oop--database)
 - [Errori comuni](#errori-comuni)
@@ -601,6 +603,258 @@ già una buona approssimazione dello stato fondamentale.
 
 ---
 
+## `lib/rl_generator.py` — Ambiente del generatore
+
+Lo spazio in cui l'agente si muove: stati, mosse lecite e ricompensa. Non
+richiede il gruppo `ml` per essere importato, ma `OracoloReward` sì — il primo
+stadio è la GNN.
+
+### Il modello dello stato
+
+Il concetto centrale, come i siti atomici lo sono per `matter.py`: **lo stato è
+la sola topologia degli atomi pesanti**, immutabile e hashabile. La geometria si
+ricava quando serve, e gli idrogeni li impone la valenza.
+
+```python
+from lib.rl_generator import Stato, Cresci, applica, a_molecola
+
+stato = Stato.da_elemento("C-12")     # CH4: un carbonio, 4 valenze libere
+stato.idrogeni                        # (4,)
+stato.formula                         # "CH4"
+
+etanolo = applica(applica(stato, Cresci(0, "C-12", 1)), Cresci(1, "O-16", 1))
+etanolo.formula                       # "C2H6O"
+a_molecola(etanolo)                   # Molecule con 9 atomi e coordinate VSEPR
+```
+
+Ne discendono due proprietà che il resto del modulo dà per acquisite:
+
+- **Ogni stato è per costruzione una molecola valida.** Non esistono stati non
+  validi da penalizzare, quindi le mosse impossibili si mascherano.
+- **Lo spazio resta aciclico.** `_embed_3d` posiziona alberi; crescita e
+  potatura agiscono sulle foglie, quindi la proprietà si mantiene da sola.
+
+### `class Stato`
+
+```python
+Stato(elementi: tuple[str, ...], legami: tuple[tuple[int, int, int], ...] = ())
+```
+
+Dataclass **frozen**. `legami` sono terne `(i, j, ordine)` con indici in
+`elementi`.
+
+| Membro | Descrizione |
+|---|---|
+| `.da_elemento(isotopo="C-12")` | *classmethod* — un solo atomo pesante |
+| `.da_scheletro(skeleton)` | *classmethod* — da uno `Skeleton` della libreria, scartando gli idrogeni |
+| `.valenza_usata(sito)` | Somma degli ordini sui legami pesante–pesante |
+| `.valenza_libera(sito)` | Legami disponibili: è qui che andranno gli idrogeni |
+| `.vicini(sito)` / `.e_terminale(sito)` | Adiacenza e foglie dell'albero |
+| `.idrogeni` | *property* — idrogeni impliciti per sito |
+| `.formula` | *property* — formula grezza in ordine di Hill |
+
+Il costruttore rifiuta gli stati con valenza in eccesso: senza il controllo,
+`satura()` aggiungerebbe zero idrogeni a un sito in debito e produrrebbe una
+molecola chimicamente falsa in silenzio.
+
+> ⚠️ È il caso del **monossido di carbonio**: C≡O porta l'ossigeno a −1 legami
+> liberi, quindi `Stato(("C-12", "O-16"), ((0, 1, 3),))` solleva
+> `GeneratoreRLError`. È voluto — meglio un limite dichiarato di una molecola
+> falsa.
+
+### Azioni
+
+| Azione | Effetto |
+|---|---|
+| `Cresci(sito, elemento, ordine=1)` | Attacca un nuovo atomo pesante a un sito con valenza libera |
+| `Muta(sito, elemento)` | Cambia l'elemento, lasciando intatta la connettività |
+| `CambiaLegame(indice, ordine)` | Cambia l'ordine di un legame esistente |
+| `Pota(sito)` | Rimuove un atomo pesante **terminale** |
+| `Ferma()` | Conclude l'episodio. L'unica azione terminale |
+
+| Funzione | Descrizione |
+|---|---|
+| `azioni_valide(stato, max_atomi_pesanti=5)` | Tutte e sole le mosse che portano a una molecola valida |
+| `applica(stato, azione)` | Nuovo stato. Solleva `GeneratoreRLError` su una mossa non valida |
+
+`azioni_valide` è la fonte di verità e `applica` ne è il guardiano, non un
+secondo giudice: mascherare invece di penalizzare evita che l'agente spenda la
+propria capacità a imparare la tavola delle valenze.
+
+### Dallo stato alla molecola
+
+| Funzione | Descrizione |
+|---|---|
+| `satura(stato, nome)` | `Skeleton` completo. Gli idrogeni vanno in coda, così gli indici dei siti pesanti restano quelli dello stato |
+| `a_molecola(stato, nome=None)` | `Molecule` con coordinate VSEPR, pronta per l'oracolo |
+| `forma_canonica(stato)` | Impronta invariante per come i siti sono numerati |
+| `nome_canonico(stato)` | `"RL-{formula}-{sha256[:8]}"`, derivato dalla forma canonica |
+| `stati_iniziali(max_atomi_pesanti=5)` | Punti di partenza: l'atomo singolo più gli scheletri della libreria |
+
+`forma_canonica` usa l'algoritmo di Aho-Hopcroft-Ullman per alberi: si sfogliano
+le foglie fino al centro, si radica lì, e ogni sottoalbero diventa una stringa
+che ordina i propri figli. Due alberi sono isomorfi **se e solo se** le stringhe
+coincidono — esatto, non euristico. Vale perché lo spazio è aciclico.
+
+> ⚠️ Serve perché l'agente raggiunge la stessa molecola per molte strade, e ogni
+> strada numera i siti a modo suo. Senza, l'oracolo ricalcolerebbe da capo
+> strutture identiche: a PySCF si paga in secondi, al VQE in minuti.
+
+### `class Valutazione`
+
+```python
+esito.energia_gnn      # ΔE previsto (Hartree)
+esito.epistemica       # ignoranza del modello
+esito.energia_pyscf    # ΔE vero, se il candidato è stato promosso
+esito.energia_vqe      # energia TOTALE, non un ΔE
+esito.stadio           # "gnn", "pyscf", "vqe"
+esito.reward           # stabilità per atomo, positiva se la molecola è legata
+```
+
+| Membro | Descrizione |
+|---|---|
+| `.energia` | *property* — la migliore stima di ΔE disponibile (PySCF se c'è, altrimenti GNN) |
+| `.reward` | *property* — `−energia / atomi` |
+| `.motivo_promozione` | Perché è stato promosso a PySCF, o `None` |
+| `.nota` | Esito della persistenza, o il motivo di un calcolo mancato |
+
+> ⚠️ **La ricompensa è per atomo, e il VQE non ci entra.** Il ΔE è estensivo:
+> premiarlo grezzo insegnerebbe all'agente solo ad aggiungere atomi. E
+> `energia_vqe` è un'energia *totale* in spazio attivo ridotto: convertirla in
+> ΔE richiederebbe riferimenti atomici presi in uno spazio diverso, e la
+> differenza fra i due non è piccola. Il VQE valida, non alimenta il segnale.
+
+### `class OracoloReward`
+
+```python
+OracoloReward(predittore=None, soglia_promessa=0.12, soglia_incertezza=1e-3,
+              metodo="MP2", base="sto-3g", usa_pyscf=True, persisti=True)
+```
+
+| Parametro | Descrizione |
+|---|---|
+| `soglia_promessa` | Ha/atomo oltre cui un candidato merita PySCF. È la **mediana** misurata sulle 15 specie del dataset |
+| `soglia_incertezza` | Epistemica oltre cui si verifica comunque: l'ignoranza è un motivo per guardare meglio |
+| `usa_pyscf` | Con `False` la ricompensa resta la sola stima della GNN |
+| `persisti` | Con `True` il database fa da cache fra le corse **e** riceve le etichette nuove |
+
+| Metodo | Descrizione |
+|---|---|
+| `.valuta(stato)` | `Valutazione`. Memoizzata sulla forma canonica |
+| `.valida_con_vqe(esito, max_qubits=8)` | Stadio 3. Costa minuti: si chiama sui pochi migliori |
+
+| Stadio | Costo | Quando |
+|---|---|---|
+| GNN | millisecondi | sempre |
+| PySCF | ~0.4 s | candidato promettente **oppure** GNN incerta |
+| VQE | minuti | solo su richiesta esplicita |
+
+A differenza di `HybridOraclePipeline._get_predictor`, qui un caricamento
+fallito del modello **non** viene ingoiato: senza modello non esiste
+ricompensa, e ricadere in silenzio su un'euristica non predittiva
+significherebbe addestrare l'agente sul rumore per ore senza accorgersene.
+
+> ⚠️ Con `persisti=True` (il default) le energie PySCF **entrano nel dataset**.
+> È il ciclo di retroazione della Fase 4, non un effetto collaterale: l'agente
+> che esplora dove il modello è ignorante costruisce il proprio insieme di
+> addestramento. Con `persisti=False` non tocca il database.
+
+---
+
+## `lib/rl_agent.py` — Agente RL
+
+Richiede il gruppo di dipendenze `ml`.
+
+```bash
+python -m lib.rl_agent --addestra --episodi 200
+python -m lib.rl_agent --addestra --episodi 500 --valida-con-vqe 3
+python -m lib.rl_agent --addestra --episodi 100 --senza-pyscf --senza-database
+```
+
+### `class PoliticaGNN`
+
+```python
+PoliticaGNN(node_dim=26, edge_dim=2, hidden_dim=32, num_layers=3, dropout=0.0)
+```
+
+Assegna un punteggio scalare a una molecola: quanto vale finirci dentro.
+L'architettura ricalca `DualHeadGNN` — stesso `NNConv`, stesso pooling additivo
+— perché il dominio è lo stesso. Cambiano la testa (un solo numero) e la
+`LayerNorm` in ingresso, che qui serve perché le molecole se le inventa l'agente
+e non esistono statistiche di dataset su cui standardizzare.
+
+`forward(data)` restituisce un punteggio per grafo del lotto.
+
+### `class Agente`
+
+```python
+Agente(politica=None, seed=42)
+```
+
+| Metodo | Descrizione |
+|---|---|
+| `.distribuzione(stato)` | `(azioni, log_prob)` — valuta tutti gli stati risultanti in un lotto solo |
+| `.scegli(stato)` | `(azione, log_prob, entropia)` — campiona una mossa |
+
+> ⚠️ **Perché la politica valuta gli stati risultanti.** Lo spazio delle azioni
+> non ha dimensione fissa: 11 mosse da un metano, 29 da un etanolo, e la mossa
+> numero 7 non significa la stessa cosa nei due casi. Una testa softmax di
+> larghezza costante non è nemmeno definibile. La rete perciò non vede mai
+> azioni — vede le molecole in cui quelle azioni portano.
+
+### Episodi
+
+| Nome | Descrizione |
+|---|---|
+| `esegui_episodio(agente, oracolo, stato_iniziale, max_passi=8)` | Una costruzione completa, giudicata solo alla fine |
+| `Episodio` | `stato_iniziale`, `stato_finale`, `valutazione`, `passi`, `fermato`, `.reward` |
+
+La ricompensa è **sparsa**: una molecola a metà non è una molecola, e premiare i
+passi intermedi significherebbe inventare un giudizio che l'oracolo non è in
+grado di dare.
+
+### `class LineaDiBase`
+
+```python
+LineaDiBase(inerzia=0.95)
+```
+
+Media e deviazione correnti delle ricompense: `.aggiorna(r)` e `.vantaggio(r)`.
+Sottrarre la media è REINFORCE classico; dividere per la deviazione risolve un
+problema di scala, perché le ricompense valgono ~0.1 Ha per atomo e i loro
+scarti ~0.01.
+
+> ⚠️ La varianza si inizializza sulla **seconda** osservazione, non a 1.0. Con
+> inerzia 0.95 un valore iniziale di 1.0 impiega ~130 episodi a scendere alla
+> scala reale, e per tutto quel tratto il vantaggio esce due ordini di grandezza
+> troppo piccolo: l'inizializzazione decide quando l'agente comincia a imparare.
+
+### `addestra(...)`
+
+```python
+addestra(oracolo, episodi=200, agente=None, learning_rate=3e-4,
+         beta_entropia=0.01, max_passi=8, seed=42, verbose=True)
+```
+
+Restituisce `(agente, cronologia, classifica)`. La classifica — i migliori
+candidati incontrati, uno per struttura — è il prodotto vero della corsa:
+l'agente serve a trovarli, non è lui il risultato.
+
+Misure su 1200 episodi con ricompensa dalla sola GNN (seed 11):
+
+| Learning rate | Ricompensa | Strutture distinte (400 ep.) |
+|---|---|---|
+| `0` (controllo) | piatta, +0.0016 | 307 |
+| `3e-4` (default) | 0.1031 → plateau a 0.135–0.144 | 163 |
+| `1e-3` | non sale | 154 |
+| `3e-3` | sale poco | 42 |
+
+Il controllo a learning rate zero è ciò che rende leggibile il resto: senza,
+una ricompensa che sale non distingue l'apprendimento dalla deriva. Learning
+rate più alti collassano l'esplorazione.
+
+---
+
 ## `lib/create_db.py` — Schema del database
 
 | Funzione | Descrizione |
@@ -703,6 +957,11 @@ stesso ordine.
 | `ModuleNotFoundError: No module named 'torch'` | Gruppo `ml` non installato | `uv sync --group ml`. Senza, la pipeline ricade sull'euristica |
 | `UCC calculations for fully occupied alpha and beta orbitals` | Spazio attivo senza orbitali virtuali | Non ritagliare uno spazio attivo pieno: UCCSD ha bisogno di orbitali vuoti in cui eccitare |
 | Energia positiva da un calcolo VQE ridotto | Somma manuale della repulsione nucleare | Usa `total_energy_from_result()`: le riduzioni aggiungono una costante che la somma manuale perde |
+| `GeneratoreRLError: ... legami oltre la propria capacità` | Stato con valenza in eccesso (il caso tipico è C≡O) | Il modello di valenza copre i soli sistemi a shell chiusa: quella struttura non è rappresentabile |
+| `GeneratoreRLError: ... ha N legami liberi, ne servono M` | `Cresci` con un ordine che il sito non regge | Scegli le mosse da `azioni_valide()` invece di costruirle a mano |
+| `GeneratoreRLError: Il sito ... non è terminale` | `Pota` su un atomo interno | Potare spezzerebbe la molecola in due: solo le foglie |
+| `GeneratoreRLError: Lo scheletro ... non ha atomi pesanti` | `Stato.da_scheletro` su `Dihydrogen` | Uno stato di soli idrogeni non è rappresentabile qui |
+| `GNNError` da `OracoloReward.valuta` | Checkpoint mancante | Qui l'errore **non** viene ingoiato: senza modello non c'è ricompensa, e un'euristica silenziosa addestrerebbe l'agente sul rumore |
 
 ---
 
