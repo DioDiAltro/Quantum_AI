@@ -148,15 +148,5 @@
     "mtime": 1785448233.7458148,
     "ast_hash": "0bcd9f81d9862c663c8b19be5272db4e",
     "semantic_hash": "0bcd9f81d9862c663c8b19be5272db4e"
-  },
-  ".claude/settings.local.json": {
-    "mtime": 1785443255.162487,
-    "ast_hash": "5a1169d9a9c109b199281b1fb9539146",
-    "semantic_hash": ""
-  },
-  "graphify-out/memory/query_20260730_222912_perche__stato_fa_da_ponte_fra_dodici_comunita_dive.md": {
-    "mtime": 1785450552.5214653,
-    "ast_hash": "68d70c21dc863a4e2fecad24cad60ef6",
-    "semantic_hash": ""
   }
 }
