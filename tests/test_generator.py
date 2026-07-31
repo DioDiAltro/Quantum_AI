@@ -291,6 +291,141 @@ def test_ogni_scheletro_produce_una_geometria_valida(scheletro):
             )
 
 
+# ===== Strutture cicliche =====
+
+ANELLI = ["Cyclopropane", "Cyclobutane", "Cyclopentane", "Cyclohexane",
+          "Benzene", "Pyridine", "Toluene", "Phenol"]
+
+
+@pytest.mark.parametrize("nome", ANELLI)
+def test_l_anello_si_chiude_geometricamente(nome):
+    """
+    La proprietà che prima mancava.
+
+    Costruito per rami come un albero, un anello non si richiude: l'ultimo
+    legame resta lungo quanto serve a collegare due estremi liberi, e la
+    struttura non è la molecola che dice di essere.
+
+    L'invariante che il poligono regolare garantisce è preciso: **ogni** lato
+    misura la media delle lunghezze tabulate dell'anello — compreso quello di
+    chiusura, che nella costruzione ad albero era l'anomalia. Dove gli ordini di
+    legame si alternano la media non coincide con i valori singoli: nella
+    piridina i legami vanno da 1.28 a 1.54 Å e il poligono ne usa 1.418. È
+    l'approssimazione dichiarata, non un errore.
+    """
+    from lib.generator import _atomi_dell_anello
+    from lib.matter import ISOTOPES
+
+    scheletro = _scaffold(nome)
+    molecola = build_molecule(scheletro)
+
+    # I siti dell'anello sono il 2-core del grafo, non semplicemente gli atomi
+    # pesanti: nel toluene il carbonio del metile e nel fenolo l'ossigeno sono
+    # pesanti ma stanno fuori dall'anello.
+    n = len(scheletro.atoms)
+    adiacenza: list[list[int]] = [[] for _ in range(n)]
+    for i, j, _ in scheletro.bonds:
+        adiacenza[i].append(j)
+        adiacenza[j].append(i)
+    sull_anello = set(_atomi_dell_anello(n, adiacenza))
+
+    legami_anello = [
+        (i, j, o) for i, j, o in scheletro.bonds
+        if i in sull_anello and j in sull_anello
+    ]
+
+    attese = [
+        bond_length(
+            ISOTOPES[scheletro.atoms[i]]["protons"],
+            ISOTOPES[scheletro.atoms[j]]["protons"],
+            ordine,
+        )
+        for i, j, ordine in legami_anello
+    ]
+    media = float(np.mean(attese))
+
+    for i, j, _ in legami_anello:
+        misurato = _distanza(molecola, i, j)
+        assert misurato == pytest.approx(media, abs=1e-6), (
+            f"{nome}: legame {i}-{j} misura {misurato:.4f} Å invece della media "
+            f"dell'anello {media:.4f}"
+        )
+
+    # E la media deve restare una lunghezza di legame plausibile
+    assert 1.2 < media < 1.6
+
+
+@pytest.mark.parametrize("nome, lati", [
+    ("Cyclopropane", 3), ("Cyclobutane", 4), ("Cyclopentane", 5),
+    ("Cyclohexane", 6), ("Benzene", 6), ("Pyridine", 6),
+])
+def test_l_anello_e_un_poligono_regolare(nome, lati):
+    """Tutti i lati dell'anello devono essere uguali fra loro."""
+    scheletro = _scaffold(nome)
+    molecola = build_molecule(scheletro)
+
+    misure = [_distanza(molecola, i, (i + 1) % lati) for i in range(lati)]
+
+    assert len(set(round(m, 6) for m in misure)) == 1, (
+        f"{nome}: lati diseguali {[round(m, 3) for m in misure]}"
+    )
+
+
+def test_il_benzene_e_planare():
+    """
+    È l'unico anello per cui il poligono regolare non è un'approssimazione:
+    il benzene è planare ed esagonale davvero.
+    """
+    molecola = build_molecule(_scaffold("Benzene"))
+    posizioni = np.array([p for _, p in molecola.atoms_data])
+
+    assert np.abs(posizioni[:, 2]).max() < 1e-6, "il benzene deve stare in un piano"
+
+    angoli = [_angolo(molecola, (i - 1) % 6, i, (i + 1) % 6) for i in range(6)]
+    for angolo in angoli:
+        assert angolo == pytest.approx(120.0, abs=0.5)
+
+
+def test_i_sostituenti_escono_dall_anello():
+    """
+    Un sostituente deve puntare *lontano* dal centro, altrimenti finirebbe
+    dentro l'anello sovrapponendosi agli altri atomi.
+    """
+    molecola = build_molecule(_scaffold("Toluene"))
+    posizioni = np.array([p for _, p in molecola.atoms_data])
+
+    centro = posizioni[:6].mean(axis=0)
+    # Il metile (sito 6) è più lontano dal centro del carbonio che lo porta
+    assert np.linalg.norm(posizioni[6] - centro) > np.linalg.norm(posizioni[0] - centro)
+
+
+def test_i_sostituenti_di_un_sito_sp3_stanno_fuori_dal_piano():
+    """Nel cicloesano i due H per carbonio non ci stanno nel piano dell'anello."""
+    molecola = build_molecule(_scaffold("Cyclohexane"))
+    posizioni = np.array([p for _, p in molecola.atoms_data])
+
+    # I primi due idrogeni stanno sul carbonio 0, uno sopra e uno sotto
+    assert posizioni[6][2] * posizioni[7][2] < 0, "devono stare su lati opposti"
+    assert abs(posizioni[6][2]) > 0.5
+
+
+def test_i_sistemi_policiclici_vengono_rifiutati():
+    """
+    Un biciclico non è gestito, e va detto: posizionarlo come monociclico
+    produrrebbe una struttura sbagliata senza segnalarlo.
+    """
+    # Bicicloesano semplificato: due anelli a quattro che condividono un legame
+    biciclico = Skeleton(
+        "Biciclico",
+        ("C-12",) * 4 + ("H-1",) * 4,
+        ((0, 1, 1), (1, 2, 1), (2, 3, 1), (3, 0, 1), (0, 2, 1),
+         (0, 4, 1), (1, 5, 1), (1, 6, 1), (3, 7, 1)),
+    )
+
+    with pytest.raises(GeneratorError, match="cicli indipendenti"):
+        build_molecule(biciclico)
+
+
 def test_la_libreria_copre_i_gruppi_funzionali():
     """
     Regressione sulla diversità: è il vincolo che limita la GNN.

@@ -425,10 +425,25 @@ def forma_canonica(stato: Stato) -> str:
     isomorfi se e solo se le stringhe coincidono — esatto, non euristico. Vale
     perché lo spazio è aciclico per costruzione; su un grafo con cicli servirebbe
     ben altro.
+
+    ⚠️ Uno stato ciclico viene **rifiutato**, non elaborato. Senza questo
+    controllo la sbucciatura delle foglie non termina — su un ciclo non ci sono
+    foglie da togliere — e la funzione resta appesa in un ciclo infinito invece
+    di sollevare un errore. È il modo peggiore di fallire: nessun messaggio,
+    nessuno stack, solo un processo che non risponde più.
     """
     n = len(stato)
     if n == 1:
         return stato.elementi[0]
+
+    cicli = len(stato.legami) - n + 1
+    if cicli > 0:
+        raise GeneratoreRLError(
+            f"La forma canonica è definita solo su strutture acicliche, ma "
+            f"questo stato ha {cicli} ciclo/i indipendenti. Le azioni "
+            f"dell'agente non ne producono; è arrivato da fuori — tipicamente "
+            f"da uno scheletro ciclico della libreria."
+        )
 
     adiacenza: dict[int, list[tuple[int, int]]] = {i: [] for i in range(n)}
     for i, j, ordine in stato.legami:
@@ -506,12 +521,20 @@ def stati_iniziali(max_atomi_pesanti: int = MAX_ATOMI_PESANTI) -> Iterator[Stato
     addestrata, quindi quelle su cui il suo giudizio vale qualcosa — più
     l'atomo singolo, da cui si costruisce da zero.
 
-    Due specie della libreria restano fuori, e per motivi diversi.
+    Tre gruppi di specie restano fuori, per motivi diversi.
     `Dihydrogen` non ha atomi pesanti: uno stato di soli idrogeni qui non è
     rappresentabile. `CarbonMonoxide` ha un legame triplo C≡O che porta
     l'ossigeno oltre la sua capacità di due — è il caso in cui il modello di
     valenza semplice si arrende, e l'eccezione di `Stato` lo dice a voce alta
     invece di produrre una molecola falsa.
+
+    E le **specie cicliche**: benzene, cicloalcani, piridina e derivati. Il
+    generatore geometrico sa ora costruirle, ma l'ambiente dell'agente resta
+    aciclico da cima a fondo — le azioni non sanno chiudere un anello, e
+    `forma_canonica` è l'algoritmo di Aho-Hopcroft-Ullman, definito sugli
+    alberi. Ammetterle qui darebbe stati da cui l'agente non saprebbe muoversi e
+    che non saprebbe nemmeno confrontare. Renderle utilizzabili è un lavoro a sé,
+    non un filtro da togliere.
 
     Le specie che si riducono allo stesso stato pesante (metano e il carbonio
     singolo danno entrambi CH4) compaiono una volta sola.
@@ -532,6 +555,9 @@ def stati_iniziali(max_atomi_pesanti: int = MAX_ATOMI_PESANTI) -> Iterator[Stato
 
     for scheletro in SCAFFOLDS:
         if not any(_numero_atomico(iso) > 1 for iso in scheletro.atoms):
+            continue
+        # Gli scheletri ciclici sono fuori portata per l'ambiente dell'agente
+        if len(scheletro.bonds) - len(scheletro.atoms) + 1 > 0:
             continue
         try:
             stato = Stato.da_scheletro(scheletro)

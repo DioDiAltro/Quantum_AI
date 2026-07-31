@@ -456,3 +456,34 @@ def test_la_stessa_struttura_non_si_valuta_due_volte():
     oracolo.valuta(Stato(("C-12",), ()))
 
     assert predittore.chiamate == 1
+
+
+# ===== Strutture cicliche: fuori portata, ma senza appendersi =====
+
+def test_la_forma_canonica_rifiuta_uno_stato_ciclico():
+    """
+    Regressione su un blocco, non su un errore.
+
+    `forma_canonica` sbuccia le foglie fino a isolare il centro dell'albero. Su
+    un ciclo non ci sono foglie da togliere, quindi il ciclo `while` non termina
+    mai: la funzione non sollevava nulla, restava appesa. È il modo peggiore di
+    fallire — nessun messaggio, nessuno stack, solo un processo che smette di
+    rispondere. Accadeva appena uno scheletro ciclico entrava nell'ambiente.
+    """
+    ciclopropano = Stato(("C-12", "C-12", "C-12"), ((0, 1, 1), (1, 2, 1), (0, 2, 1)))
+
+    with pytest.raises(GeneratoreRLError, match="acicliche"):
+        forma_canonica(ciclopropano)
+
+
+def test_gli_stati_iniziali_sono_tutti_aciclici():
+    """
+    L'ambiente dell'agente e' aciclico da cima a fondo: le azioni non sanno
+    chiudere un anello e la forma canonica non sa confrontarlo. Da quando la
+    libreria contiene benzene e cicloalcani, il filtro deve reggere.
+    """
+    for stato in stati_iniziali():
+        cicli = len(stato.legami) - len(stato) + 1
+        assert cicli == 0, f"{stato.formula()} ha {cicli} cicli"
+        # E deve restare confrontabile
+        assert forma_canonica(stato)

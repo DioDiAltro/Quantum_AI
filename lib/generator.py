@@ -158,16 +158,187 @@ def _rotation_between(a: np.ndarray, b: np.ndarray) -> np.ndarray:
     return np.eye(3) + K + K @ K * (1 / (1 + c))
 
 
+# Normale al piano dell'anello: gli anelli si costruiscono nel piano xy.
+_NORMALE_ANELLO = np.array([0.0, 0.0, 1.0])
+
+# Semiangolo fuori dal piano per i sostituenti di un sito sp³ dell'anello.
+# È l'angolo che le due direzioni formano con il piano quando l'angolo fra loro
+# vale 109.47°: metà del tetraedrico.
+_SEMIANGOLO_TETRAEDRICO = np.radians(54.75)
+
+
+def _numero_di_cicli(n_atomi: int, bonds) -> int:
+    """
+    Cicli indipendenti nel grafo dei legami (numero ciclomatico).
+
+    Per un grafo connesso vale `archi − nodi + 1`: zero per un albero, uno per
+    un anello semplice, di più per sistemi policiclici o condensati.
+    """
+    return len(bonds) - n_atomi + 1
+
+
+def _atomi_dell_anello(n: int, vicini_semplici: list[list[int]]) -> list[int]:
+    """
+    Atomi che stanno sull'anello, per rimozione iterativa dei terminali.
+
+    È il 2-core del grafo: si tolgono i siti di grado ≤ 1 finché non ne restano,
+    e ciò che rimane è il ciclo con i suoi sostituenti già staccati. Su un grafo
+    monociclico è esattamente l'anello.
+    """
+    grado = [len(v) for v in vicini_semplici]
+    rimossi: set[int] = set()
+
+    cambiato = True
+    while cambiato:
+        cambiato = False
+        for sito in range(n):
+            if sito not in rimossi and grado[sito] <= 1:
+                rimossi.add(sito)
+                for vicino in vicini_semplici[sito]:
+                    if vicino not in rimossi:
+                        grado[vicino] -= 1
+                grado[sito] = 0
+                cambiato = True
+
+    return [sito for sito in range(n) if sito not in rimossi]
+
+
+def _ordina_anello(anello: list[int], vicini_semplici: list[list[int]]) -> list[int]:
+    """Percorre l'anello per ottenerne l'ordine ciclico, non solo l'insieme."""
+    sull_anello = set(anello)
+    inizio = anello[0]
+    ordine = [inizio]
+    precedente, corrente = None, inizio
+
+    while True:
+        prossimi = [
+            v for v in vicini_semplici[corrente]
+            if v in sull_anello and v != precedente
+        ]
+        if not prossimi:
+            break
+        successivo = prossimi[0]
+        if successivo == inizio:
+            break
+        ordine.append(successivo)
+        precedente, corrente = corrente, successivo
+
+    if len(ordine) != len(anello):
+        raise GeneratorError(
+            f"L'anello non si chiude: {len(ordine)} siti percorsi su {len(anello)}."
+        )
+    return ordine
+
+
+def _posiziona_anello(
+    ordine: list[int],
+    numeri_atomici: list[int],
+    vicini: list[list[tuple[int, int]]],
+    posizioni: np.ndarray,
+):
+    """
+    Dispone i siti dell'anello su un poligono regolare nel piano xy.
+
+    Il raggio si ricava dalla lunghezza media dei legami dell'anello:
+    `R = L / (2·sin(π/k))`. Usare la media è un'approssimazione quando gli
+    ordini di legame non sono tutti uguali — nel benzene i legami alternati
+    darebbero 1.54 e 1.34 Å, e il poligono ne usa 1.44 contro gli 1.39
+    sperimentali. È lo stesso genere di idealizzazione già accettata per gli
+    angoli VSEPR: geometrie plausibili, non ottimizzate.
+
+    Il piano è una scelta: va bene per anelli a tre, quattro e sei termini
+    planari (il benzene lo è esattamente), meno per il cicloesano, che nella
+    realtà si increspa a sedia per scaricare la tensione.
+    """
+    k = len(ordine)
+    lunghezze = []
+    for indice in range(k):
+        a, b = ordine[indice], ordine[(indice + 1) % k]
+        ordine_legame = next(o for v, o in vicini[a] if v == b)
+        lunghezze.append(bond_length(numeri_atomici[a], numeri_atomici[b], ordine_legame))
+
+    raggio = float(np.mean(lunghezze)) / (2 * np.sin(np.pi / k))
+
+    for indice, sito in enumerate(ordine):
+        angolo = 2 * np.pi * indice / k
+        posizioni[sito] = np.array(
+            [raggio * np.cos(angolo), raggio * np.sin(angolo), 0.0]
+        )
+
+
+def _direzioni_sostituenti_anello(
+    sito: int,
+    quanti: int,
+    sull_anello: set[int],
+    vicini_semplici: list[list[int]],
+    posizioni: np.ndarray,
+) -> list[np.ndarray]:
+    """
+    Direzioni verso l'esterno per i sostituenti di un sito dell'anello.
+
+    I due legami dell'anello sono già fissati, quindi le direzioni libere si
+    ricavano da loro invece che dalla tabella VSEPR: la bisettrice *uscente*
+    punta lontano dall'anello, ed è dove va un sostituente singolo (il caso
+    sp², come ogni carbonio del benzene). Con due sostituenti — un sito sp³
+    come il CH₂ del cicloesano — le direzioni si aprono simmetricamente sopra e
+    sotto il piano, perché nel piano non c'è più spazio.
+    """
+    vicini_anello = [v for v in vicini_semplici[sito] if v in sull_anello]
+    if len(vicini_anello) != 2:
+        raise GeneratorError(
+            f"Il sito {sito} sta sull'anello ma ha {len(vicini_anello)} vicini "
+            f"nell'anello invece di 2."
+        )
+
+    v1 = posizioni[vicini_anello[0]] - posizioni[sito]
+    v2 = posizioni[vicini_anello[1]] - posizioni[sito]
+    uscente = -(v1 / np.linalg.norm(v1) + v2 / np.linalg.norm(v2))
+
+    norma = np.linalg.norm(uscente)
+    if norma < 1e-8:
+        # I due legami sono opposti (anello degenere): esci radialmente
+        uscente = posizioni[sito] - np.array([0.0, 0.0, 0.0])
+        norma = np.linalg.norm(uscente)
+        if norma < 1e-8:
+            uscente, norma = np.array([1.0, 0.0, 0.0]), 1.0
+    uscente = uscente / norma
+
+    if quanti == 1:
+        return [uscente]
+    if quanti == 2:
+        return [
+            uscente * np.cos(_SEMIANGOLO_TETRAEDRICO)
+            + _NORMALE_ANELLO * np.sin(_SEMIANGOLO_TETRAEDRICO),
+            uscente * np.cos(_SEMIANGOLO_TETRAEDRICO)
+            - _NORMALE_ANELLO * np.sin(_SEMIANGOLO_TETRAEDRICO),
+        ]
+
+    raise GeneratorError(
+        f"Il sito {sito} dell'anello ha {quanti} sostituenti: oltre i due "
+        f"collocabili fuori dal piano, la valenza è superata."
+    )
+
+
 def _embed_3d(skeleton: Skeleton) -> list[tuple[float, float, float]]:
     """
     Assegna coordinate 3D allo scheletro.
 
-    Percorre la connettività in ampiezza a partire dal primo atomo: ogni atomo
-    riceve la geometria VSEPR corrispondente al proprio numero sterico, ruotata
-    in modo che una direzione punti verso l'atomo che l'ha generato.
+    Due regimi, scelti dal numero ciclomatico del grafo dei legami:
 
-    Gestisce strutture aciclice (alberi). Un ciclo verrebbe posizionato come
-    albero, con l'anello non chiuso geometricamente.
+    - **Alberi** — percorso in ampiezza dal primo atomo: ogni sito riceve la
+      geometria VSEPR corrispondente al proprio numero sterico, ruotata in modo
+      che una direzione punti verso l'atomo che l'ha generato.
+    - **Un anello** — l'anello si posiziona per primo, come poligono regolare
+      nel piano xy; i sostituenti dei siti dell'anello escono dalla bisettrice
+      (o sopra e sotto il piano se sono due), e da lì riprende il percorso in
+      ampiezza per il resto della struttura.
+
+    L'anello va posizionato per primo perché è un vincolo globale: costruito
+    per rami come un albero non si richiuderebbe, e l'ultimo legame resterebbe
+    lungo quanto serve a collegare due estremi liberi.
+
+    I sistemi con più di un ciclo indipendente — biciclici, condensati — non
+    sono gestiti e vengono rifiutati.
     """
     n = len(skeleton.atoms)
     numeri_atomici = [ISOTOPES[iso]["protons"] for iso in skeleton.atoms]
@@ -176,13 +347,48 @@ def _embed_3d(skeleton: Skeleton) -> list[tuple[float, float, float]]:
     for i, j, ordine in skeleton.bonds:
         vicini[i].append((j, ordine))
         vicini[j].append((i, ordine))
+    vicini_semplici = [[v for v, _ in lista] for lista in vicini]
 
     posizioni = np.full((n, 3), np.nan)
-    posizioni[0] = np.zeros(3)
+    coda: list[tuple[int, np.ndarray | None]] = []
+    visitati: set[int] = set()
 
-    # (atomo, direzione da cui proviene) — None per la radice
-    coda: list[tuple[int, np.ndarray | None]] = [(0, None)]
-    visitati = {0}
+    cicli = _numero_di_cicli(n, skeleton.bonds)
+    if cicli > 1:
+        raise GeneratorError(
+            f"Lo scheletro ha {cicli} cicli indipendenti: i sistemi policiclici "
+            f"e condensati non sono gestiti. Ne è supportato al massimo uno."
+        )
+
+    if cicli == 1:
+        anello = _ordina_anello(_atomi_dell_anello(n, vicini_semplici), vicini_semplici)
+        _posiziona_anello(anello, numeri_atomici, vicini, posizioni)
+        visitati.update(anello)
+        sull_anello = set(anello)
+
+        # I sostituenti dei siti dell'anello, poi la coda riparte da loro
+        for sito in anello:
+            da_posizionare = [(v, o) for v, o in vicini[sito] if v not in visitati]
+            if not da_posizionare:
+                continue
+
+            direzioni = _direzioni_sostituenti_anello(
+                sito, len(da_posizionare), sull_anello, vicini_semplici, posizioni
+            )
+
+            for (vicino, ordine_legame), direzione in zip(da_posizionare, direzioni):
+                lunghezza = bond_length(
+                    numeri_atomici[sito], numeri_atomici[vicino], ordine_legame
+                )
+                direzione = direzione / np.linalg.norm(direzione)
+                posizioni[vicino] = posizioni[sito] + lunghezza * direzione
+                visitati.add(vicino)
+                coda.append((vicino, -direzione))
+    else:
+        posizioni[0] = np.zeros(3)
+        # (atomo, direzione da cui proviene) — None per la radice
+        coda = [(0, None)]
+        visitati = {0}
 
     while coda:
         corrente, dir_padre = coda.pop(0)
@@ -331,6 +537,69 @@ SCAFFOLDS: tuple[Skeleton, ...] = (
               "H-1", "H-1", "H-1", "H-1", "H-1", "H-1", "H-1", "H-1"),
              ((0, 1, 1), (1, 2, 1), (0, 3, 1), (0, 4, 1), (0, 5, 1),
               (1, 6, 1), (1, 7, 1), (2, 8, 1), (2, 9, 1), (2, 10, 1))),
+
+    # --- Terzo blocco: strutture cicliche ---
+    #
+    # Fino a quando `_embed_3d` sapeva posizionare solo alberi, gli anelli erano
+    # fuori portata e con loro tutta la chimica aromatica. Ora l'anello viene
+    # collocato per primo come poligono regolare e i sostituenti escono dalla
+    # bisettrice, quindi queste specie chiudono geometricamente.
+    #
+    # I cicloalcani portano la tensione d'anello, che è un'informazione che
+    # nessuna struttura aperta contiene: il ciclopropano a 60° è molto meno
+    # stabile per legame di quanto la sua formula suggerisca.
+
+    Skeleton("Cyclopropane",
+             ("C-12", "C-12", "C-12",
+              "H-1", "H-1", "H-1", "H-1", "H-1", "H-1"),
+             ((0, 1, 1), (1, 2, 1), (2, 0, 1),
+              (0, 3, 1), (0, 4, 1), (1, 5, 1), (1, 6, 1), (2, 7, 1), (2, 8, 1))),
+    Skeleton("Cyclobutane",
+             ("C-12", "C-12", "C-12", "C-12",
+              "H-1", "H-1", "H-1", "H-1", "H-1", "H-1", "H-1", "H-1"),
+             ((0, 1, 1), (1, 2, 1), (2, 3, 1), (3, 0, 1),
+              (0, 4, 1), (0, 5, 1), (1, 6, 1), (1, 7, 1),
+              (2, 8, 1), (2, 9, 1), (3, 10, 1), (3, 11, 1))),
+    Skeleton("Cyclopentane",
+             ("C-12", "C-12", "C-12", "C-12", "C-12",
+              "H-1", "H-1", "H-1", "H-1", "H-1",
+              "H-1", "H-1", "H-1", "H-1", "H-1"),
+             ((0, 1, 1), (1, 2, 1), (2, 3, 1), (3, 4, 1), (4, 0, 1),
+              (0, 5, 1), (0, 6, 1), (1, 7, 1), (1, 8, 1), (2, 9, 1),
+              (2, 10, 1), (3, 11, 1), (3, 12, 1), (4, 13, 1), (4, 14, 1))),
+    Skeleton("Cyclohexane",
+             ("C-12", "C-12", "C-12", "C-12", "C-12", "C-12",
+              "H-1", "H-1", "H-1", "H-1", "H-1", "H-1",
+              "H-1", "H-1", "H-1", "H-1", "H-1", "H-1"),
+             ((0, 1, 1), (1, 2, 1), (2, 3, 1), (3, 4, 1), (4, 5, 1), (5, 0, 1),
+              (0, 6, 1), (0, 7, 1), (1, 8, 1), (1, 9, 1), (2, 10, 1), (2, 11, 1),
+              (3, 12, 1), (3, 13, 1), (4, 14, 1), (4, 15, 1), (5, 16, 1), (5, 17, 1))),
+    # Il benzene è l'unico caso in cui il poligono regolare è la geometria vera,
+    # non un'approssimazione: la molecola è planare ed esagonale.
+    Skeleton("Benzene",
+             ("C-12", "C-12", "C-12", "C-12", "C-12", "C-12",
+              "H-1", "H-1", "H-1", "H-1", "H-1", "H-1"),
+             ((0, 1, 2), (1, 2, 1), (2, 3, 2), (3, 4, 1), (4, 5, 2), (5, 0, 1),
+              (0, 6, 1), (1, 7, 1), (2, 8, 1), (3, 9, 1), (4, 10, 1), (5, 11, 1))),
+    Skeleton("Pyridine",
+             ("N-14", "C-12", "C-12", "C-12", "C-12", "C-12",
+              "H-1", "H-1", "H-1", "H-1", "H-1"),
+             ((0, 1, 2), (1, 2, 1), (2, 3, 2), (3, 4, 1), (4, 5, 2), (5, 0, 1),
+              (1, 6, 1), (2, 7, 1), (3, 8, 1), (4, 9, 1), (5, 10, 1))),
+    Skeleton("Toluene",
+             ("C-12", "C-12", "C-12", "C-12", "C-12", "C-12", "C-12",
+              "H-1", "H-1", "H-1", "H-1", "H-1", "H-1", "H-1", "H-1"),
+             ((0, 1, 2), (1, 2, 1), (2, 3, 2), (3, 4, 1), (4, 5, 2), (5, 0, 1),
+              (0, 6, 1),
+              (1, 7, 1), (2, 8, 1), (3, 9, 1), (4, 10, 1), (5, 11, 1),
+              (6, 12, 1), (6, 13, 1), (6, 14, 1))),
+    Skeleton("Phenol",
+             ("C-12", "C-12", "C-12", "C-12", "C-12", "C-12", "O-16",
+              "H-1", "H-1", "H-1", "H-1", "H-1", "H-1"),
+             ((0, 1, 2), (1, 2, 1), (2, 3, 2), (3, 4, 1), (4, 5, 2), (5, 0, 1),
+              (0, 6, 1),
+              (1, 7, 1), (2, 8, 1), (3, 9, 1), (4, 10, 1), (5, 11, 1),
+              (6, 12, 1))),
 )
 
 
