@@ -49,12 +49,11 @@ from torch_geometric.data import Data
 from torch_geometric.loader import DataLoader
 from torch_geometric.nn import NNConv, global_add_pool
 
-from lib.translator import NODE_FEATURE_DIM, Translator
+from lib.translator import Translator
 
-# Dimensioni fissate dal traduttore: 30 feature per atomo — 26 intrinseche
-# (FeatureExtractor) più 4 geometriche (GraphBuilder: coordinazione e angoli di
-# legame) — e 2 per arco ([tipo_legame, distanza euclidea]).
-FEATURE_DIM = NODE_FEATURE_DIM
+# Dimensioni fissate dal traduttore: 26 feature per atomo (vedi FeatureExtractor)
+# e 2 per arco ([tipo_legame, distanza euclidea]).
+FEATURE_DIM = 26
 EDGE_DIM = 2
 
 # Il checkpoint vive fuori da lib/: è un artefatto, non codice.
@@ -365,19 +364,6 @@ class EnergyPredictor:
             )
 
         checkpoint = torch.load(path, map_location="cpu", weights_only=True)
-
-        # Un checkpoint addestrato prima dell'aggiunta delle feature geometriche
-        # ha uno strato d'ingresso della dimensione sbagliata. Senza questo
-        # controllo l'errore arriverebbe molto più tardi, come un mismatch di
-        # shape dentro il primo forward, che non dice cosa fare.
-        atteso = checkpoint["hyperparameters"].get("node_dim")
-        if atteso is not None and atteso != FEATURE_DIM:
-            raise GNNError(
-                f"Il checkpoint '{path}' si aspetta {atteso} feature per nodo, "
-                f"ma il traduttore ne produce {FEATURE_DIM}. È stato addestrato "
-                f"con una versione precedente delle feature: riaddestralo con "
-                f"'python -m lib.gnn --train'."
-            )
 
         modelli = []
         for stato in checkpoint["state_dicts"]:

@@ -127,81 +127,12 @@ class MolecularGraph:
         return adj_matrix
 
 
-# Feature geometriche per nodo, aggiunte da GraphBuilder alle 26 intrinseche.
-#
-# Non stanno in FeatureExtractor perché non sono proprietà dell'atomo: un angolo
-# di legame esiste solo in rapporto ai vicini, e il singolo atomo non conosce la
-# topologia. Qui vive la distinzione — FeatureExtractor descrive *cosa* è un
-# atomo, GraphBuilder *come sta* nella molecola.
-GEOMETRIC_FEATURE_DIM = 4
-
-# Totale del vettore per nodo, che è ciò che i modelli devono aspettarsi.
-NODE_FEATURE_DIM = 26 + GEOMETRIC_FEATURE_DIM
-
-
 class GraphBuilder:
     """Costruisce grafi molecolari da oggetti Molecule"""
-
+    
     def __init__(self, feature_extractor: FeatureExtractor):
         self.feature_extractor = feature_extractor
-
-    @staticmethod
-    def _geometric_features(molecule, positions: np.ndarray) -> np.ndarray:
-        """
-        Numero di coordinazione e statistiche degli angoli di legame, per sito.
-
-        **Perché servono.** Gli archi portano `[tipo_legame, distanza]`: senza
-        informazione angolare la rete non distingue un carbonio sp³ (109.5°) da
-        uno sp² (120°) o sp (180°) se le distanze coincidono. Ma l'ibridazione è
-        proprio ciò che governa quanto una struttura è legata, quindi il modello
-        stava cercando di prevedere l'energia di atomizzazione senza vedere la
-        variabile che più la determina.
-
-        Le quattro componenti sono normalizzate in [0, 1]:
-
-        | componente | normalizzazione | cosa cattura |
-        |---|---|---|
-        | numero di coordinazione | ÷ 4 | quanti legami fa il sito |
-        | angolo medio | ÷ 180° | l'ibridazione dominante |
-        | angolo minimo | ÷ 180° | tensione, geometrie compresse |
-        | angolo massimo | ÷ 180° | linearità |
-
-        Un sito con meno di due legami non ha angoli definiti: le tre statistiche
-        restano a zero, e il numero di coordinazione basta a distinguerlo da un
-        sito i cui angoli valgono davvero zero (che non esiste).
-        """
-        n = len(molecule.atoms_data)
-        geometriche = np.zeros((n, GEOMETRIC_FEATURE_DIM), dtype=np.float32)
-
-        vicini: list[list[int]] = [[] for _ in range(n)]
-        for i, j, _ in molecule.bonds:
-            vicini[i].append(j)
-            vicini[j].append(i)
-
-        for sito in range(n):
-            geometriche[sito, 0] = len(vicini[sito]) / 4.0
-
-            if len(vicini[sito]) < 2:
-                continue
-
-            angoli = []
-            for a in range(len(vicini[sito])):
-                for b in range(a + 1, len(vicini[sito])):
-                    v1 = positions[vicini[sito][a]] - positions[sito]
-                    v2 = positions[vicini[sito][b]] - positions[sito]
-                    norme = np.linalg.norm(v1) * np.linalg.norm(v2)
-                    if norme < 1e-8:
-                        continue
-                    coseno = float(np.clip(np.dot(v1, v2) / norme, -1.0, 1.0))
-                    angoli.append(np.degrees(np.arccos(coseno)))
-
-            if angoli:
-                geometriche[sito, 1] = float(np.mean(angoli)) / 180.0
-                geometriche[sito, 2] = float(np.min(angoli)) / 180.0
-                geometriche[sito, 3] = float(np.max(angoli)) / 180.0
-
-        return geometriche
-
+    
     def build_from_molecule(self, molecule) -> MolecularGraph:
         """
         Costruisce grafo da oggetto Molecule.
@@ -224,14 +155,6 @@ class GraphBuilder:
 
         node_features = np.array(node_features_list, dtype=np.float32)
         positions = np.array(positions, dtype=np.float32)
-
-        if len(positions):
-            node_features = np.concatenate(
-                [node_features, self._geometric_features(molecule, positions)],
-                axis=1,
-            )
-        else:
-            node_features = np.zeros((0, NODE_FEATURE_DIM), dtype=np.float32)
 
         # Costruisci archi (legami). molecule.bonds contiene indici di sito.
         edge_list = []
