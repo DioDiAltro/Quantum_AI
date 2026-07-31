@@ -554,6 +554,79 @@ def split_by_scaffold(
     return train, val
 
 
+def split_three_ways(
+    graphs: list[Data],
+    names: list[str],
+    species_fraction: float = 0.25,
+    conformer_fraction: float = 0.15,
+    seed: int = 42,
+) -> tuple[list[Data], list[Data], list[Data]]:
+    """
+    Divide in addestramento, **interpolazione** ed **estrapolazione**.
+
+    Un numero solo non basta a descrivere questo modello, e riportarne uno solo
+    lo fa sembrare rotto mentre sta facendo un lavoro diverso da quello che gli
+    si attribuisce. Le due domande sono distinte:
+
+    | insieme | cosa contiene | cosa misura |
+    |---|---|---|
+    | interpolazione | conformeri esclusi di specie **note** | quanto è preciso nel territorio che conosce |
+    | estrapolazione | tutti i conformeri di specie **mai viste** | se sa saltare a una classe chimica nuova |
+
+    L'estrapolazione è la misura severa: con poche decine di specie, escluderne
+    una intera chiede di indovinare un fenomeno che nessun dato mostrava —
+    nessuna quantità di acetone e propano insegna la tensione d'anello a chi non
+    ha mai visto un anello.
+
+    Entrambe escono da **una sola** corsa di addestramento: le specie escluse si
+    tolgono per prime, e i conformeri di validazione si prendono da quelle che
+    restano. L'estrapolazione non viene mai usata per scegliere l'epoca
+    migliore, quindi resta un insieme di prova pulito e non un secondo insieme
+    di validazione travestito.
+    """
+    specie = sorted({_scaffold_key(nome) for nome in names})
+    if len(specie) < 2:
+        raise GNNError(
+            f"Servono almeno due specie chimiche per una divisione onesta, "
+            f"trovata solo: {specie}"
+        )
+
+    rng = np.random.default_rng(seed)
+    mescolate = list(rng.permutation(specie))
+    quante_escluse = max(1, int(round(len(mescolate) * species_fraction)))
+    specie_escluse = set(mescolate[:quante_escluse])
+
+    estrapolazione = [
+        g for g, n in zip(graphs, names) if _scaffold_key(n) in specie_escluse
+    ]
+
+    # Fra le specie rimaste, tieni fuori una frazione di conformeri per ciascuna:
+    # stratificare evita che l'interpolazione finisca tutta su una specie sola.
+    per_specie: dict[str, list[Data]] = {}
+    for grafo, nome in zip(graphs, names):
+        chiave = _scaffold_key(nome)
+        if chiave not in specie_escluse:
+            per_specie.setdefault(chiave, []).append(grafo)
+
+    train: list[Data] = []
+    interpolazione: list[Data] = []
+    for chiave in sorted(per_specie):
+        lista = per_specie[chiave]
+        ordine = rng.permutation(len(lista))
+        quanti = max(1, int(round(len(lista) * conformer_fraction)))
+        for posizione, indice in enumerate(ordine):
+            (interpolazione if posizione < quanti else train).append(lista[indice])
+
+    if not train or not interpolazione or not estrapolazione:
+        raise GNNError(
+            f"La divisione ha prodotto un insieme vuoto: {len(train)} "
+            f"addestramento, {len(interpolazione)} interpolazione, "
+            f"{len(estrapolazione)} estrapolazione."
+        )
+
+    return train, interpolazione, estrapolazione
+
+
 @torch.no_grad()
 def _validation_mae(
     model: DualHeadGNN,
@@ -660,22 +733,29 @@ def train(
     grafi, nomi = load_training_graphs(
         method=method, basis=basis, limit=limit, verbose=verbose
     )
-    train_set, val_set = split_by_scaffold(grafi, nomi, val_fraction, seed)
+    train_set, interpolazione, estrapolazione = split_three_ways(
+        grafi, nomi, species_fraction=val_fraction, seed=seed
+    )
 
     # Le statistiche si calcolano SOLO sull'addestramento: includere la
     # validazione significherebbe farle vedere al modello dalla porta di
     # servizio.
     normalizzazione = Normalization.fit(train_set)
-    for grafo in train_set + val_set:
+    for grafo in train_set + interpolazione + estrapolazione:
         normalizzazione.apply_features(grafo)
 
-    val_loader = DataLoader(val_set, batch_size=batch_size)
+    # L'epoca migliore si sceglie sull'interpolazione, mai sull'estrapolazione:
+    # usare quest'ultima per la selezione la trasformerebbe in un secondo
+    # insieme di validazione, e il numero riportato non sarebbe più una misura
+    # pulita di generalizzazione a specie nuove.
+    val_loader = DataLoader(interpolazione, batch_size=batch_size)
 
     if verbose:
         specie = sorted({_scaffold_key(n) for n in nomi})
         print(
-            f"  {len(train_set)} grafi in addestramento · {len(val_set)} in validazione "
-            f"· {len(specie)} specie chimiche"
+            f"  {len(train_set)} grafi in addestramento · "
+            f"{len(interpolazione)} interpolazione · "
+            f"{len(estrapolazione)} estrapolazione · {len(specie)} specie chimiche"
         )
         print(f"  insieme di {ensemble_size} reti")
 
@@ -707,15 +787,22 @@ def train(
 
     # MAE dell'insieme: la media delle previsioni è tipicamente migliore di
     # ogni singolo membro, quindi va misurata a parte.
-    mae_insieme = _ensemble_validation_mae(predittore, val_set)
+    mae_interpolazione = _ensemble_validation_mae(predittore, interpolazione)
+    mae_estrapolazione = _ensemble_validation_mae(predittore, estrapolazione)
 
     predittore.metadata = {
         "method": method,
         "basis": basis,
         "target": "atomization_energy_hartree",
         "num_train": len(train_set),
-        "num_val": len(val_set),
-        "val_mae_hartree": mae_insieme,
+        "num_interpolazione": len(interpolazione),
+        "num_estrapolazione": len(estrapolazione),
+        "mae_interpolazione_hartree": mae_interpolazione,
+        "mae_estrapolazione_hartree": mae_estrapolazione,
+        # Conservato per compatibilità: è la misura severa, quella che va citata
+        # se se ne cita una sola.
+        "val_mae_hartree": mae_estrapolazione,
+        "num_val": len(estrapolazione),
         "val_mae_membri": mae_membri,
         "ensemble_size": ensemble_size,
         "epochs": epochs,
@@ -792,11 +879,17 @@ def main():
 
     print()
     print("=" * 60)
-    print(f"val MAE insieme : {meta['val_mae_hartree']:.4f} Hartree")
-    print("val MAE membri  : "
+    print(f"MAE interpolazione : {meta['mae_interpolazione_hartree']:.4f} Ha "
+          f"— conformeri esclusi di specie note")
+    print(f"MAE estrapolazione : {meta['mae_estrapolazione_hartree']:.4f} Ha "
+          f"— specie mai viste")
+    print()
+    print("MAE membri (interp.): "
           + " · ".join(f"{m:.4f}" for m in meta["val_mae_membri"]))
-    print(f"grafi           : {meta['num_train']} train · {meta['num_val']} validazione")
-    print(f"checkpoint      : {percorso}")
+    print(f"grafi              : {meta['num_train']} addestramento · "
+          f"{meta['num_interpolazione']} interpolazione · "
+          f"{meta['num_estrapolazione']} estrapolazione")
+    print(f"checkpoint         : {percorso}")
 
 
 if __name__ == "__main__":

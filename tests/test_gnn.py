@@ -28,6 +28,7 @@ from lib.gnn import (  # noqa: E402
     gaussian_nll,
     molecule_to_data,
     split_by_scaffold,
+    split_three_ways,
     _scaffold_key,
 )
 
@@ -294,6 +295,88 @@ def test_la_divisione_non_fa_trapelare_le_specie(water):
         if any(g is t for t in train)
     }
     assert not (specie_val & specie_train), "una specie compare in entrambi gli insiemi"
+
+
+# ===== Divisione in tre: interpolazione ed estrapolazione =====
+
+def _tre_insiemi(water, specie=("Water", "Methane", "Ammonia", "Ethane", "Benzene"),
+                 per_specie=20, seed=1):
+    """Costruisce grafi etichettati con nomi realistici e li divide."""
+    nomi = [f"{s}-conf{i:04d}" for s in specie for i in range(per_specie)]
+    grafi = [molecule_to_data(water, -0.3) for _ in nomi]
+    train, interp, estrap = split_three_ways(grafi, nomi, seed=seed)
+    return grafi, nomi, train, interp, estrap
+
+
+def _specie_di(sottoinsieme, grafi, nomi):
+    ids = {id(g) for g in sottoinsieme}
+    return {_scaffold_key(n) for g, n in zip(grafi, nomi) if id(g) in ids}
+
+
+def test_l_estrapolazione_non_condivide_specie_con_l_addestramento(water):
+    """
+    È la proprietà che rende severa la misura: le specie escluse devono essere
+    davvero mai viste, altrimenti si sta misurando interpolazione con un altro
+    nome.
+    """
+    grafi, nomi, train, _, estrap = _tre_insiemi(water)
+
+    specie_train = _specie_di(train, grafi, nomi)
+    specie_estrap = _specie_di(estrap, grafi, nomi)
+
+    assert specie_train and specie_estrap
+    assert not (specie_train & specie_estrap)
+
+
+def test_l_interpolazione_condivide_le_specie_ma_non_i_grafi(water):
+    """
+    Speculare alla precedente: l'interpolazione misura la precisione *dentro*
+    il territorio noto, quindi le sue specie devono essere le stesse
+    dell'addestramento — ma i conformeri no, o non sarebbe una misura.
+    """
+    grafi, nomi, train, interp, _ = _tre_insiemi(water)
+
+    assert _specie_di(interp, grafi, nomi) <= _specie_di(train, grafi, nomi)
+
+    ids_train = {id(g) for g in train}
+    assert not any(id(g) in ids_train for g in interp), "grafi condivisi"
+
+
+def test_i_tre_insiemi_partizionano_i_dati(water):
+    """Nessun grafo perso, nessuno contato due volte."""
+    grafi, _, train, interp, estrap = _tre_insiemi(water)
+
+    assert len(train) + len(interp) + len(estrap) == len(grafi)
+    tutti = {id(g) for g in train} | {id(g) for g in interp} | {id(g) for g in estrap}
+    assert len(tutti) == len(grafi)
+
+
+def test_ogni_specie_nota_contribuisce_all_interpolazione(water):
+    """
+    La divisione dei conformeri è stratificata: senza, l'interpolazione
+    potrebbe cadere tutta su una specie sola e misurare quella invece del
+    territorio noto nel suo complesso.
+    """
+    grafi, nomi, train, interp, _ = _tre_insiemi(water)
+
+    assert _specie_di(interp, grafi, nomi) == _specie_di(train, grafi, nomi)
+
+
+def test_divisione_in_tre_deterministica_con_seme(water):
+    _, _, train_a, interp_a, estrap_a = _tre_insiemi(water, seed=7)
+    _, _, train_b, interp_b, estrap_b = _tre_insiemi(water, seed=7)
+
+    assert (len(train_a), len(interp_a), len(estrap_a)) == (
+        len(train_b), len(interp_b), len(estrap_b)
+    )
+
+
+def test_una_sola_specie_non_e_divisibile_in_tre(water):
+    nomi = [f"Water-conf{i:04d}" for i in range(10)]
+    grafi = [molecule_to_data(water, -0.3) for _ in nomi]
+
+    with pytest.raises(GNNError, match="due specie"):
+        split_three_ways(grafi, nomi)
 
 
 def test_una_sola_specie_non_e_divisibile(water):
