@@ -271,6 +271,66 @@ SCAFFOLDS: tuple[Skeleton, ...] = (
              ((0, 1, 2), (0, 2, 1), (0, 3, 1), (1, 4, 1), (1, 5, 1))),
     Skeleton("Acetylene", ("C-12", "C-12", "H-1", "H-1"),
              ((0, 1, 3), (0, 2, 1), (1, 3, 1))),
+
+    # --- Secondo blocco: copertura dei gruppi funzionali ---
+    #
+    # Le quindici specie qui sopra bastavano a far girare la pipeline ma non a
+    # insegnare chimica: con quindici punti nello spazio delle strutture il MAE
+    # della GNN (0.054 Ha) è confrontabile con la distanza fra una specie e
+    # l'altra, e un modello che non sa distinguerle non può guidare una ricerca.
+    #
+    # Queste aggiungono i gruppi funzionali che mancavano — carbonile,
+    # carbossile, ammide, nitrile, immina, etere, alcol, chetone — a parità di
+    # elementi (H, C, N, O) e di vincoli: strutture acicliche, tutte a shell
+    # chiusa. Sono ordinate per numero di atomi, come il primo blocco.
+
+    Skeleton("CarbonDioxide", ("C-12", "O-16", "O-16"), ((0, 1, 2), (0, 2, 2))),
+    Skeleton("Methanimine", ("C-12", "N-14", "H-1", "H-1", "H-1"),
+             ((0, 1, 2), (0, 2, 1), (0, 3, 1), (1, 4, 1))),
+    Skeleton("Ketene", ("C-12", "C-12", "O-16", "H-1", "H-1"),
+             ((0, 1, 2), (1, 2, 2), (0, 3, 1), (0, 4, 1))),
+    Skeleton("FormicAcid", ("C-12", "O-16", "O-16", "H-1", "H-1"),
+             ((0, 1, 2), (0, 2, 1), (0, 3, 1), (2, 4, 1))),
+    Skeleton("Formamide", ("C-12", "O-16", "N-14", "H-1", "H-1", "H-1"),
+             ((0, 1, 2), (0, 2, 1), (0, 3, 1), (2, 4, 1), (2, 5, 1))),
+    Skeleton("Acetonitrile", ("C-12", "C-12", "N-14", "H-1", "H-1", "H-1"),
+             ((0, 1, 1), (1, 2, 3), (0, 3, 1), (0, 4, 1), (0, 5, 1))),
+    Skeleton("Glyoxal", ("C-12", "C-12", "O-16", "O-16", "H-1", "H-1"),
+             ((0, 1, 1), (0, 2, 2), (1, 3, 2), (0, 4, 1), (1, 5, 1))),
+    Skeleton("Propyne", ("C-12", "C-12", "C-12", "H-1", "H-1", "H-1", "H-1"),
+             ((0, 1, 1), (1, 2, 3), (0, 3, 1), (0, 4, 1), (0, 5, 1), (2, 6, 1))),
+    Skeleton("Acetaldehyde", ("C-12", "C-12", "O-16", "H-1", "H-1", "H-1", "H-1"),
+             ((0, 1, 1), (1, 2, 2), (0, 3, 1), (0, 4, 1), (0, 5, 1), (1, 6, 1))),
+    Skeleton("Propene",
+             ("C-12", "C-12", "C-12", "H-1", "H-1", "H-1", "H-1", "H-1", "H-1"),
+             ((0, 1, 1), (1, 2, 2), (0, 3, 1), (0, 4, 1), (0, 5, 1),
+              (1, 6, 1), (2, 7, 1), (2, 8, 1))),
+    # Etanolo e dimetiletere sono isomeri: stessa formula C2H6O, strutture
+    # diverse. È la coppia che dice se il modello guarda la topologia o si
+    # limita a contare gli atomi.
+    Skeleton("Ethanol",
+             ("C-12", "C-12", "O-16", "H-1", "H-1", "H-1", "H-1", "H-1", "H-1"),
+             ((0, 1, 1), (1, 2, 1), (0, 3, 1), (0, 4, 1), (0, 5, 1),
+              (1, 6, 1), (1, 7, 1), (2, 8, 1))),
+    Skeleton("DimethylEther",
+             ("O-16", "C-12", "C-12", "H-1", "H-1", "H-1", "H-1", "H-1", "H-1"),
+             ((0, 1, 1), (0, 2, 1), (1, 3, 1), (1, 4, 1), (1, 5, 1),
+              (2, 6, 1), (2, 7, 1), (2, 8, 1))),
+    Skeleton("Acetone",
+             ("C-12", "C-12", "C-12", "O-16",
+              "H-1", "H-1", "H-1", "H-1", "H-1", "H-1"),
+             ((0, 1, 1), (0, 2, 1), (0, 3, 2), (1, 4, 1), (1, 5, 1), (1, 6, 1),
+              (2, 7, 1), (2, 8, 1), (2, 9, 1))),
+    Skeleton("DimethylAmine",
+             ("N-14", "C-12", "C-12",
+              "H-1", "H-1", "H-1", "H-1", "H-1", "H-1", "H-1"),
+             ((0, 1, 1), (0, 2, 1), (0, 3, 1), (1, 4, 1), (1, 5, 1), (1, 6, 1),
+              (2, 7, 1), (2, 8, 1), (2, 9, 1))),
+    Skeleton("Propane",
+             ("C-12", "C-12", "C-12",
+              "H-1", "H-1", "H-1", "H-1", "H-1", "H-1", "H-1", "H-1"),
+             ((0, 1, 1), (1, 2, 1), (0, 3, 1), (0, 4, 1), (0, 5, 1),
+              (1, 6, 1), (1, 7, 1), (2, 8, 1), (2, 9, 1), (2, 10, 1))),
 )
 
 
