@@ -382,6 +382,44 @@ serve per instradare.
 Su 15 specie (451 grafi di addestramento, 164 di validazione) il MAE
 dell'insieme è **0.0541 Ha**, contro 0.0248–0.0975 dei singoli membri.
 
+### Tre strade già tentate, tutte senza esito
+
+Il MAE su specie mai viste non è mai sceso sotto ~0.055 Ha. Sono stati provati
+tre interventi, ognuno con una misura controllata: **nessuno ha funzionato**, e
+vale la pena saperlo prima di ritentarli.
+
+| Intervento | MAE su specie viste | MAE su specie ignote | Epistemica ignote/note |
+|---|---|---|---|
+| *riferimento* — 30 specie | 0.0098 | **0.0552** | 16.0× |
+| Da 15 a 30 specie | dimezzato | fermo | migliorata |
+| Geometrie più ampie (fino a 0.25 Å) | migliorato | **0.0995** ✗ | **0.91×** ✗ |
+| Feature angolari (26 → 30 dim) | migliorato | **0.1234** ✗ | **3.19×** ✗ |
+
+Il denominatore comune: **ogni informazione aggiunta viene usata per
+memorizzare meglio, non per generalizzare.** Il divario fra le due colonne
+centrali si allarga sempre.
+
+Due diagnosi specifiche, che spiegano perché due interventi plausibili hanno
+peggiorato le cose:
+
+- **Geometrie ampie.** A 0.25 Å di perturbazione si producono strutture che non
+  sono molecole in nessun senso utile — fra queste, un'energia di atomizzazione
+  di **+16.3 Ha**, cioè meno stabile degli atomi separati. L'asse dominante di
+  variazione diventa *quanto è distorta* invece di *quale molecola è*, e
+  l'incertezza finisce per misurare la distorsione anziché l'ignoranza chimica:
+  da qui il crollo a 0.91×, che rende l'instradamento casuale.
+- **Feature angolari.** Sono fisicamente corrette — catturano l'ibridazione con
+  i valori esatti (sp³ 109.5°, sp² 120°, sp 180°) — ma con 30 scheletri e
+  conformeri perturbati di ±0.06 Å gli angoli sono quasi costanti dentro ogni
+  specie. Diventano di fatto un'impronta digitale della specie, e il modello
+  impara "coordinazione 4 + 109.5° → è metano → l'energia è quella lì".
+  Varrà la pena riprovarle quando le specie saranno centinaia; l'implementazione
+  è nella storia di git (commit `85617a0`, annullato da `1cb0618`).
+
+La lettura più semplice che resta in piedi è che **30 specie siano poche in
+assoluto** per imparare chimica trasferibile, e che nessun accorgimento sulle
+feature o sul campionamento lo compensi.
+
 ## 🧬 Il Generatore di Composti
 
 `lib/rl_generator.py` è l'ambiente, `lib/rl_agent.py` è chi lo percorre.
