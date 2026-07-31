@@ -446,6 +446,7 @@ def load_training_graphs(
     method: str = "MP2",
     basis: str = "sto-3g",
     limit: int | None = None,
+    verbose: bool = True,
 ) -> tuple[list[Data], list[str]]:
     """
     Rilegge il dataset etichettato dal database e lo converte in grafi.
@@ -458,17 +459,54 @@ def load_training_graphs(
 
     Restituisce i grafi e i nomi corrispondenti: i nomi servono a dividere
     train e validation per specie chimica.
+
+    Il caricamento riporta l'avanzamento perché non è istantaneo: ogni molecola
+    va ricostruita dal database con le sue query per atomi, posizioni e legami,
+    e su qualche migliaio di righe la fase resta muta per minuti. Senza una
+    riga di avanzamento è indistinguibile da un processo bloccato.
     """
-    from lib.dataset import load_dataset
+    import time
+
+    from lib.dataset import dataset_size, load_dataset
+
+    try:
+        totale = dataset_size(method=method, basis=basis)
+    except Exception:
+        totale = 0
+    if limit is not None:
+        totale = min(totale, limit) if totale else limit
+
+    passo = max(1, totale // 8) if totale else 250
+    inizio = time.time()
 
     grafi: list[Data] = []
     nomi: list[str] = []
 
-    for campione in load_dataset(method=method, basis=basis, limit=limit):
+    if verbose and totale:
+        print(f"  caricamento di {totale} molecole dal database…", flush=True)
+
+    for indice, campione in enumerate(
+        load_dataset(method=method, basis=basis, limit=limit), start=1
+    ):
         if campione.atomization_energy is None:
             continue
         grafi.append(molecule_to_data(campione.molecule, campione.atomization_energy))
         nomi.append(campione.molecule.name)
+
+        if verbose and indice % passo == 0:
+            trascorso = time.time() - inizio
+            quota = f" ({100 * indice / totale:.0f}%)" if totale else ""
+            print(
+                f"    … {indice}{f'/{totale}' if totale else ''}{quota} "
+                f"· {trascorso:.0f}s",
+                flush=True,
+            )
+
+    if verbose and grafi:
+        print(
+            f"  caricate {len(grafi)} molecole in {time.time() - inizio:.0f}s",
+            flush=True,
+        )
 
     if not grafi:
         raise GNNError(
@@ -619,7 +657,9 @@ def train(
     dove i dati vincolano il problema i membri convergono alla stessa risposta,
     altrove si separano.
     """
-    grafi, nomi = load_training_graphs(method=method, basis=basis, limit=limit)
+    grafi, nomi = load_training_graphs(
+        method=method, basis=basis, limit=limit, verbose=verbose
+    )
     train_set, val_set = split_by_scaffold(grafi, nomi, val_fraction, seed)
 
     # Le statistiche si calcolano SOLO sull'addestramento: includere la
