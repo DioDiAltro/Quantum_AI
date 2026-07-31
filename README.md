@@ -382,11 +382,11 @@ serve per instradare.
 Su 15 specie (451 grafi di addestramento, 164 di validazione) il MAE
 dell'insieme è **0.0541 Ha**, contro 0.0248–0.0975 dei singoli membri.
 
-### Tre strade già tentate, tutte senza esito
+### Quattro strade già tentate, tutte senza esito
 
 Il MAE su specie mai viste non è mai sceso sotto ~0.055 Ha. Sono stati provati
-tre interventi, ognuno con una misura controllata: **nessuno ha funzionato**, e
-vale la pena saperlo prima di ritentarli.
+quattro interventi, ognuno con una misura controllata: **nessuno ha
+funzionato**, e vale la pena saperlo prima di ritentarli.
 
 | Intervento | MAE su specie viste | MAE su specie ignote | Epistemica ignote/note |
 |---|---|---|---|
@@ -394,6 +394,7 @@ vale la pena saperlo prima di ritentarli.
 | Da 15 a 30 specie | dimezzato | fermo | migliorata |
 | Geometrie più ampie (fino a 0.25 Å) | migliorato | **0.0995** ✗ | **0.91×** ✗ |
 | Feature angolari (26 → 30 dim) | migliorato | **0.1234** ✗ | **3.19×** ✗ |
+| Strutture cicliche (30 → 38 specie) | ~stabile | **0.1047** ✗ | **3.00×** ✗ |
 
 Il denominatore comune: **ogni informazione aggiunta viene usata per
 memorizzare meglio, non per generalizzare.** Il divario fra le due colonne
@@ -415,10 +416,34 @@ peggiorato le cose:
   impara "coordinazione 4 + 109.5° → è metano → l'energia è quella lì".
   Varrà la pena riprovarle quando le specie saranno centinaia; l'implementazione
   è nella storia di git (commit `85617a0`, annullato da `1cb0618`).
+- **Strutture cicliche.** Erano la candidata più promettente, perché la tensione
+  d'anello è un fenomeno *qualitativamente nuovo*: nessuna struttura aperta la
+  contiene, e il ciclopropano a 60° è molto meno stabile per legame di quanto la
+  formula suggerisca. Non è bastato. E qui non vale nemmeno l'attenuante della
+  validazione più difficile: dei sette anelli, **sei finiscono in addestramento**
+  e solo il benzene resta escluso, quindi la validazione è quasi tutta molecole
+  piccole e aperte, il territorio dove il modello aveva già i dati.
 
-La lettura più semplice che resta in piedi è che **30 specie siano poche in
-assoluto** per imparare chimica trasferibile, e che nessun accorgimento sulle
-feature o sul campionamento lo compensi.
+### Cosa se ne conclude
+
+La lettura che resta in piedi non riguarda i dati né le feature, ma **il
+protocollo di misura a questa scala**.
+
+Tenere fuori una specie intera chiede al modello di estrapolare a una classe
+chimica mai vista. Con ~38 specie ciascuna esclusione è un salto nel buio:
+nessuna quantità di dati su acetone e propano insegna la tensione d'anello se
+non hai mai visto un anello. Il modello è quindi **un interpolatore, non un
+estrapolatore** — 0.022 Ha dentro il territorio noto, 0.10 Ha fuori.
+
+Per l'oracolo la conseguenza è precisa, ed è già quella implementata: la GNN
+serve a **instradare**, mai a decidere da sola. In `evaluate_candidate`
+un'incertezza alta promuove al VQE invece di scartare, quindi l'architettura
+regge anche dove il modello non generalizza.
+
+La direzione utile non è inseguire ancora quel numero, ma **misurarne due**:
+errore di interpolazione (conformeri esclusi, specie note) ed errore di
+estrapolazione (specie escluse). Oggi il secondo viene riportato come se fosse
+l'unico, e fa sembrare rotto un modello che sta facendo un lavoro diverso.
 
 ## 🧬 Il Generatore di Composti
 
