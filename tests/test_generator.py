@@ -232,6 +232,110 @@ def test_dataset_riproducibile_con_seed():
 
 # ===== Verifica fisica (richiede PySCF) =====
 
+# Quanti legami forma ciascun elemento. Non sono gli elettroni di valenza:
+# l'azoto ne ha 5 ma forma 3 legami. Confonderli lascerebbe passare radicali
+# travestiti da molecole.
+CAPACITA_DI_LEGAME = {1: 1, 6: 4, 7: 3, 8: 2}
+
+# Il monossido di carbonio è l'eccezione legittima al conteggio delle valenze.
+# In C≡O il legame di dativo lascia cariche formali opposte — C⁻≡O⁺ — quindi il
+# carbonio conta 3 legami invece di 4 e l'ossigeno 3 invece di 2. La molecola
+# resta un singoletto a shell chiusa perfettamente ordinario, e PySCF la tratta
+# correttamente come neutra: è il conteggio ingenuo a non applicarsi, non la
+# chimica a essere sbagliata.
+VALENZA_NON_STANDARD = {"CarbonMonoxide"}
+
+
+@pytest.mark.parametrize("scheletro", SCAFFOLDS, ids=lambda s: s.name)
+def test_ogni_scheletro_satura_le_valenze(scheletro):
+    """
+    Ogni atomo deve usare esattamente la propria capacità di legame.
+
+    Un sito che ne usa meno è un radicale, uno che ne usa di più è impossibile:
+    in entrambi i casi la molecola non è il singoletto a shell chiusa che il
+    resto della pipeline presuppone. PySCF la calcolerebbe comunque, senza
+    protestare, producendo un'etichetta plausibile e sbagliata.
+
+    Il controllo vale su tutta la libreria, così ogni scheletro aggiunto in
+    futuro lo attraversa senza che nessuno debba ricordarsene.
+    """
+    from lib.matter import ISOTOPES
+
+    if scheletro.name in VALENZA_NON_STANDARD:
+        pytest.skip(f"{scheletro.name}: valenza formale non standard (vedi commento)")
+
+    for sito, isotopo in enumerate(scheletro.atoms):
+        z = ISOTOPES[isotopo]["protons"]
+        usata = sum(o for i, j, o in scheletro.bonds if sito in (i, j))
+
+        assert usata == CAPACITA_DI_LEGAME[z], (
+            f"{scheletro.name}: il sito {sito} ('{isotopo}') usa {usata} legami "
+            f"invece dei {CAPACITA_DI_LEGAME[z]} previsti per Z={z}"
+        )
+
+
+@pytest.mark.parametrize("scheletro", SCAFFOLDS, ids=lambda s: s.name)
+def test_ogni_scheletro_produce_una_geometria_valida(scheletro):
+    """Nessuna specie della libreria deve avere atomi sovrapposti o NaN."""
+    molecola = build_molecule(scheletro)
+    posizioni = np.array([p for _, p in molecola.atoms_data])
+
+    assert np.isfinite(posizioni).all(), f"{scheletro.name}: coordinate non finite"
+
+    for i in range(len(posizioni)):
+        for j in range(i + 1, len(posizioni)):
+            distanza = float(np.linalg.norm(posizioni[i] - posizioni[j]))
+            assert distanza > 0.5, (
+                f"{scheletro.name}: siti {i} e {j} a {distanza:.3f} Å, "
+                f"troppo vicini per essere atomi distinti"
+            )
+
+
+def test_la_libreria_copre_i_gruppi_funzionali():
+    """
+    Regressione sulla diversità: è il vincolo che limita la GNN.
+
+    Con quindici specie il MAE del modello era confrontabile con la distanza
+    fra una specie e l'altra. Questo test non misura l'accuratezza, ma impedisce
+    che la libreria torni a restringersi senza che nessuno se ne accorga.
+    """
+    nomi = {s.name for s in SCAFFOLDS}
+
+    attesi = {
+        "FormicAcid",      # carbossile
+        "Formamide",       # ammide
+        "Acetonitrile",    # nitrile
+        "Methanimine",     # immina
+        "DimethylEther",   # etere
+        "Ethanol",         # alcol
+        "Acetone",         # chetone
+        "Acetaldehyde",    # aldeide
+    }
+
+    assert attesi <= nomi, f"gruppi funzionali mancanti: {attesi - nomi}"
+    assert len(SCAFFOLDS) >= 30
+
+
+def test_isomeri_hanno_composizione_uguale_e_struttura_diversa():
+    """
+    Etanolo e dimetiletere: stessa formula C2H6O, topologia diversa.
+
+    Sono la coppia che distingue un modello che guarda la struttura da uno che
+    si limita a contare gli atomi — per questo stanno entrambi nella libreria.
+    """
+    etanolo = build_molecule(_scaffold("Ethanol"))
+    etere = build_molecule(_scaffold("DimethylEther"))
+
+    def composizione(mol):
+        return sorted(a.symbol for a in mol.atoms)
+
+    assert composizione(etanolo) == composizione(etere)
+    assert etanolo.molecular_mass == etere.molecular_mass
+    # L'ossigeno dell'etere lega due carboni, quello dell'etanolo un carbonio e
+    # un idrogeno: le topologie non coincidono.
+    assert sorted(etanolo.bonds) != sorted(etere.bonds)
+
+
 @pytest.mark.parametrize(
     "nome, energia_attesa",
     [
@@ -242,6 +346,13 @@ def test_dataset_riproducibile_con_seed():
         ("Dinitrogen", -107.500),
         ("Acetylene", -75.856),
         ("Ethylene", -77.073),
+        # Secondo blocco: valori Hartree-Fock/sto-3g alla geometria VSEPR
+        # idealizzata, verificati contro la letteratura.
+        ("CarbonDioxide", -185.066),
+        ("FormicAcid", -186.199),
+        ("Acetaldehyde", -150.943),
+        ("Propane", -116.879),
+        ("Acetonitrile", -130.269),
     ],
 )
 def test_energia_generata_vicina_alla_letteratura(nome, energia_attesa):
