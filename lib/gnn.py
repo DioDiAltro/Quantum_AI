@@ -191,16 +191,27 @@ def molecule_to_data(molecule, target: float | None = None) -> Data:
     return data
 
 
+# Suffissi che marcano un conformero e non una specie nuova.
+#
+# Ogni schema di nomi introdotto per generare geometrie va registrato qui.
+# Ometterlo non produce un errore: produce una divisione train/validation che
+# *sembra* funzionare e non separa più le specie. È già successo con il blocco
+# `-wide`, e il sintomo era un MAE che migliorava mentre la correlazione fra
+# errore e incertezza saliva a +0.98 — troppo bella per essere vera, perché
+# misurava memoria invece di generalizzazione.
+SUFFISSI_CONFORMERO = ("-conf", "-perturbata", "-wide")
+
+
 def _scaffold_key(name: str) -> str:
     """
     Specie chimica di appartenenza, spogliata del suffisso del conformero.
 
-    "Water-conf0007" -> "Water". Serve a separare train e validation *per
-    specie*: i conformeri della stessa molecola sono quasi identici, e
-    dividerli a caso significherebbe validare su copie di ciò che si è già
-    visto, con un errore ottimistico e falso.
+    "Water-conf0007" -> "Water", "Water-wide0.15-03" -> "Water". Serve a
+    separare train e validation *per specie*: i conformeri della stessa
+    molecola sono quasi identici, e dividerli a caso significherebbe validare
+    su copie di ciò che si è già visto, con un errore ottimistico e falso.
     """
-    for separatore in ("-conf", "-perturbata"):
+    for separatore in SUFFISSI_CONFORMERO:
         if separatore in name:
             return name.split(separatore)[0]
     return name

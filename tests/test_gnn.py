@@ -228,7 +228,44 @@ def test_la_varianza_scala_col_quadrato():
 def test_scaffold_key_toglie_il_suffisso_del_conformero():
     assert _scaffold_key("Water-conf0007") == "Water"
     assert _scaffold_key("Methane-perturbata") == "Methane"
+    assert _scaffold_key("Water-wide0.15-03") == "Water"
     assert _scaffold_key("Ethane") == "Ethane"
+
+
+def test_ogni_nome_generato_si_riconduce_a_una_specie_reale():
+    """
+    Regressione sul modo più silenzioso di rompere la divisione train/val.
+
+    Un suffisso di conformero non registrato in `SUFFISSI_CONFORMERO` non
+    solleva errori: fa semplicemente sì che `_scaffold_key` restituisca il nome
+    intero, ogni geometria diventi una "specie" a sé, e la divisione smetta di
+    separare alcunché. Il modello viene allora validato su copie quasi identiche
+    di ciò che ha già visto.
+
+    È già accaduto con lo schema `-wide`, e il sintomo era un risultato *troppo
+    buono*: MAE dimezzato e correlazione fra errore e incertezza a +0.98.
+
+    Questo test lega i nomi generati alla libreria di scheletri: se qualcuno
+    introduce uno schema nuovo senza registrarlo, la chiave non corrisponderà a
+    nessuna specie e il test lo dirà.
+    """
+    from lib.generator import SCAFFOLDS
+
+    nomi_reali = {s.name for s in SCAFFOLDS}
+
+    generati = [
+        f"{s.name}{suffisso}"
+        for s in SCAFFOLDS
+        for suffisso in ("", "-conf0000", "-conf0042", "-perturbata",
+                         "-wide0.05-00", "-wide0.25-07")
+    ]
+
+    for nome in generati:
+        chiave = _scaffold_key(nome)
+        assert chiave in nomi_reali, (
+            f"'{nome}' si riduce a '{chiave}', che non è una specie della "
+            f"libreria: il suffisso non è registrato in SUFFISSI_CONFORMERO"
+        )
 
 
 def test_la_divisione_non_fa_trapelare_le_specie(water):
