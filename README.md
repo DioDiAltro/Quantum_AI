@@ -198,7 +198,7 @@ riduzione dello spazio attivo.
 
 **Modalità `oracle`**
 ```
-🧠 Screening: GNN addestrata (5 reti, val MAE 0.0541 Ha)
+🧠 Screening: GNN addestrata (5 reti, val MAE 0.1306 Ha)
 ⚛️  Hamiltoniano: fermionic · base sto-3g · budget 8 qubit
 
 🔍 [Fase 1] Valutazione Classica (ML) per: Water...
@@ -379,14 +379,50 @@ serve per instradare.
 | Correlazione \|errore\| vs epistemica | −0.041 | **+0.201** |
 | Correlazione \|errore\| vs σ | −0.004 | **+0.234** |
 
-Su 15 specie (451 grafi di addestramento, 164 di validazione) il MAE
-dell'insieme è **0.0541 Ha**, contro 0.0248–0.0975 dei singoli membri.
+### Due misure, non una
+
+Un numero solo non descrive questo modello, e riportarne uno solo lo fa
+sembrare rotto mentre sta facendo un lavoro diverso da quello che gli si
+attribuisce. `split_three_ways` produce entrambe da **una sola** corsa:
+
+| Misura | Insieme | Valore |
+|---|---|---|
+| **Interpolazione** | conformeri esclusi di specie **note** | **0.0123 Ha** (~7.7 kcal/mol) |
+| **Estrapolazione** | tutti i conformeri di specie **mai viste** | **0.1306 Ha** (~82 kcal/mol) |
+
+**Un fattore 10.6 fra le due.** Dentro il territorio noto il modello è
+utilizzabile; su una classe chimica mai vista, essenzialmente non sa — il che
+con 38 specie è quello che ci si deve aspettare.
+
+I cinque membri concordano strettamente sull'interpolazione (0.0149–0.0157) e
+divergono sull'estrapolazione. **Concordano quando sanno, divergono quando non
+sanno**: è ciò che rende sensato usare il loro disaccordo come misura di
+ignoranza, ed è il motivo per cui la soglia di instradamento dell'oracolo è una
+decisione fondata e non arbitraria.
+
+| | Insieme di 5 reti (38 specie) |
+|---|---|
+| Epistemica su specie mai viste / su specie viste | **12.52×** |
+| Correlazione \|errore\| vs epistemica | **+0.516** |
+| Correlazione \|errore\| vs σ totale | +0.009 |
+
+> ⚠️ **Instradare sull'epistemica, mai sulla σ totale.** L'ultima riga non è un
+> errore: σ totale è dominata dalla componente aleatoria, che è piatta e non
+> porta segnale. È `Prediction.epistemic` a distinguere il noto dall'ignoto, ed
+> è quella che `evaluate_candidate` confronta con `uncertainty_threshold`.
 
 ### Quattro strade già tentate, tutte senza esito
 
-Il MAE su specie mai viste non è mai sceso sotto ~0.055 Ha. Sono stati provati
-quattro interventi, ognuno con una misura controllata: **nessuno ha
-funzionato**, e vale la pena saperlo prima di ritentarli.
+Prima che le due misure venissero separate, il MAE riportato — che era quello di
+estrapolazione — non è mai sceso sotto ~0.055 Ha. Sono stati provati quattro
+interventi, ognuno con una misura controllata: **nessuno ha funzionato**, e vale
+la pena saperlo prima di ritentarli.
+
+Con il senno di poi la lettura cambia: non fallivano tutti: **si stava misurando
+la cosa sbagliata**. Ogni allargamento della libreria allargava anche la varietà
+di ciò che veniva escluso, quindi il numero unico peggiorava mentre il modello
+sul lavoro che fa davvero migliorava. Il MAE sulle specie viste che "migliorava
+sempre" non era memorizzazione: era il segnale vero, che nessuno riportava.
 
 | Intervento | MAE su specie viste | MAE su specie ignote | Epistemica ignote/note |
 |---|---|---|---|
@@ -520,12 +556,14 @@ Da tenere presente prima di interpretare i numeri come grandezze chimiche reali:
   completo: sull'acqua la differenza è ~0.04 Ha, ~26 volte l'accuratezza
   chimica. L'etichetta della riduzione viaggia con il risultato proprio perché
   energie ottenute in spazi diversi non sono confrontabili fra loro.
-- **La GNN non è chimicamente accurata.** Un MAE di 0.054 Ha è ~34 kcal/mol:
-  utile per *instradare*, non per sostituire un calcolo. È il limite di un
-  dataset di 15 specie, non un difetto dell'architettura.
-- **L'incertezza è direzionale, non calibrata.** Correlazione +0.20 fra errore e
-  incertezza: sufficiente a separare il noto dall'ignoto, insufficiente a essere
-  letta come una barra d'errore.
+- **La GNN estrapola male, e va usata sapendolo.** Su specie note l'errore è
+  0.0123 Ha (~7.7 kcal/mol), utilizzabile; su specie mai viste sale a 0.1306 Ha
+  (~82 kcal/mol), cioè non sa. Serve a *instradare*, non a sostituire un calcolo
+  — ed è esattamente così che la pipeline la usa. Il divario è il limite di un
+  dataset di 38 specie, non un difetto dell'architettura.
+- **L'incertezza è direzionale, non calibrata.** Correlazione +0.52 fra errore e
+  incertezza epistemica: sufficiente a separare il noto dall'ignoto,
+  insufficiente a essere letta come una barra d'errore.
 - **Ottimizzatore locale.** SLSQP può fermarsi in minimi locali. Sul percorso
   fermionico si parte dallo stato di Hartree-Fock, che è già una buona
   approssimazione; il risultato è comunque verificato contro la
@@ -605,7 +643,7 @@ python -m pytest tests/ -m "not db"    # solo test senza database
 
 Quattro limiti misurati, in ordine di quanto pesano:
 
-- [ ] **Allargare il dataset.** È il vincolo che lega tutto: con 15 specie il MAE della GNN (0.054 Ha) è confrontabile con la distanza fra una specie e l'altra, e l'agente naviga un segnale rumoroso.
+- [ ] **Allargare il dataset.** È il vincolo che lega tutto: con 38 specie il modello interpola bene (0.0123 Ha) ma non estrapola (0.1306 Ha), quindi l'agente riceve un segnale affidabile solo finché resta vicino a ciò che il modello conosce.
 - [ ] **Identità sul database per struttura, non per nome.** `save_molecule` riconosce le molecole dal nome e `atoms` non ha una colonna per la carica: gli ioni si ri-leggono come neutri. La Fase 4 lo aggira con nomi a impronta canonica, ma è un aggiramento.
 - [ ] **Molteplicità di spin.** Tutto è costruito come singoletto di shell chiusa; per O₂ e in generale per i diradicali è sbagliato.
 - [ ] **Strutture cicliche.** `_embed_3d` posiziona alberi: niente anelli, quindi niente chimica aromatica.

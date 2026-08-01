@@ -493,13 +493,36 @@ DualHeadGNN(node_dim=26, edge_dim=2, hidden_dim=32, num_layers=3, dropout=0.1)
 |---|---|
 | `molecule_to_data(molecule, target=None)` | `Molecule` → `torch_geometric.data.Data` |
 | `load_training_graphs(method, basis, limit)` | Rilegge il dataset dal database |
-| `split_by_scaffold(graphs, names, val_fraction, seed)` | Divisione **per specie chimica** |
+| `split_by_scaffold(graphs, names, val_fraction, seed)` | Divisione in due, **per specie chimica** |
+| `split_three_ways(graphs, names, species_fraction, conformer_fraction, seed)` | Divisione in tre: addestramento, interpolazione, estrapolazione |
 | `train(...)` | Addestra l'insieme. Restituisce `(EnergyPredictor, cronologia)` |
 | `gaussian_nll(pred, log_var, target)` | Perdita che insegna l'incertezza |
 
 ```bash
 python -m lib.gnn --train --epochs 400 --ensemble-size 5
 ```
+
+#### Le due misure
+
+`train()` usa `split_three_ways` e riporta due errori distinti, perché un
+numero solo non descrive il modello:
+
+| Chiave nei metadati | Insieme | Valore attuale |
+|---|---|---|
+| `mae_interpolazione_hartree` | conformeri esclusi di specie **note** | 0.0123 Ha |
+| `mae_estrapolazione_hartree` | conformeri di specie **mai viste** | 0.1306 Ha |
+| `val_mae_hartree` | alias dell'estrapolazione, per compatibilità | 0.1306 Ha |
+
+L'epoca migliore si sceglie **sull'interpolazione**: usare l'estrapolazione per
+la selezione la trasformerebbe in un secondo insieme di validazione, e il numero
+riportato non sarebbe più una misura pulita.
+
+> ⚠️ **Instradare sull'epistemica, non sulla σ totale.** La correlazione fra
+> errore e incertezza epistemica è +0.52; quella con σ totale è +0.01, perché
+> σ totale è dominata dalla componente aleatoria, piatta e priva di segnale.
+> `evaluate_candidate` confronta `Prediction.epistemic` con
+> `uncertainty_threshold`: sostituirlo con `variance` romperebbe
+> l'instradamento senza produrre alcun errore visibile.
 
 > ⚠️ `split_by_scaffold` divide per **specie**, non per grafo. I conformeri
 > della stessa molecola differiscono di centesimi di Ångström: dividerli a caso
